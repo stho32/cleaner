@@ -6,4 +6,5 @@ public interface IFileSystemAccessProvider
     IEnumerable<string> GetFiles(string path, string searchPattern);
     string GetFileName(string path);
     bool DirectoryExists(string path);
+    string GetFileContent(string filePath);
 }

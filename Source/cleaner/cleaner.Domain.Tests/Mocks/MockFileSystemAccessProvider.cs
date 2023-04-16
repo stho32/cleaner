@@ -40,4 +40,9 @@ public class MockFileSystemAccessProvider : IFileSystemAccessProvider
     {
         return Directories.ContainsKey(path);
     }
+
+    public string GetFileContent(string filePath)
+    {
+        throw new NotImplementedException();
+    }
 }

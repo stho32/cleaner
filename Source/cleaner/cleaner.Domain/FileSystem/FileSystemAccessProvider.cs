@@ -21,4 +21,9 @@ public class FileSystemAccessProvider : IFileSystemAccessProvider
     {
         return Directory.Exists(path);
     }
+
+    public string GetFileContent(string filePath)
+    {
+        return File.ReadAllText(filePath);
+    }
 }
