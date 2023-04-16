@@ -6,11 +6,13 @@ public class DirectoryWalker
 {
     private readonly Action<string> _fileCallback;
     private readonly IFileSystemAccessProvider _fileSystemAccessProvider;
+    private readonly string _searchPattern;
 
-    public DirectoryWalker(Action<string> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider)
+    public DirectoryWalker(Action<string> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider, string searchPattern)
     {
         _fileCallback = fileCallback;
         _fileSystemAccessProvider = fileSystemAccessProvider;
+        _searchPattern = searchPattern;
     }
 
     public void Walk(string directoryPath)
@@ -35,7 +37,7 @@ public class DirectoryWalker
             }
         }
 
-        var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, "*.cs");
+        var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern);
 
         foreach (var csFile in csFiles)
         {
