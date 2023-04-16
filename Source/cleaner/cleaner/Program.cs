@@ -1,3 +1,18 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System;
+using System.IO;
+using cleaner.Domain;
 
-Console.WriteLine("Hello, World!");
+namespace cleaner
+{
+    public static class Program
+    {
+        static void Main(string[] args)
+        {
+            var cmdParser = new CommandLineArgumentParser();
+
+            var result = cmdParser.Parse(args);
+            if (string.IsNullOrWhiteSpace(result))
+                return;
+        }
+    }
+}
