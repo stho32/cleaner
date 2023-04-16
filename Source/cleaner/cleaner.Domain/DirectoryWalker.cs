@@ -15,7 +15,7 @@ public class DirectoryWalker
 
     public void Walk(string directoryPath)
     {
-        if (string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.GetDirectories(directoryPath).GetEnumerator().MoveNext())
+        if (string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.DirectoryExists(directoryPath))
         {
             throw new ArgumentException("Invalid directory path provided.");
         }

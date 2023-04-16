@@ -16,4 +16,9 @@ public class FileSystemAccessProvider : IFileSystemAccessProvider
     {
         return Path.GetFileName(path);
     }
+    
+    public bool DirectoryExists(string path)
+    {
+        return Directory.Exists(path);
+    }
 }
