@@ -1,21 +1,12 @@
-# DotNet 6 app repository template
+# cleaner
 
-The project is based on these [Requirements](Documentation/requirements.md) and is considered https://github.com/stho32/Training .
+Cleaner ist der Versuch der technischen Unterstützung folgenden gerade in Arbeit befindlichen A3's.
 
-## Badges
+[Technologische und strukturelle Drift und Innovation steuern](Documentation/Technologische-und-struktruelle-Drift-und-Innovation-steuern.pdf)
 
-- [ ] Add a badge from the build workflow
-- [ ] Add a badge from https://www.codefactor.io/
-- [ ] Add a badge from sonarcloud
-    - [ ] Code coverage
-    - [ ] Lines of code
-    - [ ] Maintainability rating
-    - [ ] Security rating
-    - [ ] Reliability rating
+Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und strukturelle Drift und Innovation sichtbar machen und dem entgegen wirken kann.
 
-## What is this?
-
-- [ ] add documentation about the usage here
-- [ ] put a few screenshots in between
-
+- Es soll eine Übersicht über unerwünschte Abweichungen darstellen.
+- Ggf. noch unbekannte Muster erkennen und nachfragen.
+- Ein nächstes einfaches Refactoring aufstellen, so dass man Lösungen schrittweise in den neuen Lösungsstandard überführen kann.
 
