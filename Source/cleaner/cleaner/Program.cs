@@ -30,18 +30,27 @@ namespace cleaner
             walker.Walk(result);
         }
 
+        private static bool IsDesignerFile(string filePath)
+        {
+            var fileName = Path.GetFileName(filePath);
+            return fileName.Contains(".Designer.");
+        }
+
         private static void ValidateRules(string filePath)
         {
+            if (IsDesignerFile(filePath))
+                return;
+            
             var fileContent = _fileSystemAccessProvider?.GetFileContent(filePath);
 
-            if (fileContent != null)
-            {
-                var messages = _validationRules?.Validate(filePath, fileContent);
-                var messagePrinter = new ValidationMessagePrinter();
+            if (string.IsNullOrWhiteSpace(fileContent)) 
+                return;
+            
+            var messages = _validationRules?.Validate(filePath, fileContent);
+            var messagePrinter = new ValidationMessagePrinter();
 
-                if (messages != null) 
-                    messagePrinter.Print(messages);
-            }
+            if (messages != null) 
+                messagePrinter.Print(messages);
         }
     }
 }
