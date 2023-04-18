@@ -21,4 +21,5 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 7. [X] Dateien dürfen insgesamt nicht länger als 500 Zeilen sein.
 8. [X] Dateien dürfen nur eine Deklaration (class, interface, enum, struct) beinhalten
 9. [X] Dateien sollten immer nach dem innerhalb deklarierten Typ heißen
-10. 
+10. [X] Keine public properties mit generic lists als Typ, auch wenn sie nur getter haben.
+11. [X] Keine public fields.
