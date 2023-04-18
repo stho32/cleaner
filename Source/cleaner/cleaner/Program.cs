@@ -21,8 +21,21 @@ namespace cleaner
             _validationRules = new CompositeRule(
                 new IRule[]
                 {
-                    new SingleDeclarationRule(),
-                    new NotImplementedExceptionRule()
+                    new AllowedUsingsRule(
+                        new HashSet<string>
+                        {
+                            "System",
+                            "System.Collections.Generic",
+                            "System.Linq",
+                            // Add more allowed usings here
+                        }),
+                    new IfStatementOperatorRule(),
+                    new LinqExpressionLengthRule(),
+                    new MethodLengthRule(),
+                    new NotImplementedExceptionRule(),
+                    new PublicPropertiesPrivateSettersRule(),
+                    new RowLimitRule(),
+                    new SingleDeclarationRule()
                 });
             _fileSystemAccessProvider = new FileSystemAccessProvider();
 

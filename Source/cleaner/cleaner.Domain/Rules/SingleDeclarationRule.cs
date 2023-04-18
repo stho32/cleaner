@@ -1,11 +1,13 @@
-using System.Text.RegularExpressions;
-
 namespace cleaner.Domain.Rules;
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class SingleDeclarationRule : IRule
 {
-    private readonly string[] _keywords = { "enum", "class", "interface", "record", "struct" };
-
     public string Id => "E002";
     public string Name => "Single Declaration Rule";
     public string ShortDescription => "Check if a file contains only one type declaration.";
@@ -15,16 +17,19 @@ public class SingleDeclarationRule : IRule
     {
         var messages = new List<ValidationMessage>();
 
-        int keywordCount = _keywords.Sum(keyword => Regex.Matches(fileContent, $@"\b{keyword}\b").Count);
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+        var root = tree.GetCompilationUnitRoot();
 
-        if (keywordCount > 1)
+        int declarationCount = root.Members.OfType<BaseTypeDeclarationSyntax>().Count();
+
+        if (declarationCount > 1)
         {
             messages.Add(
                 new ValidationMessage(
-                Severity.Error,
-                Id,
-                Name,
-                $"The file '{filePath}' contains more than one of the following keywords: {string.Join(", ", _keywords)}. Only one type declaration is allowed per file."));
+                    Severity.Error,
+                    Id,
+                    Name,
+                    $"The file '{filePath}' contains {declarationCount} type declarations. Only one type declaration is allowed per file."));
         }
 
         return messages.ToArray();

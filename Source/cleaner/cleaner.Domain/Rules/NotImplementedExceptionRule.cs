@@ -1,6 +1,10 @@
-using System.Text.RegularExpressions;
-
 namespace cleaner.Domain.Rules;
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class NotImplementedExceptionRule : IRule
 {
@@ -13,7 +17,21 @@ public class NotImplementedExceptionRule : IRule
     {
         var messages = new List<ValidationMessage>();
 
-        int exceptionCount = Regex.Matches(fileContent, @"\bNotImplementedException\b").Count;
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+        var root = tree.GetCompilationUnitRoot();
+
+        var throwStatements = root.DescendantNodes()
+            .OfType<ThrowStatementSyntax>();
+
+        int exceptionCount = 0;
+        foreach (var throwStatement in throwStatements)
+        {
+            if (throwStatement.Expression is ObjectCreationExpressionSyntax objectCreation &&
+                objectCreation.Type.ToString() == "NotImplementedException")
+            {
+                exceptionCount++;
+            }
+        }
 
         if (exceptionCount > 0)
         {
