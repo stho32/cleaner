@@ -8,7 +8,8 @@ public class DirectoryWalker
     private readonly IFileSystemAccessProvider _fileSystemAccessProvider;
     private readonly string _searchPattern;
 
-    public DirectoryWalker(Action<string> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider, string searchPattern)
+    public DirectoryWalker(Action<string> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider,
+        string searchPattern)
     {
         _fileCallback = fileCallback;
         _fileSystemAccessProvider = fileSystemAccessProvider;
@@ -31,10 +32,12 @@ public class DirectoryWalker
 
         foreach (var subdirectory in subdirectories)
         {
-            if (!_fileSystemAccessProvider.GetFileName(subdirectory).StartsWith("."))
-            {
-                WalkDirectory(subdirectory);
-            }
+            if (subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/"))
+                continue;
+            if (_fileSystemAccessProvider.GetFileName(subdirectory).StartsWith("."))
+                continue;
+
+            WalkDirectory(subdirectory);
         }
 
         var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern);

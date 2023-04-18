@@ -53,7 +53,8 @@ public class AllowedUsingsRule : IRule
         if (namespaceDeclaration != null)
         {
             string rootNamespace = namespaceDeclaration.Name.ToString();
-            return usingNamespace.StartsWith(rootNamespace);
+            string firstPartOnly = rootNamespace.Split(".").First();
+            return usingNamespace.StartsWith(firstPartOnly);
         }
 
         return false;

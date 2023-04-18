@@ -27,7 +27,12 @@ namespace cleaner
                             "System",
                             "System.Collections.Generic",
                             "System.Linq",
-                            // Add more allowed usings here
+                            "Newtonsoft.Json",
+                            "Newtonsoft.Json.Linq",
+                            "System.Data",
+                            "System.Data.SqlClient",
+                            "System.Text",
+                            "System.ComponentModel",
                         }),
                     new FileNameMatchingDeclarationRule(),
                     new IfStatementOperatorRule(),
