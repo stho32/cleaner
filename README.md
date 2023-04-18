@@ -10,3 +10,15 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 - Ggf. noch unbekannte Muster erkennen und nachfragen.
 - Ein nächstes einfaches Refactoring aufstellen, so dass man Lösungen schrittweise in den neuen Lösungsstandard überführen kann.
 
+## Geprüfte Regeln
+
+1. [X] Nur erlaubte Usings. (nuget-Pakete müssen explizit erlaubt werden)
+2. [X] IOSP: If-Statements dürfen keine Expressions enthalten
+3. [X] Linq: Es sind nur Ketten bis zu 2 Steps erlaubt, damit die Lesbarkeit der Ketten gewährleistet ist.
+4. [X] Methodenlänge: Methoden dürfen nur 10 Zeilen lang sein.
+5. [X] NotImplementedException: Code darf keine NotImplementedExceptions beinhalten
+6. [X] Public Properties dürfen keine public setter haben (immutability)
+7. [X] Dateien dürfen insgesamt nicht länger als 500 Zeilen sein.
+8. [X] Dateien dürfen nur eine Deklaration (class, interface, enum, struct) beinhalten
+9. [X] Dateien sollten immer nach dem innerhalb deklarierten Typ heißen
+10. 

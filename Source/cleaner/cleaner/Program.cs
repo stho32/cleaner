@@ -29,6 +29,7 @@ namespace cleaner
                             "System.Linq",
                             // Add more allowed usings here
                         }),
+                    new FileNameMatchingDeclarationRule(),
                     new IfStatementOperatorRule(),
                     new LinqExpressionLengthRule(),
                     new MethodLengthRule(),
