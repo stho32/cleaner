@@ -23,3 +23,4 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 9. [X] Dateien sollten immer nach dem innerhalb deklarierten Typ heißen
 10. [X] Keine public properties mit generic lists als Typ, auch wenn sie nur getter haben.
 11. [X] Keine public fields.
+12. [X] Keine Out / Ref Parameter verwenden.
