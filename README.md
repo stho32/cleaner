@@ -24,3 +24,24 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 10. [X] Keine public properties mit generic lists als Typ, auch wenn sie nur getter haben.
 11. [X] Keine public fields.
 12. [X] Keine Out / Ref Parameter verwenden.
+13. [ ] Das .Net-interne Konfigurationsmanagement sollte nicht verwendet werden.
+14. [ ] Es gibt bestimmte Standard-Bibliotheken, die immer verwendet werden sollten.
+15. [ ] SQL ist nur in Klassen erlaubt, die auf *Repository enden.
+16. [ ] Klassen die auf *Repository enden sollten nicht von anderen Klassen abgeleitet sein.
+17. [ ] Klassen, die auf *Repository enden haben mindestens einen IDataAccessor-Konstruktor-Parameter
+18. [ ] ? Klassen, die auf *Repository enden werden alle über eine gemeinsame Factory erstellt
+19. [ ] Wir verwenden ausschließlich den Logger aus der Core-Bibliothek.
+20. [ ] Jede Anwendung muss in der Program.cs in der Main-Funktion eine bestimmte Sequenz an Befehlen enthalten.
+21. [ ] Es sind nur bestimmte .Net-Versionen erlaubt.
+22. [ ] Alle Referenzen sollten aktuell sein. (Nuget)
+23. [ ] Alle Referenzen sollten aktuell sein. (Eigenes Artefaktsystem)
+24. [ ] ? Struktur-Regeln? Was sollte wo sein?
+25. [ ] ? Keine Enums
+26. [ ] ? Keine switch-Statements
+27. [ ] ? Isolations-Regeln: Vielleicht kann man Regeln formulieren, die es wahrscheinlich machen, dass man Themen in Subnamespaces zusammenfasst, statt nach Klassenarten zu sortieren.
+28. [ ] ...
+
+
+
+
+
