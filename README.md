@@ -39,7 +39,9 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 25. [ ] ? Keine Enums
 26. [ ] ? Keine switch-Statements
 27. [ ] ? Isolations-Regeln: Vielleicht kann man Regeln formulieren, die es wahrscheinlich machen, dass man Themen in Subnamespaces zusammenfasst, statt nach Klassenarten zu sortieren.
-28. [ ] ...
+28. [ ] Wenn CSS vorhanden ist, sollte es sich nur um max. das Frontend-Framework und 1-2 zusätzliche CSS-Dateien handeln.
+29. [ ] Wenn Javascript vorhanden ist, sollten keine Vendor-Pakete eingebaut sein (das ist Aufgabe des Frontend Frameworks)
+30. [ ] Kein Typescript. R. C++. (Explizite Liste erlaubter und nicht erlaubter Dateitypen?)
 
 
 
