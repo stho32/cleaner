@@ -25,7 +25,7 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 11. [X] Keine public fields.
 12. [X] Keine Out / Ref Parameter verwenden.
 13. [ ] Das .Net-interne Konfigurationsmanagement sollte nicht verwendet werden.
-14. [ ] Es gibt bestimmte Standard-Bibliotheken, die immer verwendet werden sollten.
+14. [ ] Es gibt bestimmte Standard-Bibliotheken, die immer verwendet werden sollten. (Core, Frontend falls UI...)
 15. [ ] SQL ist nur in Klassen erlaubt, die auf *Repository enden.
 16. [ ] Klassen die auf *Repository enden sollten nicht von anderen Klassen abgeleitet sein.
 17. [ ] Klassen, die auf *Repository enden haben mindestens einen IDataAccessor-Konstruktor-Parameter
