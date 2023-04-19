@@ -42,6 +42,7 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 28. [ ] Wenn CSS vorhanden ist, sollte es sich nur um max. das Frontend-Framework und 1-2 zusätzliche CSS-Dateien handeln.
 29. [ ] Wenn Javascript vorhanden ist, sollten keine Vendor-Pakete eingebaut sein (das ist Aufgabe des Frontend Frameworks)
 30. [ ] Kein Typescript. R. C++. (Explizite Liste erlaubter und nicht erlaubter Dateitypen?)
+31. [ ] At the upmost execution level there should be a catch all for exceptions and it should be implemented in a way, that those exceptions are logged.
 
 
 
