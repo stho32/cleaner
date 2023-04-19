@@ -31,14 +31,17 @@ public class IfStatementOperatorRule : IRule
         var ifStatements = root.DescendantNodes()
             .OfType<IfStatementSyntax>()
             .Where(IfStatementContainsOperator);
-
+        
         foreach (var ifStatement in ifStatements)
         {
+            FileLinePositionSpan span = ifStatement.SyntaxTree.GetLineSpan(ifStatement.Span);
+            int lineNumber = span.StartLinePosition.Line;
+
             var message = new ValidationMessage(
                 Severity.Warning,
                 Id,
                 Name,
-                $"An if statement in the file '{filePath}' contains operators, which is not allowed."
+                $"An if statement in the file '{filePath}':{lineNumber} contains operators, which is not allowed."
             );
             messages.Add(message);
         }
