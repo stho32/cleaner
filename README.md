@@ -45,7 +45,7 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 31. [ ] At the upmost execution level there should be a catch all for exceptions and it should be implemented in a way, that those exceptions are logged.
 32. [ ] ? Jedes Git-Repository sollte explizit als entweder "aktiv zu warten" oder "nicht aktiv zu warten" klassifiziert sein (an einem gemeinsamen Ort)
 33. [ ] ? Für aktiv zu wartende Git-Repositories sollte bei den Anforderungen ein MOC-* existieren.
-
+34. [ ] #region verbieten
 
 
 
