@@ -24,11 +24,11 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 10. [X] Keine public properties mit generic lists als Typ, auch wenn sie nur getter haben.
 11. [X] Keine public fields.
 12. [X] Keine Out / Ref Parameter verwenden.
-13. [ ] Das .Net-interne Konfigurationsmanagement sollte nicht verwendet werden.
+13. [X] Das .Net-interne Konfigurationsmanagement sollte nicht verwendet werden.
 14. [ ] Es gibt bestimmte Standard-Bibliotheken, die immer verwendet werden sollten. (Core, Frontend falls UI...)
-15. [ ] SQL ist nur in Klassen erlaubt, die auf *Repository enden.
-16. [ ] Klassen die auf *Repository enden sollten nicht von anderen Klassen abgeleitet sein.
-17. [ ] Klassen, die auf *Repository enden haben mindestens einen IDataAccessor-Konstruktor-Parameter
+15. [X] SQL ist nur in Klassen erlaubt, die auf *Repository enden.
+16. [X] Klassen die auf *Repository enden sollten nicht von anderen Klassen abgeleitet sein.
+17. [X] Klassen, die auf *Repository enden haben mindestens einen IDataAccessor-Konstruktor-Parameter
 18. [ ] ? Klassen, die auf *Repository enden werden alle über eine gemeinsame Factory erstellt
 19. [ ] Wir verwenden ausschließlich den Logger aus der Core-Bibliothek.
 20. [ ] Jede Anwendung muss in der Program.cs in der Main-Funktion eine bestimmte Sequenz an Befehlen enthalten.
