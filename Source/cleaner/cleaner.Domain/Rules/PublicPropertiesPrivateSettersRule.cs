@@ -24,7 +24,7 @@ public class PublicPropertiesPrivateSettersRule : IRule
         {
             if (propertyDeclaration.Modifiers.Any(modifier => modifier.ValueText == "public"))
             {
-                var setter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(a => a.Keyword.ValueText == "set");
+                var setter = propertyDeclaration?.AccessorList?.Accessors.FirstOrDefault(a => a.Keyword.ValueText == "set");
 
                 if (setter != null && !setter.Modifiers.Any(modifier => modifier.ValueText == "private"))
                 {
@@ -32,7 +32,7 @@ public class PublicPropertiesPrivateSettersRule : IRule
                         Severity.Warning,
                         Id,
                         Name,
-                        $"The property '{propertyDeclaration.Identifier.Text}' in the file '{filePath}' has a public setter. Consider using a private setter."
+                        $"The property '{propertyDeclaration?.Identifier.Text}' in the file '{filePath}' has a public setter. Consider using a private setter."
                     );
                     messages.Add(message);
                 }

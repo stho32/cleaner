@@ -13,7 +13,7 @@ public class DirectoryWalkerTests
     public void Walk_InvalidPath_ThrowsArgumentException()
     {
         var mockProvider = new MockFileSystemAccessProvider();
-        var walker = new DirectoryWalker(_ => { }, mockProvider, "*.cs");
+        var walker = new DirectoryWalker(_ => { return false; }, mockProvider, "*.cs");
 
         Assert.Throws<ArgumentException>(() => walker.Walk("invalid_path"));
     }
@@ -42,7 +42,11 @@ public class DirectoryWalkerTests
         };
 
         var foundFiles = new List<string>();
-        var walker = new DirectoryWalker(filePath => foundFiles.Add(filePath), mockProvider, "*.cs");
+        var walker = new DirectoryWalker(filePath =>
+        {
+            foundFiles.Add(filePath);
+            return true;
+        }, mockProvider, "*.cs");
 
         walker.Walk("root");
 

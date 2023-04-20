@@ -37,7 +37,7 @@ public class AllowedUsingsRule : IRule
                     Severity.Warning,
                     Id,
                     Name,
-                    $"The file '{filePath}' contains a disallowed using: '{usingNamespace}'. Only allowed usings are: {string.Join(", ", _allowedUsings)}."
+                    $"The file '{filePath}' contains a disallowed using: '{usingNamespace}'."
                 );
                 messages.Add(message);
             }

@@ -30,12 +30,16 @@ public class IfStatementOperatorRule : IRule
 
         var ifStatements = root.DescendantNodes()
             .OfType<IfStatementSyntax>()
-            .Where(IfStatementContainsOperator);
+            .ToArray();
+            
+        var notCool = ifStatements
+            .Where(IfStatementContainsOperator)
+            .ToArray();
         
-        foreach (var ifStatement in ifStatements)
+        foreach (var ifStatement in notCool)
         {
             FileLinePositionSpan span = ifStatement.SyntaxTree.GetLineSpan(ifStatement.Span);
-            int lineNumber = span.StartLinePosition.Line;
+            int lineNumber = span.StartLinePosition.Line +1;
 
             var message = new ValidationMessage(
                 Severity.Warning,
@@ -54,12 +58,12 @@ public class IfStatementOperatorRule : IRule
         var nodes = ifStatement.Condition.DescendantNodesAndSelf();
         bool hasOperator = nodes.Any(n =>
             n is BinaryExpressionSyntax ||
-            n is PrefixUnaryExpressionSyntax ||
             n is PostfixUnaryExpressionSyntax);
 
-        bool hasInvocation = nodes.Any(n => n is InvocationExpressionSyntax);
+        // bool hasInvocation = nodes.Any(n => n is InvocationExpressionSyntax);
 
-        return hasOperator && !hasInvocation;
+        return hasOperator;
+        // return hasOperator && !hasInvocation;
     }
 }
 

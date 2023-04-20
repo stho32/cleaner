@@ -4,11 +4,11 @@ namespace cleaner.Domain;
 
 public class DirectoryWalker
 {
-    private readonly Action<string> _fileCallback;
+    private readonly Func<string, bool> _fileCallback;
     private readonly IFileSystemAccessProvider _fileSystemAccessProvider;
     private readonly string _searchPattern;
 
-    public DirectoryWalker(Action<string> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider,
+    public DirectoryWalker(Func<string, bool> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider,
         string searchPattern)
     {
         _fileCallback = fileCallback;
@@ -44,7 +44,8 @@ public class DirectoryWalker
 
         foreach (var csFile in csFiles)
         {
-            _fileCallback(csFile);
+            if (_fileCallback(csFile))
+                Environment.Exit(1);
         }
     }
 }

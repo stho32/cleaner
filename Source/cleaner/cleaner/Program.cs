@@ -33,6 +33,10 @@ namespace cleaner
                             "System.Data.SqlClient",
                             "System.Text",
                             "System.ComponentModel",
+                            "System.Web",
+                            "System.Web.Mvc",
+                            "System.Web.Routing",
+                            "Newtonsoft.Json.Serialization"
                         }),
                     new FileNameMatchingDeclarationRule(),
                     new IfStatementOperatorRule(),
@@ -58,21 +62,26 @@ namespace cleaner
             return fileName.Contains(".Designer.");
         }
 
-        private static void ValidateRules(string filePath)
+        private static bool ValidateRules(string filePath)
         {
             if (IsDesignerFile(filePath))
-                return;
+                return false;
             
             var fileContent = _fileSystemAccessProvider?.GetFileContent(filePath);
 
             if (string.IsNullOrWhiteSpace(fileContent)) 
-                return;
+                return false;
             
             var messages = _validationRules?.Validate(filePath, fileContent);
             var messagePrinter = new ValidationMessagePrinter();
 
-            if (messages != null) 
+            if (messages != null && messages.Length > 0)
+            {
                 messagePrinter.Print(messages);
+                return true;
+            }
+
+            return false;
         }
     }
 }
