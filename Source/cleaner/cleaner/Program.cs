@@ -36,7 +36,8 @@ namespace cleaner
                             "System.Web",
                             "System.Web.Mvc",
                             "System.Web.Routing",
-                            "Newtonsoft.Json.Serialization"
+                            "Newtonsoft.Json.Serialization",
+                            "WebGrease.Css.Extensions"
                         }),
                     new FileNameMatchingDeclarationRule(),
                     new IfStatementOperatorRule(),
