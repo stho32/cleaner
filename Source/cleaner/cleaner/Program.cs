@@ -43,6 +43,7 @@ namespace cleaner
                     new IfStatementOperatorRule(),
                     new LinqExpressionLengthRule(),
                     new MethodLengthRule(),
+                    new SqlInNonRepositoryRule(),
                     new NoConfigurationManagerRule(),
                     new NoOutAndRefParametersRule(),
                     new NoPublicFieldsRule(),
