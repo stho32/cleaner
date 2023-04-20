@@ -16,17 +16,17 @@ public class DirectoryWalker
         _searchPattern = searchPattern;
     }
 
-    public void Walk(string directoryPath)
+    public void Walk(string directoryPath, bool stopOnFirstFileWithErrors = false)
     {
         if (string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.DirectoryExists(directoryPath))
         {
             throw new ArgumentException("Invalid directory path provided.");
         }
 
-        WalkDirectory(directoryPath);
+        WalkDirectory(directoryPath, stopOnFirstFileWithErrors);
     }
 
-    private void WalkDirectory(string directoryPath)
+    private void WalkDirectory(string directoryPath, bool stopOnFirstFileWithErrors)
     {
         var subdirectories = _fileSystemAccessProvider.GetDirectories(directoryPath);
 
@@ -37,14 +37,14 @@ public class DirectoryWalker
             if (_fileSystemAccessProvider.GetFileName(subdirectory).StartsWith("."))
                 continue;
 
-            WalkDirectory(subdirectory);
+            WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
         }
 
         var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern);
 
         foreach (var csFile in csFiles)
         {
-            if (_fileCallback(csFile))
+            if (_fileCallback(csFile) && stopOnFirstFileWithErrors)
                 Environment.Exit(1);
         }
     }

@@ -1,39 +1,44 @@
+namespace cleaner.Domain.Rules;
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace cleaner.Domain.Rules;
-
 public class NoConfigurationManagerRule : IRule
 {
-    public string Id => "NoConfigurationManager";
-    public string Name => "No ConfigurationManager Rule";
-    public string ShortDescription => "Check if ConfigurationManager or WebConfigurationManager is used in the code";
-    public string LongDescription => "This rule checks if ConfigurationManager or WebConfigurationManager is used anywhere in the code. It will return an error if either is found.";
+    public string Id => "NoConfigurationManagerRule";
+
+    public string Name => "Configuration Management Detection Rule";
+
+    public string ShortDescription => "Detects usage of .NET Configuration Management";
+
+    public string LongDescription => "This rule checks for usage of the .NET Configuration Management, including both normal and web versions, and raises a warning if detected.";
 
     public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 
-        var tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetRoot();
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+        var root = tree.GetCompilationUnitRoot();
+        
+        var usings = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
 
-        // Find all method invocations of ConfigurationManager and WebConfigurationManager
-        var configurationManagerInvocations = root.DescendantNodes()
-            .OfType<MemberAccessExpressionSyntax>()
-            .Where(m => (m.Name.Identifier.ValueText == "ConfigurationManager" || m.Name.Identifier.ValueText == "WebConfigurationManager") && m.Expression != null)
-            .Select(m => m.Expression.ToString())
-            .Distinct();
-
-        // Check if any ConfigurationManager or WebConfigurationManager invocations were found
-        if (configurationManagerInvocations.Any())
+        foreach (var usingDirective in usings)
         {
-            messages.Add(new ValidationMessage(
-                Severity.Error,
-                Id,
-                Name,
-                $"The file '{filePath}' contains references to ConfigurationManager or WebConfigurationManager. Please avoid using these APIs as they are considered legacy and have been deprecated in .NET Core."));
+            if (usingDirective.Name.ToString() == "System.Configuration" || usingDirective.Name.ToString() == "System.Web.Configuration")
+            {
+                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Configuration Management detected in file '{filePath}' at line {GetLineNumber(usingDirective)}"));
+            }
         }
 
         return messages.ToArray();
+    }
+
+    private int GetLineNumber(SyntaxNode node)
+    {
+        var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
+        return lineSpan.StartLinePosition.Line + 1;
     }
 }

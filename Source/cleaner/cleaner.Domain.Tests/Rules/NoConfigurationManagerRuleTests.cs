@@ -57,8 +57,8 @@ public class NoConfigurationManagerRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Error, messages[0].Severity);
-        Assert.AreEqual("NoConfigurationManager", messages[0].RuleId);
+        Assert.AreEqual(Severity.Warning, messages[0].Severity);
+        Assert.AreEqual("NoConfigurationManagerRule", messages[0].RuleId);
     }
 
     [Test]
@@ -82,8 +82,8 @@ public class NoConfigurationManagerRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Error, messages[0].Severity);
-        Assert.AreEqual("NoConfigurationManager", messages[0].RuleId);
+        Assert.AreEqual(Severity.Warning, messages[0].Severity);
+        Assert.AreEqual("NoConfigurationManagerRule", messages[0].RuleId);
     }
 
     [Test]
@@ -108,8 +108,8 @@ public class NoConfigurationManagerRuleTests
         var messages = _rule.Validate("TestClass.cs", code);
 
         Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Error, messages[0].Severity);
-        Assert.AreEqual("NoConfigurationManager", messages[0].RuleId);
+        Assert.AreEqual(2, messages.Length);
+        Assert.AreEqual(Severity.Warning, messages[0].Severity);
+        Assert.AreEqual("NoConfigurationManagerRule", messages[0].RuleId);
     }
 }
