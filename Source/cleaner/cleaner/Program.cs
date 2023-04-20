@@ -50,6 +50,7 @@ namespace cleaner
                     new NoPublicGenericListPropertiesRule(),
                     new NotImplementedExceptionRule(),
                     new PublicPropertiesPrivateSettersRule(),
+                    new RepositoryInheritanceRule(),
                     new RowLimitRule(),
                     new SingleDeclarationRule()
                 });
