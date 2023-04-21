@@ -1,3 +1,5 @@
+using cleaner.Domain.Helpers;
+
 namespace cleaner.Domain.Rules;
 
 using System.Collections.Generic;
@@ -29,16 +31,10 @@ public class NoConfigurationManagerRule : IRule
         {
             if (usingDirective.Name.ToString() == "System.Configuration" || usingDirective.Name.ToString() == "System.Web.Configuration")
             {
-                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Configuration Management detected in file '{filePath}' at line {GetLineNumber(usingDirective)}"));
+                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Configuration Management detected in file '{filePath}' at line {RuleHelper.GetLineNumber(usingDirective)}"));
             }
         }
 
         return messages.ToArray();
-    }
-
-    private int GetLineNumber(SyntaxNode node)
-    {
-        var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
-        return lineSpan.StartLinePosition.Line + 1;
     }
 }

@@ -1,3 +1,4 @@
+using cleaner.Domain.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -39,7 +40,7 @@ public class RepositoryConstructorRule : IRule
 
                 if (!hasRequiredConstructor)
                 {
-                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {GetLineNumber(classDeclaration)} should have a constructor with at least one parameter of type 'IDatabaseAccessor'."));
+                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should have a constructor with at least one parameter of type 'IDatabaseAccessor'."));
                 }
             }
         }
@@ -60,11 +61,5 @@ public class RepositoryConstructorRule : IRule
         var className = classDeclaration.Identifier.Text;
         var classNameEndsWithRepository = className.EndsWith("Repository", StringComparison.OrdinalIgnoreCase);
         return classNameEndsWithRepository;
-    }
-
-    private int GetLineNumber(SyntaxNode node)
-    {
-        var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
-        return lineSpan.StartLinePosition.Line + 1;
     }
 }

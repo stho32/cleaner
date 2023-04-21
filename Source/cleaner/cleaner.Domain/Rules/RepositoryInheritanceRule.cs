@@ -1,3 +1,4 @@
+using cleaner.Domain.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -28,17 +29,11 @@ public class RepositoryInheritanceRule : IRule
             {
                 if (classDeclaration.BaseList != null && classDeclaration.BaseList.Types.Count > 0)
                 {
-                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {GetLineNumber(classDeclaration)} should not inherit from another class."));
+                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class."));
                 }
             }
         }
 
         return messages.ToArray();
-    }
-
-    private int GetLineNumber(SyntaxNode node)
-    {
-        var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
-        return lineSpan.StartLinePosition.Line + 1;
     }
 }

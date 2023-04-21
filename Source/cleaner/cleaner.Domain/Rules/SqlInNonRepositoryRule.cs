@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using cleaner.Domain.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -36,18 +37,12 @@ public class SqlInNonRepositoryRule : IRule
                 {
                     if (SqlRegex.IsMatch(stringLiteral.Token.ValueText))
                     {
-                        messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"SQL detected in non-Repository class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {GetLineNumber(stringLiteral)}"));
+                        messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"SQL detected in non-Repository class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
                     }
                 }
             }
         }
 
         return messages.ToArray();
-    }
-
-    private int GetLineNumber(SyntaxNode node)
-    {
-        var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
-        return lineSpan.StartLinePosition.Line + 1;
     }
 }

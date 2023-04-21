@@ -1,8 +1,7 @@
+using cleaner.Domain.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace cleaner.Domain.Rules;
 
@@ -31,7 +30,7 @@ public class ForEachDataSourceRule : IRule
         {
             if (DataSourceExpressionHasTooManyDots(forEachStatement))
             {
-                int lineNumber = GetLineNumber(forEachStatement);
+                int lineNumber = RuleHelper.GetLineNumber(forEachStatement);
 
                 var message = new ValidationMessage(
                     Severity.Warning,
@@ -51,11 +50,5 @@ public class ForEachDataSourceRule : IRule
         var dataSourceExpression = forEachStatement.Expression.ToString();
         var dotCount = dataSourceExpression.Count(c => c == '.');
         return dotCount > 2;
-    }
-
-    private int GetLineNumber(ForEachStatementSyntax forEachStatement)
-    {
-        FileLinePositionSpan span = forEachStatement.SyntaxTree.GetLineSpan(forEachStatement.Span);
-        return span.StartLinePosition.Line + 1;
     }
 }

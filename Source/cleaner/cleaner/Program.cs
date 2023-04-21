@@ -3,6 +3,7 @@ using cleaner.Domain.FileSystem;
 using cleaner.Domain.Formatter;
 using cleaner.Domain.Helpers;
 using cleaner.Domain.Rules;
+using cleaner.Domain.Rules.NestedIfStatementsRuleValidation;
 
 namespace cleaner
 {
