@@ -24,7 +24,7 @@ public class IfStatementOperatorRuleTests
         var result = _ifStatementOperatorRule.Validate(filePath, fileContent);
 
         // Assert
-        Assert.IsEmpty(result);
+        Assert.IsEmpty(result!);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class TestClass
         var result = _ifStatementOperatorRule.Validate(filePath, fileContent);
 
         // Assert
-        Assert.IsEmpty(result);
+        Assert.IsEmpty(result!);
     }
 
     [Test]
@@ -77,7 +77,7 @@ public class TestClass
         var result = _ifStatementOperatorRule.Validate(filePath, fileContent);
 
         // Assert
-        Assert.AreEqual(1, result.Length);
+        Assert.AreEqual(1, result!.Length);
         Assert.AreEqual(Severity.Warning, result[0]?.Severity);
         Assert.AreEqual("IfStatementOperatorRule", result[0]?.RuleId);
         Assert.AreEqual("If Statement Operator Rule", result[0]?.RuleName);

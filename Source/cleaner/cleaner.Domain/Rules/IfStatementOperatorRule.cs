@@ -13,7 +13,7 @@ public class IfStatementOperatorRule : IRule
     public string ShortDescription => "Detects if statements containing operators, except for function calls";
     public string LongDescription => "This rule checks if an if statement contains operators, except for function calls, and raises a warning if it does.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

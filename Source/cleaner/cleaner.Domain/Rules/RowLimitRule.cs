@@ -7,7 +7,7 @@ public class RowLimitRule : IRule
     public string ShortDescription => "Detects files with more than 500 rows";
     public string LongDescription => "This rule checks if a file has more than 500 rows and raises a warning if it does.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         int rowCount = CountRows(fileContent);
         if (rowCount > 500)

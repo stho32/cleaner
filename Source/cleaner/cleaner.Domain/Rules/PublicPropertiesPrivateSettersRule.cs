@@ -11,7 +11,7 @@ public class PublicPropertiesPrivateSettersRule : IRule
     public string ShortDescription => "Public properties should not have public setters";
     public string LongDescription => "This rule checks if public properties have public setters and raises a warning if they do.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

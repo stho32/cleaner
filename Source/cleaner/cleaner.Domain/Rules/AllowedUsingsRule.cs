@@ -18,7 +18,7 @@ public class AllowedUsingsRule : IRule
     public string ShortDescription => "Verify that only allowed usings are used";
     public string LongDescription => "This rule checks if only allowed usings are used in a file and raises a warning if any disallowed usings are found.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

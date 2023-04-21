@@ -14,7 +14,7 @@ public class CompositeRule : IRule
         _rules = rules.ToList();
     }
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

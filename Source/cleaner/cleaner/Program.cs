@@ -126,25 +126,52 @@ namespace cleaner
         {
             if (IsDesignerFile(filePath))
                 return false;
-            
-            var fileContent = _fileSystemAccessProvider?.GetFileContent(filePath);
 
-            if (string.IsNullOrWhiteSpace(fileContent)) 
+            string? fileContent = GetFileContent(filePath);
+            if (string.IsNullOrWhiteSpace(fileContent))
                 return false;
-            
+
+            IncrementTotalFilesChecked();
+
+            ValidationMessage[]? messages = RunValidationRules(filePath, fileContent);
+            if (CollectionHelpers.IsNullOrEmpty(messages))
+                return false;
+
+            UpdateProblemStatistics(messages);
+            PrintValidationMessages(messages);
+
+            return true;
+        }
+
+        private static string? GetFileContent(string filePath)
+        {
+            return _fileSystemAccessProvider?.GetFileContent(filePath);
+        }
+
+        private static void IncrementTotalFilesChecked()
+        {
             _totalFilesChecked += 1;
+        }
 
-            var messages = _validationRules?.Validate(filePath, fileContent);
-            var messagePrinter = new ValidationMessagePrinter();
+        private static ValidationMessage[]? RunValidationRules(string filePath, string fileContent)
+        {
+            var messages = _validationRules!.Validate(filePath, fileContent);
+            return messages;
+        }
 
-            if (CollectionHelpers.IsNullOrEmpty(messages)) 
-                return false;
+        private static void UpdateProblemStatistics(ValidationMessage[]? messages)
+        {
+            if (messages == null)
+                return;
             
             _totalFilesWithProblems += 1;
-            _totalProblems += messages!.Length;
-                
-            messagePrinter.Print(messages!);
-            return true;
+            _totalProblems += messages.Length;
+        }
+
+        private static void PrintValidationMessages(ValidationMessage[]? messages)
+        {
+            var messagePrinter = new ValidationMessagePrinter();
+            messagePrinter.Print(messages);
         }
     }
 }

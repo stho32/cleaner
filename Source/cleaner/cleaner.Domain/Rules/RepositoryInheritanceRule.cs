@@ -14,7 +14,7 @@ public class RepositoryInheritanceRule : IRule
 
     public string LongDescription => "This rule checks if a class ending with 'Repository' is derived from another class. If it is, a warning is raised.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

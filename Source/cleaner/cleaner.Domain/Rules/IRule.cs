@@ -6,5 +6,5 @@ public interface IRule
     string Name { get; }
     string ShortDescription { get; }
     string LongDescription { get; }
-    ValidationMessage?[] Validate(string filePath, string fileContent);
+    ValidationMessage[]? Validate(string filePath, string fileContent);
 }

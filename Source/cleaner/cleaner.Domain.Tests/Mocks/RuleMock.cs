@@ -20,8 +20,8 @@ public class RuleMock : IRule
     public string ShortDescription => "A mock rule for testing.";
     public string LongDescription => "This is a mock rule implementation for testing purposes. It can be configured to return a given message or not.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
-        return _returnMessage ? new[] { _message } : Array.Empty<ValidationMessage>();
+        return (_returnMessage ? new[] { _message } : Array.Empty<ValidationMessage>())!;
     }
 }

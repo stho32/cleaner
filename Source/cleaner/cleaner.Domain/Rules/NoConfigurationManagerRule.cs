@@ -16,7 +16,7 @@ public class NoConfigurationManagerRule : IRule
 
     public string LongDescription => "This rule checks for usage of the .NET Configuration Management, including both normal and web versions, and raises a warning if detected.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

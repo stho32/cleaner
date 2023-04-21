@@ -17,7 +17,7 @@ public class SqlInNonRepositoryRule : IRule
 
     private static readonly Regex SqlRegex = new Regex(@"\b(?:SELECT|INSERT|UPDATE|DELETE)\b", RegexOptions.IgnoreCase);
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

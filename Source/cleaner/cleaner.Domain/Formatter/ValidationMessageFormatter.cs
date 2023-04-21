@@ -1,12 +1,16 @@
+using cleaner.Domain.Helpers;
 using cleaner.Domain.Rules;
 
 namespace cleaner.Domain.Formatter;
 
 public class ValidationMessagePrinter
 {
-    public void Print(ValidationMessage[] messages)
+    public void Print(ValidationMessage[]? messages)
     {
-        foreach (var message in messages)
+        if (CollectionHelpers.IsNullOrEmpty(messages))
+            return;
+        
+        foreach (var message in messages!)
         {
             Console.ForegroundColor = GetSeverityColor(message.Severity);
             Console.WriteLine($"{message.Severity}: {message.RuleName} ({message.RuleId}): {message.ErrorMessage}");

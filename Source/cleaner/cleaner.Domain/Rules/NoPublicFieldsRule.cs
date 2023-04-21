@@ -11,7 +11,7 @@ public class NoPublicFieldsRule : IRule
     public string ShortDescription => "Checks if any public fields are declared in a file.";
     public string LongDescription => "This rule checks if any public fields are declared in a file. It will return a warning if a public field is found.";
 
-    public ValidationMessage?[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 
