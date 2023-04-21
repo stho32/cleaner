@@ -53,8 +53,11 @@ public class NestedIfStatementsRule : IRule
         }
     }
 
-    private int GetLineNumber(SyntaxNode node)
+    private int GetLineNumber(SyntaxNode? node)
     {
+        if (node == null)
+            return -1;
+        
         var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
         return lineSpan.StartLinePosition.Line + 1;
     }
