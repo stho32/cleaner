@@ -35,7 +35,9 @@ public class LinqExpressionLengthRule : IRule
                                      identifier.Identifier.Text.StartsWith("GroupJoin"))
                 .ToList();
 
-            if (methodCalls.Count > 2)
+            var linqExpressionIsTooLong = methodCalls.Count > 2;
+            
+            if (linqExpressionIsTooLong)
             {
                 var message = new ValidationMessage(
                     Severity.Warning,
