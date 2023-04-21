@@ -47,7 +47,8 @@ public class PublicPropertiesPrivateSettersRule : IRule
         if (setter == null)
             return false;
 
-        if (setter.Modifiers.Any(modifier => modifier.ValueText == "private"))
+        var areAnyPrivateModifiersPresent = setter.Modifiers.Any(modifier => modifier.ValueText == "private");
+        if (areAnyPrivateModifiersPresent)
             return false;
 
         return true;

@@ -56,7 +56,7 @@ public class SqlInNonRepositoryRuleTests
                 {
                     public void GetData()
                     {
-                        string sql = ""SELECT * FROM Users"";
+                        string sql = ""SELECT TOP 10 * FROM Users"";
                     }
                 }
             ";

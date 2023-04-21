@@ -104,7 +104,8 @@ namespace cleaner
                 "System.Net.Http",
                 "System.Threading",
                 "System.Threading.Tasks",
-                "System.Runtime.CompilerServices"
+                "System.Runtime.CompilerServices",
+                "System.Text.RegularExpressions"
             };
         }
 

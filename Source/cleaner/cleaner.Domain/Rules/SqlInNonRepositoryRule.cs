@@ -16,8 +16,8 @@ public class SqlInNonRepositoryRule : IRule
 
     public string LongDescription => "This rule checks for SQL strings within classes, and if found, ensures the class name ends with 'Repository'. If not, a warning is raised.";
 
-    private static readonly Regex SqlRegex = new Regex(@"\b(?:SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|EXEC)\b", RegexOptions.IgnoreCase);
-    private const int SqlKeywordThreshold = 2;
+    private static readonly Regex SqlRegex = new Regex(@"\b(?:SELECT|TOP|INSERT|UPDATE|DELETE|FROM|WHERE|EXEC|ORDER BY)\b", RegexOptions.IgnoreCase);
+    private const int SqlKeywordThreshold = 3;
 
     public ValidationMessage[] Validate(string filePath, string fileContent)
     {
@@ -29,7 +29,8 @@ public class SqlInNonRepositoryRule : IRule
 
         foreach (var classDeclaration in classDeclarations)
         {
-            if (!classDeclaration.Identifier.Text.EndsWith("Repository", StringComparison.OrdinalIgnoreCase))
+            var className = classDeclaration.Identifier.Text;
+            if (!IsRepository(className))
             {
                 var stringLiterals = classDeclaration.DescendantNodes().OfType<LiteralExpressionSyntax>()
                     .Where(node => node.IsKind(SyntaxKind.StringLiteralExpression))
@@ -39,14 +40,20 @@ public class SqlInNonRepositoryRule : IRule
                 {
                     var matches = SqlRegex.Matches(stringLiteral.Token.ValueText);
 
-                    if (matches.Count >= SqlKeywordThreshold)
+                    var isASubstentialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
+                    if (isASubstentialAmountOfSqlPresent)
                     {
-                        messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"SQL detected in non-Repository class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
+                        messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"SQL detected in non-Repository class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
                     }
                 }
             }
         }
 
         return messages.ToArray();
+    }
+
+    private static bool IsRepository(string className)
+    {
+        return className.EndsWith("Repository", StringComparison.OrdinalIgnoreCase);
     }
 }
