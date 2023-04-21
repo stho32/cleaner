@@ -13,9 +13,6 @@ public class ValidationMessagePrinter
         }
 
         Console.ResetColor();
-
-        // Print the count of messages
-        Console.WriteLine($"\nTotal messages: {messages.Length}");
     }
 
     private ConsoleColor GetSeverityColor(Severity severity)
