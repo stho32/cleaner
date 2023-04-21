@@ -20,35 +20,29 @@ namespace cleaner
                 return;
             }
 
+            HashSet<string> allowedUsings;
+
+            if (!string.IsNullOrEmpty(parser.AllowedUsingsFilePath))
+            {
+                try
+                {
+                    allowedUsings = new HashSet<string>(File.ReadAllLines(parser.AllowedUsingsFilePath));
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine($"Error reading allowed usings file: {e.Message}");
+                    return;
+                }
+            }
+            else
+            {
+                allowedUsings = GetDefaultAllowedUsings();
+            }
+
             _validationRules = new CompositeRule(
                 new IRule[]
                 {
-                    new AllowedUsingsRule(
-                        new HashSet<string>
-                        {
-                            "System",
-                            "System.Collections.Generic",
-                            "System.Linq",
-                            "Newtonsoft.Json",
-                            "Newtonsoft.Json.Linq",
-                            "System.Data",
-                            "System.Data.SqlClient",
-                            "System.Text",
-                            "System.ComponentModel",
-                            "System.Web",
-                            "System.Web.Mvc",
-                            "System.Web.Routing",
-                            "Newtonsoft.Json.Serialization",
-                            "WebGrease.Css.Extensions",
-                            "System.IO",
-                            "Microsoft.CodeAnalysis",
-                            "Microsoft.CodeAnalysis.CSharp",
-                            "Microsoft.CodeAnalysis.CSharp.Syntax",
-                            "System.Net.Http",
-                            "System.Threading",
-                            "System.Threading.Tasks",
-                            "System.Runtime.CompilerServices"
-                        }),
+                    new AllowedUsingsRule(allowedUsings),
                     new FileNameMatchingDeclarationRule(),
                     new IfStatementOperatorRule(),
                     new LinqExpressionLengthRule(),
@@ -72,6 +66,35 @@ namespace cleaner
             walker.Walk(parser.DirectoryPath??"", parser.StopOnFirstFileWithProblems);
 
             PrintStatistics(_totalFilesChecked, _totalFilesWithProblems, _totalProblems);
+        }
+
+        private static HashSet<string> GetDefaultAllowedUsings()
+        {
+            return new HashSet<string>
+            {
+                "System",
+                "System.Collections.Generic",
+                "System.Linq",
+                "Newtonsoft.Json",
+                "Newtonsoft.Json.Linq",
+                "System.Data",
+                "System.Data.SqlClient",
+                "System.Text",
+                "System.ComponentModel",
+                "System.Web",
+                "System.Web.Mvc",
+                "System.Web.Routing",
+                "Newtonsoft.Json.Serialization",
+                "WebGrease.Css.Extensions",
+                "System.IO",
+                "Microsoft.CodeAnalysis",
+                "Microsoft.CodeAnalysis.CSharp",
+                "Microsoft.CodeAnalysis.CSharp.Syntax",
+                "System.Net.Http",
+                "System.Threading",
+                "System.Threading.Tasks",
+                "System.Runtime.CompilerServices"
+            };
         }
 
         private static bool IsDesignerFile(string filePath)
