@@ -26,12 +26,18 @@ public class AllowedUsingsRule : IRule
         var root = tree.GetCompilationUnitRoot();
 
         var usingDirectives = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
+        string rootNamespace = ExtractRootNamespace(root);
 
         foreach (var usingDirective in usingDirectives)
         {
             string usingNamespace = usingDirective.Name.ToString();
+            if (usingNamespace.StartsWith("global::"))
+            {
+                usingNamespace = usingNamespace.Replace("global::", "");
+            }
 
-            if (!_allowedUsings.Contains(usingNamespace.Replace("global::", "")) && !IsSubNamespaceOfRootNamespace(usingNamespace, root))
+            if (!_allowedUsings.Contains(usingNamespace) && 
+                !IsSubNamespaceOfSameRootNamespace(usingNamespace, rootNamespace))
             {
                 var message = new ValidationMessage(
                     Severity.Warning,
@@ -46,17 +52,49 @@ public class AllowedUsingsRule : IRule
         return messages.ToArray();
     }
 
-    private bool IsSubNamespaceOfRootNamespace(string usingNamespace, CompilationUnitSyntax root)
+    private string ExtractRootNamespace(CompilationUnitSyntax root)
     {
         var namespaceDeclaration = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
+        var fileScopedNamespaceDeclaration = root.DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>().FirstOrDefault();
 
         if (namespaceDeclaration != null)
         {
-            string rootNamespace = namespaceDeclaration.Name.ToString();
-            string firstPartOnly = rootNamespace.Split(".").First();
-            return usingNamespace.StartsWith(firstPartOnly);
+            string fullNamespace = namespaceDeclaration.Name.ToString();
+            string[] namespaceParts = fullNamespace.Split('.');
+            return namespaceParts.Length > 0 ? namespaceParts[0] : string.Empty;
+        }
+        else if (fileScopedNamespaceDeclaration != null)
+        {
+            string fullNamespace = fileScopedNamespaceDeclaration.Name.ToString();
+            string[] namespaceParts = fullNamespace.Split('.');
+            return namespaceParts.Length > 0 ? namespaceParts[0] : string.Empty;
+        }
+
+        return string.Empty;
+    }
+
+
+    private bool IsSubNamespaceOfSameRootNamespace(string usingNamespace, string rootNamespace)
+    {
+        if (!string.IsNullOrEmpty(rootNamespace))
+        {
+            return usingNamespace.StartsWith(rootNamespace);
         }
 
         return false;
     }
+
+    // private bool IsSubNamespaceOfRootNamespace(string usingNamespace, CompilationUnitSyntax root)
+    // {
+    //     var namespaceDeclaration = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
+    //
+    //     if (namespaceDeclaration != null)
+    //     {
+    //         string rootNamespace = namespaceDeclaration.Name.ToString();
+    //         string firstPartOnly = rootNamespace.Split(".").First();
+    //         return usingNamespace.StartsWith(firstPartOnly);
+    //     }
+    //
+    //     return false;
+    // }
 }
