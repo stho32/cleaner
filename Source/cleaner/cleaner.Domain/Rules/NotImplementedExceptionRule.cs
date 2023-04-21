@@ -23,17 +23,10 @@ public class NotImplementedExceptionRule : IRule
         var throwStatements = root.DescendantNodes()
             .OfType<ThrowStatementSyntax>();
 
-        int exceptionCount = 0;
-        foreach (var throwStatement in throwStatements)
-        {
-            if (throwStatement.Expression is ObjectCreationExpressionSyntax objectCreation &&
-                objectCreation.Type.ToString() == "NotImplementedException")
-            {
-                exceptionCount++;
-            }
-        }
-
-        if (exceptionCount > 0)
+        var exceptionCount = CountNotImplementedExceptions(throwStatements);
+        var exceptionsFound = exceptionCount > 0;
+        
+        if (exceptionsFound)
         {
             messages.Add(
                 new ValidationMessage(
@@ -44,5 +37,23 @@ public class NotImplementedExceptionRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private static int CountNotImplementedExceptions(IEnumerable<ThrowStatementSyntax> throwStatements)
+    {
+        int exceptionCount = 0;
+        foreach (var throwStatement in throwStatements)
+        {
+            if (IsNewNotImplementedExceptionStatement(throwStatement))
+                exceptionCount++;
+        }
+
+        return exceptionCount;
+    }
+
+    private static bool IsNewNotImplementedExceptionStatement(ThrowStatementSyntax throwStatement)
+    {
+        return throwStatement.Expression is ObjectCreationExpressionSyntax objectCreation &&
+               objectCreation.Type.ToString() == "NotImplementedException";
     }
 }

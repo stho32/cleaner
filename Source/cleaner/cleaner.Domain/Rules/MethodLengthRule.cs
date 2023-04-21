@@ -27,8 +27,9 @@ namespace cleaner.Domain.Rules
             {
                 var semicolonCount = method.DescendantTokens()
                     .Count(token => token.IsKind(SyntaxKind.SemicolonToken));
-
-                if (semicolonCount > 10)
+                var hasMoreSemicolonsThanAllowed = semicolonCount > 10;
+                
+                if (hasMoreSemicolonsThanAllowed)
                 {
                     var lineNumber = tree.GetLineSpan(method.Span).StartLinePosition.Line + 1;
                     var message = new ValidationMessage(

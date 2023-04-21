@@ -10,7 +10,9 @@ public class RowLimitRule : IRule
     public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         int rowCount = CountRows(fileContent);
-        if (rowCount > 500)
+        var hasMoreRowsThanAllowed = rowCount > 500;
+        
+        if (hasMoreRowsThanAllowed)
         {
             var message = new ValidationMessage(
                 Severity.Warning,
