@@ -24,6 +24,7 @@ namespace cleaner
                 {
                     new AllowedUsingsRule(allowedUsings),
                     new FileNameMatchingDeclarationRule(),
+                    new IfStatementDotsRule(),
                     new IfStatementOperatorRule(),
                     new LinqExpressionLengthRule(),
                     new MethodLengthRule(),
