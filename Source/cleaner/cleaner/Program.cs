@@ -13,32 +13,11 @@ namespace cleaner
         
         static void Main(string[] args)
         {
-            var parser = new CommandLineArgumentParser(args);
-
-            if (!parser.IsValid)
-            {
-                CommandLineArgumentParser.PrintUsage();
+            var parser = ParseCommandLineArguments(args); 
+            if (!parser.IsValid) 
                 return;
-            }
 
-            HashSet<string> allowedUsings;
-
-            if (!string.IsNullOrEmpty(parser.AllowedUsingsFilePath))
-            {
-                try
-                {
-                    allowedUsings = new HashSet<string>(File.ReadAllLines(parser.AllowedUsingsFilePath));
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine($"Error reading allowed usings file: {e.Message}");
-                    return;
-                }
-            }
-            else
-            {
-                allowedUsings = GetDefaultAllowedUsings();
-            }
+            HashSet<string> allowedUsings = LoadAllowedUsingsOrUseDefault(parser.AllowedUsingsFilePath);
 
             _validationRules = new CompositeRule(
                 new IRule[]
@@ -67,6 +46,33 @@ namespace cleaner
             walker.Walk(parser.DirectoryPath??"", parser.StopOnFirstFileWithProblems);
 
             PrintStatistics(_totalFilesChecked, _totalFilesWithProblems, _totalProblems);
+        }
+
+        private static HashSet<string> LoadAllowedUsingsOrUseDefault(string? allowedUsingsFilePath)
+        {
+            if (!string.IsNullOrEmpty(allowedUsingsFilePath))
+            {
+                try
+                {
+                    return new HashSet<string>(File.ReadAllLines(allowedUsingsFilePath));
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine($"Error reading allowed usings file: {e.Message}");
+                }
+            }
+
+            return GetDefaultAllowedUsings();
+        }
+
+        private static CommandLineArgumentParser ParseCommandLineArguments(string[] args)
+        {
+            var parser = new CommandLineArgumentParser(args);
+
+            if (!parser.IsValid) 
+                CommandLineArgumentParser.PrintUsage();
+
+            return parser;
         }
 
         private static HashSet<string> GetDefaultAllowedUsings()
