@@ -23,18 +23,15 @@ public class AllowedUsingsRule : IRule
         var messages = new List<ValidationMessage>();
 
         SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+
         var root = tree.GetCompilationUnitRoot();
+        string rootNamespace = ExtractRootNamespace(root);
 
         var usingDirectives = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
-        string rootNamespace = ExtractRootNamespace(root);
 
         foreach (var usingDirective in usingDirectives)
         {
-            string usingNamespace = usingDirective.Name.ToString();
-            if (usingNamespace.StartsWith("global::"))
-            {
-                usingNamespace = usingNamespace.Replace("global::", "");
-            }
+            string usingNamespace = GetUsingWithoutOptionalGlobalMarker(usingDirective);
 
             var isInvalidUsing = !_allowedUsings.Contains(usingNamespace) && 
                     !IsSubNamespaceOfSameRootNamespace(usingNamespace, rootNamespace);
@@ -52,6 +49,18 @@ public class AllowedUsingsRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private string GetUsingWithoutOptionalGlobalMarker(UsingDirectiveSyntax usingDirective)
+    {
+        var usingNamespace = usingDirective.Name.ToString();
+        
+        if (usingNamespace.StartsWith("global::"))
+        {
+            usingNamespace = usingNamespace.Replace("global::", "");
+        }
+
+        return usingNamespace;
     }
 
     private string ExtractRootNamespace(CompilationUnitSyntax root)
@@ -85,18 +94,4 @@ public class AllowedUsingsRule : IRule
 
         return false;
     }
-
-    // private bool IsSubNamespaceOfRootNamespace(string usingNamespace, CompilationUnitSyntax root)
-    // {
-    //     var namespaceDeclaration = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
-    //
-    //     if (namespaceDeclaration != null)
-    //     {
-    //         string rootNamespace = namespaceDeclaration.Name.ToString();
-    //         string firstPartOnly = rootNamespace.Split(".").First();
-    //         return usingNamespace.StartsWith(firstPartOnly);
-    //     }
-    //
-    //     return false;
-    // }
 }
