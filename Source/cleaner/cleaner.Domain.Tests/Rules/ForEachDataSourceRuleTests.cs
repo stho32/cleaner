@@ -51,7 +51,7 @@ public class ForEachDataSourceRuleTests
         var messages = rule.Validate("TestFile.cs", code);
 
         Assert.AreEqual(1, messages.Length);
-        Assert.IsTrue(messages[0].ErrorMessage.Contains("TestFile.cs:8"));
+        Assert.IsTrue(messages[0].ErrorMessage.Contains("'TestFile.cs':8"));
     }
 
     [Test]
