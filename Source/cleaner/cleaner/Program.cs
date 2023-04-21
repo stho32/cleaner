@@ -70,6 +70,8 @@ namespace cleaner
 
             var walker = new DirectoryWalker(ValidateRules, new FileSystemAccessProvider(), "*.cs");
             walker.Walk(parser.DirectoryPath??"", parser.StopOnFirstFileWithProblems);
+
+            PrintStatistics(_totalFilesChecked, _totalFilesWithProblems, _totalProblems);
         }
 
         private static bool IsDesignerFile(string filePath)
@@ -78,6 +80,18 @@ namespace cleaner
             return fileName.Contains(".Designer.");
         }
 
+        private static int _totalFilesChecked = 0;
+        private static int _totalFilesWithProblems = 0;
+        private static int _totalProblems = 0;
+        
+        private static void PrintStatistics(int totalFilesChecked, int totalFilesWithProblems, int totalProblems)
+        {
+            Console.WriteLine("\nStatistics:");
+            Console.WriteLine($"  Total files checked:       {totalFilesChecked}");
+            Console.WriteLine($"  Total files with problems: {totalFilesWithProblems}");
+            Console.WriteLine($"  Total problems found:      {totalProblems}");
+        }
+        
         private static bool ValidateRules(string filePath)
         {
             if (IsDesignerFile(filePath))
@@ -88,11 +102,16 @@ namespace cleaner
             if (string.IsNullOrWhiteSpace(fileContent)) 
                 return false;
             
+            _totalFilesChecked += 1;
+
             var messages = _validationRules?.Validate(filePath, fileContent);
             var messagePrinter = new ValidationMessagePrinter();
 
             if (messages != null && messages.Length > 0)
             {
+                _totalFilesWithProblems += 1;
+                _totalProblems += messages.Length;
+                
                 messagePrinter.Print(messages!);
                 return true;
             }
