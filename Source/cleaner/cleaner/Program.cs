@@ -12,11 +12,13 @@ namespace cleaner
         
         static void Main(string[] args)
         {
-            var cmdParser = new CommandLineArgumentParser();
+            var parser = new CommandLineArgumentParser(args);
 
-            var result = cmdParser.Parse(args);
-            if (string.IsNullOrWhiteSpace(result))
+            if (!parser.IsValid)
+            {
+                CommandLineArgumentParser.PrintUsage();
                 return;
+            }
 
             _validationRules = new CompositeRule(
                 new IRule[]
@@ -63,7 +65,7 @@ namespace cleaner
             _fileSystemAccessProvider = new FileSystemAccessProvider();
 
             var walker = new DirectoryWalker(ValidateRules, new FileSystemAccessProvider(), "*.cs");
-            walker.Walk(result);
+            walker.Walk(parser.DirectoryPath??"", parser.StopOnFirstFileWithProblems);
         }
 
         private static bool IsDesignerFile(string filePath)
