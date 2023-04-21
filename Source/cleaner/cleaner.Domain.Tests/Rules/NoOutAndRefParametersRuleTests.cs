@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class NoOutAndRefParametersRuleTests
 {
-    private NoOutAndRefParametersRule _rule;
+    private NoOutAndRefParametersRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -45,9 +45,9 @@ public class NoOutAndRefParametersRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(5, messages.Length);
-        Assert.AreEqual("No Out and Ref Parameters Rule", messages[0].RuleName);
-        Assert.AreEqual(Severity.Warning, messages[0].Severity);
-        Assert.IsTrue(messages.All(m => m.ErrorMessage.Contains("Please avoid using out or ref parameters.")));
+        Assert.AreEqual("No Out and Ref Parameters Rule", messages[0]?.RuleName);
+        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
+        Assert.IsTrue(messages.All(m => m!.ErrorMessage.Contains("Please avoid using out or ref parameters.")));
     }
 
     [Test]
@@ -64,8 +64,8 @@ public class NoOutAndRefParametersRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(3, messages.Length);
-        Assert.AreEqual("No Out and Ref Parameters Rule", messages[0].RuleName);
-        Assert.AreEqual(Severity.Warning, messages[0].Severity);
-        Assert.IsTrue(messages.All(m => m.ErrorMessage.Contains("Please avoid using out or ref parameters.")));
+        Assert.AreEqual("No Out and Ref Parameters Rule", messages[0]?.RuleName);
+        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
+        Assert.IsTrue(messages.All(m => m!.ErrorMessage.Contains("Please avoid using out or ref parameters.")));
     }
 }

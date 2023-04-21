@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class RepositoryInheritanceRuleTests
 {
-    private RepositoryInheritanceRule _rule;
+    private RepositoryInheritanceRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -60,10 +60,10 @@ public class RepositoryInheritanceRuleTests
         var messages = _rule.Validate("TestFile.cs", code);
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Warning, messages[0].Severity);
-        Assert.AreEqual(_rule.Id, messages[0].RuleId);
-        Assert.AreEqual(_rule.Name, messages[0].RuleName);
+        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
+        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+        Assert.AreEqual(_rule.Name, messages[0]?.RuleName);
         StringAssert.Contains("Class 'TestRepository' in file 'TestFile.cs' at line 6 should not inherit from another class.",
-            messages[0].ErrorMessage);
+            messages[0]?.ErrorMessage);
     }
 }

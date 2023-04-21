@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class NoPublicFieldsRuleTests
 {
-    private NoPublicFieldsRule _rule;
+    private NoPublicFieldsRule _rule = null!;
 
     [SetUp]
     public void SetUp()
@@ -67,22 +67,22 @@ public class NoPublicFieldsRuleTests
         // Assert
         Assert.AreEqual(3, result.Length);
 
-        Assert.AreEqual(Severity.Warning, result[0].Severity);
-        Assert.AreEqual("E006", result[0].RuleId);
-        Assert.AreEqual("No Public Fields Rule", result[0].RuleName);
+        Assert.AreEqual(Severity.Warning, result[0]?.Severity);
+        Assert.AreEqual("E006", result[0]?.RuleId);
+        Assert.AreEqual("No Public Fields Rule", result[0]?.RuleName);
         Assert.AreEqual("The file 'test.cs' contains a public field: 'publicField'. This is not allowed.",
-            result[0].ErrorMessage);
+            result[0]?.ErrorMessage);
 
-        Assert.AreEqual(Severity.Warning, result[1].Severity);
-        Assert.AreEqual("E006", result[1].RuleId);
-        Assert.AreEqual("No Public Fields Rule", result[1].RuleName);
+        Assert.AreEqual(Severity.Warning, result[1]?.Severity);
+        Assert.AreEqual("E006", result[1]?.RuleId);
+        Assert.AreEqual("No Public Fields Rule", result[1]?.RuleName);
         Assert.AreEqual("The file 'test.cs' contains a public field: 'publicStaticField'. This is not allowed.",
-            result[1].ErrorMessage);
+            result[1]?.ErrorMessage);
 
-        Assert.AreEqual(Severity.Warning, result[2].Severity);
-        Assert.AreEqual("E006", result[2].RuleId);
-        Assert.AreEqual("No Public Fields Rule", result[2].RuleName);
+        Assert.AreEqual(Severity.Warning, result[2]?.Severity);
+        Assert.AreEqual("E006", result[2]?.RuleId);
+        Assert.AreEqual("No Public Fields Rule", result[2]?.RuleName);
         Assert.AreEqual("The file 'test.cs' contains a public field: 'publicReadonlyField'. This is not allowed.",
-            result[2].ErrorMessage);
+            result[2]?.ErrorMessage);
     }
 }

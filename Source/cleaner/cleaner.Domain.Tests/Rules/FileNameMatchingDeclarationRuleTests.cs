@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class FileNameMatchingDeclarationRuleTests
 {
-    private FileNameMatchingDeclarationRule _rule;
+    private FileNameMatchingDeclarationRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -45,7 +45,7 @@ public class FileNameMatchingDeclarationRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("FileNameMatchingDeclarationRule", messages[0].RuleId);
+        Assert.AreEqual("FileNameMatchingDeclarationRule", messages[0]?.RuleId);
     }
 
     [Test]

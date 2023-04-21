@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class NestedIfStatementsRuleTests
 {
-    private NestedIfStatementsRule _rule;
+    private NestedIfStatementsRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -76,11 +76,11 @@ public class NestedIfStatementsRuleTests
         var messages = _rule.Validate("TestFile.cs", code);
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Warning, messages[0].Severity);
-        Assert.AreEqual(_rule.Id, messages[0].RuleId);
-        Assert.AreEqual(_rule.Name, messages[0].RuleName);
+        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
+        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+        Assert.AreEqual(_rule.Name, messages[0]?.RuleName);
         StringAssert.Contains(
             "Method 'TestMethod' in file 'TestFile.cs' at line 4 has if statements nested more than 2 levels deep.",
-            messages[0].ErrorMessage);
+            messages[0]?.ErrorMessage);
     }
 }

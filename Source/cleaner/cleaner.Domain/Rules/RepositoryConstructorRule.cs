@@ -14,7 +14,7 @@ public class RepositoryConstructorRule : IRule
 
     public string LongDescription => "This rule checks if a class ending with 'Repository' has a constructor with at least one parameter of type 'IDatabaseAccessor'. If it doesn't, a warning is raised.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage?[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 
@@ -30,7 +30,7 @@ public class RepositoryConstructorRule : IRule
 
                 foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>())
                 {
-                    if (constructor.ParameterList.Parameters.Any(param => param.Type.ToString() == "IDatabaseAccessor"))
+                    if (constructor.ParameterList.Parameters.Any(param => param.Type?.ToString() == "IDatabaseAccessor"))
                     {
                         hasRequiredConstructor = true;
                         break;

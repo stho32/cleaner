@@ -21,7 +21,7 @@ public class SingleDeclarationRuleTests
         string fileContent = "class Test {}";
 
         // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        var messages = _rule!.Validate(filePath, fileContent);
 
         // Assert
         Assert.IsEmpty(messages);
@@ -35,7 +35,7 @@ public class SingleDeclarationRuleTests
         string fileContent = "interface ITest {}";
 
         // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        var messages = _rule!.Validate(filePath, fileContent);
 
         // Assert
         Assert.IsEmpty(messages);
@@ -52,12 +52,12 @@ public class SingleDeclarationRuleTests
             ";
 
         // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        var messages = _rule!.Validate(filePath, fileContent);
 
         // Assert
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0].RuleId);
-        Assert.AreEqual(Severity.Error, messages[0].Severity);
+        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+        Assert.AreEqual(Severity.Error, messages[0]?.Severity);
     }
 
     [Test]
@@ -71,12 +71,12 @@ public class SingleDeclarationRuleTests
             ";
 
         // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        var messages = _rule!.Validate(filePath, fileContent);
 
         // Assert
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0].RuleId);
-        Assert.AreEqual(Severity.Error, messages[0].Severity);
+        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+        Assert.AreEqual(Severity.Error, messages[0]?.Severity);
     }
 
     [Test]
@@ -90,11 +90,11 @@ public class SingleDeclarationRuleTests
             ";
 
         // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        var messages = _rule!.Validate(filePath, fileContent);
 
         // Assert
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0].RuleId);
-        Assert.AreEqual(Severity.Error, messages[0].Severity);
+        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+        Assert.AreEqual(Severity.Error, messages[0]?.Severity);
     }
 }

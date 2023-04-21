@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class PublicPropertiesPrivateSettersRuleTests
 {
-    private PublicPropertiesPrivateSettersRule _rule;
+    private PublicPropertiesPrivateSettersRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -45,6 +45,6 @@ public class PublicPropertiesPrivateSettersRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("PublicPropertiesPrivateSettersRule", messages[0].RuleId);
+        Assert.AreEqual("PublicPropertiesPrivateSettersRule", messages[0]?.RuleId);
     }
 }

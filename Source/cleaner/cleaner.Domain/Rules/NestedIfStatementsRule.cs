@@ -14,7 +14,7 @@ public class NestedIfStatementsRule : IRule
 
     public string LongDescription => "This rule checks if a method contains if statements nested more than 2 levels deep. If it does, a warning is raised.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage?[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

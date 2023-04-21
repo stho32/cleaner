@@ -5,7 +5,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class NoPublicGenericListPropertiesRuleTests
 {
-    private NoPublicGenericListPropertiesRule _rule;
+    private NoPublicGenericListPropertiesRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -54,7 +54,7 @@ public class NoPublicGenericListPropertiesRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("NoPublicGenericListPropertiesRule", messages[0].RuleId);
+        Assert.AreEqual("NoPublicGenericListPropertiesRule", messages[0]?.RuleId);
     }
 
     [Test]
@@ -74,6 +74,6 @@ public class NoPublicGenericListPropertiesRuleTests
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("NoPublicGenericListPropertiesRule", messages[0].RuleId);
+        Assert.AreEqual("NoPublicGenericListPropertiesRule", messages[0]?.RuleId);
     }
 }

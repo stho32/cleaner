@@ -4,7 +4,8 @@ namespace cleaner.Domain.Formatter;
 
 public class ValidationMessagePrinter
 {
-    public void Print(ValidationMessage[] messages) {
+    public void Print(ValidationMessage[] messages)
+    {
         foreach (var message in messages)
         {
             Console.ForegroundColor = GetSeverityColor(message.Severity);
@@ -12,6 +13,9 @@ public class ValidationMessagePrinter
         }
 
         Console.ResetColor();
+
+        // Print the count of messages
+        Console.WriteLine($"\nTotal messages: {messages.Length}");
     }
 
     private ConsoleColor GetSeverityColor(Severity severity)

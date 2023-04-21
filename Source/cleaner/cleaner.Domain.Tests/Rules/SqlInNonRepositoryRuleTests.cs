@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class SqlInNonRepositoryRuleTests
 {
-    private SqlInNonRepositoryRule _rule;
+    private SqlInNonRepositoryRule _rule = null!;
 
     [SetUp]
     public void Setup()
@@ -64,9 +64,9 @@ public class SqlInNonRepositoryRuleTests
         var messages = _rule.Validate("TestFile.cs", code);
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Warning, messages[0].Severity);
-        Assert.AreEqual(_rule.Id, messages[0].RuleId);
-        Assert.AreEqual(_rule.Name, messages[0].RuleName);
-        StringAssert.Contains("SQL detected in non-Repository class 'TestClass'", messages[0].ErrorMessage);
+        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
+        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+        Assert.AreEqual(_rule.Name, messages[0]?.RuleName);
+        StringAssert.Contains("SQL detected in non-Repository class 'TestClass'", messages[0]?.ErrorMessage);
     }
 }

@@ -38,7 +38,7 @@ public class CompositeRuleTests
 
         // Assert
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(rule.Id, messages[0].RuleId);
+        Assert.AreEqual(rule.Id, messages[0]?.RuleId);
     }
 
     [Test]
@@ -69,7 +69,7 @@ public class CompositeRuleTests
 
         // Assert
         Assert.AreEqual(2, messages.Length);
-        Assert.IsTrue(messages.Any(msg => msg.RuleId == rule1.Id));
-        Assert.IsTrue(messages.Any(msg => msg.RuleId == rule2.Id));
+        Assert.IsTrue(messages.Any(msg => msg?.RuleId == rule1.Id));
+        Assert.IsTrue(messages.Any(msg => msg?.RuleId == rule2.Id));
     }
 }

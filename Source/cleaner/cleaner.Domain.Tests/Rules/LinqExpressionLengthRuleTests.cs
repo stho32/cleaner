@@ -6,7 +6,7 @@ namespace cleaner.Domain.Tests.Rules;
 [TestFixture]
 public class LinqExpressionLengthRuleTests
 {
-    private LinqExpressionLengthRule _rule;
+    private LinqExpressionLengthRule? _rule;
 
     [SetUp]
     public void Setup()
@@ -32,7 +32,7 @@ public class LinqExpressionLengthRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestFile.cs", code);
+        var messages = _rule!.Validate("TestFile.cs", code);
 
         Assert.IsEmpty(messages);
     }
@@ -56,10 +56,10 @@ public class LinqExpressionLengthRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestFile.cs", code);
+        var messages = _rule!.Validate("TestFile.cs", code);
 
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("LinqExpressionLengthRule", messages[0].RuleId);
+        Assert.AreEqual("LinqExpressionLengthRule", messages[0]?.RuleId);
     }
 }

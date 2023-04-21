@@ -11,7 +11,7 @@ public class FileNameMatchingDeclarationRule : IRule
     public string ShortDescription => "Verify that the file name matches the declared type";
     public string LongDescription => "This rule checks if the file name matches the name of the declared type inside the file and raises a warning if they don't match.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage?[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

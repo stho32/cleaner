@@ -93,7 +93,7 @@ namespace cleaner
 
             if (messages != null && messages.Length > 0)
             {
-                messagePrinter.Print(messages);
+                messagePrinter.Print(messages!);
                 return true;
             }
 

@@ -13,7 +13,7 @@ public class LinqExpressionLengthRule : IRule
     public string ShortDescription => "Detects LINQ expressions with more than 2 steps";
     public string LongDescription => "This rule checks if a LINQ expression contains more than 2 steps and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage?[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 

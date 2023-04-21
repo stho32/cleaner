@@ -5,7 +5,7 @@ namespace cleaner.Domain.Tests.Rules;
 
 public class IfStatementOperatorRuleTests
 {
-    private IRule _ifStatementOperatorRule;
+    private IRule _ifStatementOperatorRule = null!;
 
     [SetUp]
     public void Setup()
@@ -78,9 +78,9 @@ public class TestClass
 
         // Assert
         Assert.AreEqual(1, result.Length);
-        Assert.AreEqual(Severity.Warning, result[0].Severity);
-        Assert.AreEqual("IfStatementOperatorRule", result[0].RuleId);
-        Assert.AreEqual("If Statement Operator Rule", result[0].RuleName);
-        StringAssert.Contains("contains operators, which is not allowed", result[0].ErrorMessage);
+        Assert.AreEqual(Severity.Warning, result[0]?.Severity);
+        Assert.AreEqual("IfStatementOperatorRule", result[0]?.RuleId);
+        Assert.AreEqual("If Statement Operator Rule", result[0]?.RuleName);
+        StringAssert.Contains("contains operators, which is not allowed", result[0]?.ErrorMessage);
     }
 }

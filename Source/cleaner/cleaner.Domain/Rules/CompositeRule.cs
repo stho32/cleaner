@@ -14,14 +14,14 @@ public class CompositeRule : IRule
         _rules = rules.ToList();
     }
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage?[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 
         foreach (var rule in _rules)
         {
             var ruleMessages = rule.Validate(filePath, fileContent);
-            messages.AddRange(ruleMessages);
+            messages.AddRange(ruleMessages!);
         }
 
         return messages.ToArray();

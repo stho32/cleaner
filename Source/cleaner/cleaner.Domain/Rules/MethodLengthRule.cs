@@ -17,7 +17,7 @@ public class MethodLengthRule : IRule
     public string ShortDescription => "Detects methods with more than 10 semicolons in their body";
     public string LongDescription => "This rule checks if a method contains more than 10 semicolons in its body and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage?[] Validate(string filePath, string fileContent)
     {
         var messages = new List<ValidationMessage>();
 
