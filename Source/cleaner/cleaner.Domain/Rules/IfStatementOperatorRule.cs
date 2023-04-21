@@ -49,13 +49,17 @@ public class IfStatementOperatorRule : IRule
     {
         var nodes = ifStatement.Condition.DescendantNodesAndSelf();
         bool hasOperator = nodes.Any(n =>
-            n is BinaryExpressionSyntax ||
+            (n is BinaryExpressionSyntax binaryExpression && !(IsSimpleNullComparison(binaryExpression))) ||
             n is PostfixUnaryExpressionSyntax);
 
-        // bool hasInvocation = nodes.Any(n => n is InvocationExpressionSyntax);
-
         return hasOperator;
-        // return hasOperator && !hasInvocation;
     }
+
+    private bool IsSimpleNullComparison(BinaryExpressionSyntax binaryExpression)
+    {
+        return (binaryExpression.Left is LiteralExpressionSyntax leftLiteral && leftLiteral.IsKind(SyntaxKind.NullLiteralExpression)) ||
+               (binaryExpression.Right is LiteralExpressionSyntax rightLiteral && rightLiteral.IsKind(SyntaxKind.NullLiteralExpression));
+    }
+
 }
 

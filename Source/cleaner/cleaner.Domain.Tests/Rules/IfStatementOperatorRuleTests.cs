@@ -83,4 +83,32 @@ public class TestClass
         Assert.AreEqual("If Statement Operator Rule", result[0]?.RuleName);
         StringAssert.Contains("contains operators, which is not allowed", result[0]?.ErrorMessage);
     }
+
+    [Test]
+    public void IfStatementOperatorRule_AllowsSimpleNullComparison()
+    {
+        // Arrange
+        var ifStatementOperatorRule = new IfStatementOperatorRule();
+        string testCode = @"
+                namespace TestNamespace
+                {
+                    public class TestClass
+                    {
+                        public void TestMethod()
+                        {
+                            object obj = null;
+                            if (obj == null)
+                            {
+                                // do something
+                            }
+                        }
+                    }
+                }";
+
+        // Act
+        var messages = ifStatementOperatorRule.Validate("TestClass.cs", testCode);
+
+        // Assert
+        Assert.IsEmpty(messages, "The IfStatementOperatorRule should allow simple null comparisons.");
+    }
 }
