@@ -36,8 +36,10 @@ public class AllowedUsingsRule : IRule
                 usingNamespace = usingNamespace.Replace("global::", "");
             }
 
-            if (!_allowedUsings.Contains(usingNamespace) && 
-                !IsSubNamespaceOfSameRootNamespace(usingNamespace, rootNamespace))
+            var isInvalidUsing = !_allowedUsings.Contains(usingNamespace) && 
+                    !IsSubNamespaceOfSameRootNamespace(usingNamespace, rootNamespace);
+            
+            if (isInvalidUsing)
             {
                 var message = new ValidationMessage(
                     Severity.Warning,
