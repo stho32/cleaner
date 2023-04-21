@@ -22,11 +22,11 @@ public class PublicPropertiesPrivateSettersRule : IRule
 
         foreach (var propertyDeclaration in propertyDeclarations)
         {
-            if (propertyDeclaration.Modifiers.Any(modifier => modifier.ValueText == "public"))
+            if (IsPublicProperty(propertyDeclaration))
             {
                 var setter = propertyDeclaration?.AccessorList?.Accessors.FirstOrDefault(a => a.Keyword.ValueText == "set");
 
-                if (setter != null && !setter.Modifiers.Any(modifier => modifier.ValueText == "private"))
+                if (IsPublicSetter(setter))
                 {
                     var message = new ValidationMessage(
                         Severity.Warning,
@@ -40,5 +40,15 @@ public class PublicPropertiesPrivateSettersRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private static bool IsPublicSetter(AccessorDeclarationSyntax? setter)
+    {
+        return setter != null && setter.Modifiers.Any(modifier => modifier.ValueText == "public");
+    }
+
+    private static bool IsPublicProperty(PropertyDeclarationSyntax propertyDeclaration)
+    {
+        return propertyDeclaration.Modifiers.Any(modifier => modifier.ValueText == "public");
     }
 }
