@@ -24,17 +24,13 @@ public class RepositoryConstructorRule : IRule
 
         foreach (var classDeclaration in classDeclarations)
         {
-            if (classDeclaration.Identifier.Text.EndsWith("Repository", StringComparison.OrdinalIgnoreCase))
+            if (HasMatchingClassName(classDeclaration))
             {
                 bool hasRequiredConstructor = false;
 
                 foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>())
                 {
-                    var parameters = constructor.ParameterList.Parameters;
-                    var requiredParameterType = "IDatabaseAccessor";
-                    var hasRequiredParameter = parameters.Any(param => param.Type?.ToString() == requiredParameterType);
-
-                    if (hasRequiredParameter)
+                    if (HasParameterOfTypeIDatabaseAccessor(constructor))
                     {
                         hasRequiredConstructor = true;
                         break;
@@ -49,6 +45,21 @@ public class RepositoryConstructorRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private static bool HasParameterOfTypeIDatabaseAccessor(ConstructorDeclarationSyntax constructor)
+    {
+        var parameters = constructor.ParameterList.Parameters;
+        var requiredParameterType = "IDatabaseAccessor";
+        var hasRequiredParameter = parameters.Any(param => param.Type?.ToString() == requiredParameterType);
+        return hasRequiredParameter;
+    }
+
+    private static bool HasMatchingClassName(ClassDeclarationSyntax classDeclaration)
+    {
+        var className = classDeclaration.Identifier.Text;
+        var classNameEndsWithRepository = className.EndsWith("Repository", StringComparison.OrdinalIgnoreCase);
+        return classNameEndsWithRepository;
     }
 
     private int GetLineNumber(SyntaxNode node)
