@@ -26,8 +26,9 @@ public class NestedIfStatementsRule : IRule
         {
             int maxNestingLevel = 0;
             AnalyzeNode(methodDeclaration?.Body, ref maxNestingLevel, 0);
-
-            if (maxNestingLevel > 2)
+            var nestingIsTooDeep = maxNestingLevel > 2;
+            
+            if (nestingIsTooDeep)
             {
                 messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Method '{methodDeclaration?.Identifier.Text}' in file '{filePath}' at line {GetLineNumber(methodDeclaration)} has if statements nested more than 2 levels deep."));
             }
@@ -41,7 +42,7 @@ public class NestedIfStatementsRule : IRule
         if (node == null)
             return;
         
-        if (node is IfStatementSyntax)
+        if (IsAnIfStatement(node))
         {
             currentNestingLevel++;
             maxNestingLevel = Math.Max(maxNestingLevel, currentNestingLevel);
@@ -51,6 +52,11 @@ public class NestedIfStatementsRule : IRule
         {
             AnalyzeNode(child, ref maxNestingLevel, currentNestingLevel);
         }
+    }
+
+    private static bool IsAnIfStatement(SyntaxNode node)
+    {
+        return node is IfStatementSyntax;
     }
 
     private int GetLineNumber(SyntaxNode? node)
