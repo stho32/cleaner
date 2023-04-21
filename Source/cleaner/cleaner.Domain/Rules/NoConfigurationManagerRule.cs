@@ -29,12 +29,19 @@ public class NoConfigurationManagerRule : IRule
 
         foreach (var usingDirective in usings)
         {
-            if (usingDirective.Name.ToString() == "System.Configuration" || usingDirective.Name.ToString() == "System.Web.Configuration")
+            var usingName = usingDirective.Name.ToString();
+            
+            if (IsRelatedToConfigurationManagementInNet(usingName))
             {
                 messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Configuration Management detected in file '{filePath}' at line {RuleHelper.GetLineNumber(usingDirective)}"));
             }
         }
 
         return messages.ToArray();
+    }
+
+    private static bool IsRelatedToConfigurationManagementInNet(string usingName)
+    {
+        return usingName == "System.Configuration" || usingName == "System.Web.Configuration";
     }
 }
