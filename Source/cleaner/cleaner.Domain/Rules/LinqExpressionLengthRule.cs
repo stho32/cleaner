@@ -27,12 +27,7 @@ public class LinqExpressionLengthRule : IRule
         {
             var methodCalls = invocationExpression.DescendantNodes()
                 .OfType<IdentifierNameSyntax>()
-                .Where(identifier => identifier.Identifier.Text.StartsWith("Where") ||
-                                     identifier.Identifier.Text.StartsWith("Select") ||
-                                     identifier.Identifier.Text.StartsWith("GroupBy") ||
-                                     identifier.Identifier.Text.StartsWith("OrderBy") ||
-                                     identifier.Identifier.Text.StartsWith("Join") ||
-                                     identifier.Identifier.Text.StartsWith("GroupJoin"))
+                .Where(IsALinqPredicate)
                 .ToList();
 
             var linqExpressionIsTooLong = methodCalls.Count > 2;
@@ -50,5 +45,28 @@ public class LinqExpressionLengthRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private static bool IsALinqPredicate(IdentifierNameSyntax identifierNameSyntax)
+    {
+        var name = identifierNameSyntax.Identifier.Text;
+        
+        var possibleKeywords = new[]
+        {
+            "Where",
+            "Select",
+            "GroupBy",
+            "OrderBy",
+            "Join",
+            "GroupJoin"
+        };
+
+        foreach (var possibleKeyword in possibleKeywords)
+        {
+            if (name.StartsWith(possibleKeyword))
+                return true;
+        }
+
+        return false;
     }
 }
