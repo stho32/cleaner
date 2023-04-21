@@ -25,19 +25,22 @@ public class NestedIfStatementsRule : IRule
         foreach (var methodDeclaration in methodDeclarations)
         {
             int maxNestingLevel = 0;
-            AnalyzeNode(methodDeclaration.Body, ref maxNestingLevel, 0);
+            AnalyzeNode(methodDeclaration?.Body, ref maxNestingLevel, 0);
 
             if (maxNestingLevel > 2)
             {
-                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' at line {GetLineNumber(methodDeclaration)} has if statements nested more than 2 levels deep."));
+                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Method '{methodDeclaration?.Identifier.Text}' in file '{filePath}' at line {GetLineNumber(methodDeclaration)} has if statements nested more than 2 levels deep."));
             }
         }
 
         return messages.ToArray();
     }
 
-    private void AnalyzeNode(SyntaxNode node, ref int maxNestingLevel, int currentNestingLevel)
+    private void AnalyzeNode(SyntaxNode? node, ref int maxNestingLevel, int currentNestingLevel)
     {
+        if (node == null)
+            return;
+        
         if (node is IfStatementSyntax)
         {
             currentNestingLevel++;
@@ -50,8 +53,11 @@ public class NestedIfStatementsRule : IRule
         }
     }
 
-    private int GetLineNumber(SyntaxNode node)
+    private int GetLineNumber(SyntaxNode? node)
     {
+        if (node == null)
+            return -1;
+        
         var lineSpan = node.SyntaxTree.GetLineSpan(node.Span);
         return lineSpan.StartLinePosition.Line + 1;
     }

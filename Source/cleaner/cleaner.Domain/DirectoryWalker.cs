@@ -34,6 +34,8 @@ public class DirectoryWalker
         {
             if (subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/"))
                 continue;
+            if (subdirectory.Contains("\\bin\\") || subdirectory.Contains("\\obj\\"))
+                continue;
             if (_fileSystemAccessProvider.GetFileName(subdirectory).StartsWith("."))
                 continue;
 

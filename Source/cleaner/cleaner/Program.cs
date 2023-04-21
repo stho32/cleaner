@@ -44,6 +44,10 @@ namespace cleaner
                             "Microsoft.CodeAnalysis",
                             "Microsoft.CodeAnalysis.CSharp",
                             "Microsoft.CodeAnalysis.CSharp.Syntax",
+                            "System.Net.Http",
+                            "System.Threading",
+                            "System.Threading.Tasks",
+                            "System.Runtime.CompilerServices"
                         }),
                     new FileNameMatchingDeclarationRule(),
                     new IfStatementOperatorRule(),

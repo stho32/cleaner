@@ -31,7 +31,7 @@ public class AllowedUsingsRule : IRule
         {
             string usingNamespace = usingDirective.Name.ToString();
 
-            if (!_allowedUsings.Contains(usingNamespace) && !IsSubNamespaceOfRootNamespace(usingNamespace, root))
+            if (!_allowedUsings.Contains(usingNamespace.Replace("global::", "")) && !IsSubNamespaceOfRootNamespace(usingNamespace, root))
             {
                 var message = new ValidationMessage(
                     Severity.Warning,
