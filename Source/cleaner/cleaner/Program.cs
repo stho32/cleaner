@@ -1,6 +1,7 @@
 ﻿using cleaner.Domain;
 using cleaner.Domain.FileSystem;
 using cleaner.Domain.Formatter;
+using cleaner.Domain.Helpers;
 using cleaner.Domain.Rules;
 
 namespace cleaner
@@ -130,16 +131,14 @@ namespace cleaner
             var messages = _validationRules?.Validate(filePath, fileContent);
             var messagePrinter = new ValidationMessagePrinter();
 
-            if (messages != null && messages.Length > 0)
-            {
-                _totalFilesWithProblems += 1;
-                _totalProblems += messages.Length;
+            if (CollectionHelpers.IsNullOrEmpty(messages)) 
+                return false;
+            
+            _totalFilesWithProblems += 1;
+            _totalProblems += messages!.Length;
                 
-                messagePrinter.Print(messages!);
-                return true;
-            }
-
-            return false;
+            messagePrinter.Print(messages!);
+            return true;
         }
     }
 }
