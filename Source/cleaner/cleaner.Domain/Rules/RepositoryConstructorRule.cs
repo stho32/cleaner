@@ -30,7 +30,11 @@ public class RepositoryConstructorRule : IRule
 
                 foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>())
                 {
-                    if (constructor.ParameterList.Parameters.Any(param => param.Type?.ToString() == "IDatabaseAccessor"))
+                    var parameters = constructor.ParameterList.Parameters;
+                    var requiredParameterType = "IDatabaseAccessor";
+                    var hasRequiredParameter = parameters.Any(param => param.Type?.ToString() == requiredParameterType);
+
+                    if (hasRequiredParameter)
                     {
                         hasRequiredConstructor = true;
                         break;
