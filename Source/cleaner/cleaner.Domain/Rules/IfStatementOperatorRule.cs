@@ -11,7 +11,9 @@ public class IfStatementOperatorRule : IRule
     public string Id => "IfStatementOperatorRule";
     public string Name => "If Statement Operator Rule";
     public string ShortDescription => "Detects if statements containing operators, except for function calls";
-    public string LongDescription => "This rule checks if an if statement contains operators, except for function calls, and raises a warning if it does.";
+
+    public string LongDescription =>
+        "This rule checks if an if statement contains operators, except for function calls, and raises a warning if it does.";
 
     public ValidationMessage[] Validate(string filePath, string fileContent)
     {
@@ -23,15 +25,15 @@ public class IfStatementOperatorRule : IRule
         var ifStatements = root.DescendantNodes()
             .OfType<IfStatementSyntax>()
             .ToArray();
-            
+
         var notCool = ifStatements
             .Where(IfStatementContainsOperator)
             .ToArray();
-        
+
         foreach (var ifStatement in notCool)
         {
             FileLinePositionSpan span = ifStatement.SyntaxTree.GetLineSpan(ifStatement.Span);
-            int lineNumber = span.StartLinePosition.Line +1;
+            int lineNumber = span.StartLinePosition.Line + 1;
 
             var message = new ValidationMessage(
                 Severity.Warning,
@@ -57,9 +59,9 @@ public class IfStatementOperatorRule : IRule
 
     private bool IsSimpleNullComparison(BinaryExpressionSyntax binaryExpression)
     {
-        return (binaryExpression.Left is LiteralExpressionSyntax leftLiteral && leftLiteral.IsKind(SyntaxKind.NullLiteralExpression)) ||
-               (binaryExpression.Right is LiteralExpressionSyntax rightLiteral && rightLiteral.IsKind(SyntaxKind.NullLiteralExpression));
+        return (binaryExpression.Left is LiteralExpressionSyntax leftLiteral &&
+                leftLiteral.IsKind(SyntaxKind.NullLiteralExpression)) ||
+               (binaryExpression.Right is LiteralExpressionSyntax rightLiteral &&
+                rightLiteral.IsKind(SyntaxKind.NullLiteralExpression));
     }
-
 }
-

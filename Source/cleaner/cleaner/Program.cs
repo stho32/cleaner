@@ -24,6 +24,7 @@ namespace cleaner
                 {
                     new AllowedUsingsRule(allowedUsings),
                     new FileNameMatchingDeclarationRule(),
+                    new ForEachDataSourceRule(),
                     new IfStatementDotsRule(),
                     new IfStatementOperatorRule(),
                     new LinqExpressionLengthRule(),
@@ -41,6 +42,7 @@ namespace cleaner
                     new RowLimitRule(),
                     new SingleDeclarationRule()
                 });
+            
             _fileSystemAccessProvider = new FileSystemAccessProvider();
 
             var walker = new DirectoryWalker(ValidateRules, new FileSystemAccessProvider(), "*.cs");

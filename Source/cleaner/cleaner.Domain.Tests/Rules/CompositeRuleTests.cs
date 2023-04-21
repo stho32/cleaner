@@ -25,13 +25,13 @@ public class CompositeRuleTests
         // Arrange
         var rule = new RuleMock(
             "M001",
-            true, 
+            true,
             new ValidationMessage(Severity.Info,
                 "M001",
-                "Mock Rule", 
+                "Mock Rule",
                 "This is a mock rule."));
-        
-        var compositeRule = new CompositeRule(new[] { rule });
+
+        var compositeRule = new CompositeRule(new[] {rule});
 
         // Act
         var messages = compositeRule.Validate("test.cs", "class Test {}");
@@ -47,22 +47,22 @@ public class CompositeRuleTests
         // Arrange
         var rule1 = new RuleMock(
             "M001",
-            true, 
-            new ValidationMessage( 
-            Severity.Info, 
-            "M001",
-            "Mock Rule",
-            "This is a mock rule."));
+            true,
+            new ValidationMessage(
+                Severity.Info,
+                "M001",
+                "Mock Rule",
+                "This is a mock rule."));
         var rule2 = new RuleMock(
             "M002",
-            true, 
-            new ValidationMessage( 
-                Severity.Info, 
+            true,
+            new ValidationMessage(
+                Severity.Info,
                 "M002",
                 "Mock Rule",
                 "This is a mock rule."));
-        
-        var compositeRule = new CompositeRule(new[] { rule1, rule2 });
+
+        var compositeRule = new CompositeRule(new[] {rule1, rule2});
 
         // Act
         var messages = compositeRule.Validate("test.cs", "class Test {}");
