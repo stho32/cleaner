@@ -44,7 +44,13 @@ public class PublicPropertiesPrivateSettersRule : IRule
 
     private static bool IsPublicSetter(AccessorDeclarationSyntax? setter)
     {
-        return setter != null && setter.Modifiers.Any(modifier => modifier.ValueText == "public");
+        if (setter == null)
+            return false;
+
+        if (setter.Modifiers.Any(modifier => modifier.ValueText == "private"))
+            return false;
+
+        return true;
     }
 
     private static bool IsPublicProperty(PropertyDeclarationSyntax propertyDeclaration)
