@@ -1,10 +1,6 @@
-using System.Text.RegularExpressions;
-
 namespace cleaner.Domain.Rules;
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
