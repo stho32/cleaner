@@ -29,7 +29,10 @@ public class ForEachDataSourceRule : IRule
         {
             var dataSourceExpression = forEachStatement.Expression.ToString();
 
-            if (dataSourceExpression.Count(c => c == '.') > 2)
+            var dotCount = dataSourceExpression.Count(c => c == '.');
+            var tooManyDots = dotCount > 2;
+            
+            if (tooManyDots)
             {
                 FileLinePositionSpan span = forEachStatement.SyntaxTree.GetLineSpan(forEachStatement.Span);
                 int lineNumber = span.StartLinePosition.Line + 1;
