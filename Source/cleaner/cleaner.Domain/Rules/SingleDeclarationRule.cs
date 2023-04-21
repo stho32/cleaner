@@ -22,7 +22,9 @@ public class SingleDeclarationRule : IRule
 
         int declarationCount = root.Members.OfType<BaseTypeDeclarationSyntax>().Count();
 
-        if (declarationCount > 1)
+        var moreThanOneDeclaration = declarationCount > 1;
+        
+        if (moreThanOneDeclaration)
         {
             messages.Add(
                 new ValidationMessage(
