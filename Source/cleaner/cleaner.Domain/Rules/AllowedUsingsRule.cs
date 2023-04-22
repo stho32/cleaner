@@ -94,4 +94,34 @@ public class AllowedUsingsRule : IRule
 
         return false;
     }
+    
+    public static HashSet<string> GetDefaultAllowedUsings()
+    {
+        return new HashSet<string>
+        {
+            "System",
+            "System.Collections.Generic",
+            "System.Linq",
+            "Newtonsoft.Json",
+            "Newtonsoft.Json.Linq",
+            "System.Data",
+            "System.Data.SqlClient",
+            "System.Text",
+            "System.ComponentModel",
+            "System.Web",
+            "System.Web.Mvc",
+            "System.Web.Routing",
+            "Newtonsoft.Json.Serialization",
+            "WebGrease.Css.Extensions",
+            "System.IO",
+            "Microsoft.CodeAnalysis",
+            "Microsoft.CodeAnalysis.CSharp",
+            "Microsoft.CodeAnalysis.CSharp.Syntax",
+            "System.Net.Http",
+            "System.Threading",
+            "System.Threading.Tasks",
+            "System.Runtime.CompilerServices",
+            "System.Text.RegularExpressions"
+        };
+    }
 }
