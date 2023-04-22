@@ -1,4 +1,5 @@
-﻿using cleaner.Domain;
+﻿using System.Reflection;
+using cleaner.Domain;
 using cleaner.Domain.FileSystem;
 using cleaner.Domain.Formatter;
 using cleaner.Domain.Helpers;
@@ -20,29 +21,26 @@ namespace cleaner
 
             HashSet<string> allowedUsings = LoadAllowedUsingsOrUseDefault(parser.AllowedUsingsFilePath);
 
-            _validationRules = new CompositeRule(
-                new IRule[]
+            // Dynamically load all rule types
+            var ruleTypes = Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => t.GetInterfaces().Contains(typeof(IRule)) && !t.IsAbstract);
+
+            // Create rule instances
+            var ruleInstances = new List<IRule>();
+            foreach (var ruleType in ruleTypes)
+            {
+                if (ruleType == typeof(AllowedUsingsRule))
                 {
-                    new AllowedUsingsRule(allowedUsings),
-                    new FileNameMatchingDeclarationRule(),
-                    new ForEachDataSourceRule(),
-                    new IfStatementDotsRule(),
-                    new IfStatementOperatorRule(),
-                    new LinqExpressionLengthRule(),
-                    new MethodLengthRule(),
-                    new NestedIfStatementsRule(),
-                    new SqlInNonRepositoryRule(),
-                    new NoConfigurationManagerRule(),
-                    new NoOutAndRefParametersRule(),
-                    new NoPublicFieldsRule(),
-                    new NoPublicGenericListPropertiesRule(),
-                    new NotImplementedExceptionRule(),
-                    new PublicPropertiesPrivateSettersRule(),
-                    new RepositoryConstructorRule(),
-                    new RepositoryInheritanceRule(),
-                    new RowLimitRule(),
-                    new SingleDeclarationRule()
-                });
+                    ruleInstances.Add(new AllowedUsingsRule(allowedUsings));
+                }
+                else
+                {
+                    ruleInstances.Add((IRule)Activator.CreateInstance(ruleType));
+                }
+            }
+
+            _validationRules = new CompositeRule(ruleInstances);
             
             _fileSystemAccessProvider = new FileSystemAccessProvider();
 
