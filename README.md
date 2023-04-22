@@ -1,5 +1,7 @@
 # cleaner
 
+[![CodeScene Code Health](https://codescene.io/projects/38361/status-badges/code-health)](https://codescene.io/projects/38361)
+
 Cleaner ist der Versuch der technischen Unterstützung folgenden gerade in Arbeit befindlichen A3's.
 
 obsidian://open?vault=Training2&file=A3s%2FA3%20Probleml%C3%B6sungstemplate
