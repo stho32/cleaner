@@ -24,12 +24,10 @@ public class RepositoryConstructorRule : IRule
 
         foreach (var classDeclaration in classDeclarations)
         {
-            if (HasMatchingClassName(classDeclaration))
+            var isMissingRequiredConstructor = HasMatchingClassName(classDeclaration) && !HasRequiredConstructor(classDeclaration);
+            if (isMissingRequiredConstructor)
             {
-                if (!HasRequiredConstructor(classDeclaration))
-                {
-                    messages.Add(new ValidationMessage(Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should have a constructor with at least one parameter of type 'IDatabaseAccessor'."));
-                }
+                messages.Add(new ValidationMessage(Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should have a constructor with at least one parameter of type 'IDatabaseAccessor'."));
             }
         }
 
