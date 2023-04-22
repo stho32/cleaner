@@ -12,7 +12,7 @@ public class QualityScanner
     private int _totalFilesChecked;
     private int _totalFilesWithProblems;
     private int _totalProblems;
-    private HashSet<string> _allowedUsings;
+    private HashSet<string> _allowedUsings = null!;
 
     public void PerformQualityScan(CommandLineOptions commandLineOptions)
     {

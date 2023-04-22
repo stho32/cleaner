@@ -7,7 +7,7 @@ namespace cleaner.Domain.CommandLineArguments
     {
         public static CommandLineOptions? ParseCommandLineArguments(string[] args)
         {
-            CommandLineOptions options = null;
+            CommandLineOptions options = null!;
             var parser = new Parser(with => with.HelpWriter = null); // Disable automatic help output
 
             var parserResult = parser.ParseArguments<CommandLineOptions>(args);
@@ -16,21 +16,33 @@ namespace cleaner.Domain.CommandLineArguments
                 .WithParsed(parsedOptions => options = parsedOptions)
                 .WithNotParsed(errors =>
                 {
-                    if (errors.IsVersion())
+                    var enumerable = errors as Error[] ?? errors.ToArray();
+                    
+                    if (enumerable.IsVersion())
                     {
-                        Console.WriteLine("Version 1.0.0");
-                        Environment.Exit(0);
+                        PrintVersionAndExit();
                     }
-                    if (errors.IsHelp())
+                    if (enumerable.IsHelp())
                     {
-                        Console.WriteLine(HelpText.AutoBuild(parserResult, h => h));
-                        Environment.Exit(0);
+                        PrintHelptextAndExit(parserResult);
                     }
                     Console.Error.WriteLine(HelpText.AutoBuild(parserResult, h => h));
                     Environment.Exit(1);
                 });
 
             return options;
+        }
+
+        private static void PrintHelptextAndExit(ParserResult<CommandLineOptions> parserResult)
+        {
+            Console.WriteLine(HelpText.AutoBuild(parserResult, h => h));
+            Environment.Exit(0);
+        }
+
+        private static void PrintVersionAndExit()
+        {
+            Console.WriteLine("Version 1.0.0");
+            Environment.Exit(0);
         }
     }
 }
