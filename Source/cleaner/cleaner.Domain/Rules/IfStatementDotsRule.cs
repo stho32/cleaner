@@ -6,7 +6,7 @@ namespace cleaner.Domain.Rules;
 
 public class IfStatementDotsRule : IRule
 {
-    public string Id => "IfStatementDotsRule";
+    public string Id => GetType().Name;
     public string Name => "If Statement Dots Rule";
     public string ShortDescription => "Detects if statements with expressions containing more than two dots";
     public string LongDescription => "This rule checks if an if statement contains expressions with more than two dots and raises a warning if it does.";

@@ -13,7 +13,7 @@ public class AllowedUsingsRule : IRule
         _allowedUsings = allowedUsings;
     }
 
-    public string Id => "AllowedUsingsRule";
+    public string Id => GetType().Name;
     public string Name => "Allowed Usings Rule";
     public string ShortDescription => "Verify that only allowed usings are used";
     public string LongDescription => "This rule checks if only allowed usings are used in a file and raises a warning if any disallowed usings are found.";

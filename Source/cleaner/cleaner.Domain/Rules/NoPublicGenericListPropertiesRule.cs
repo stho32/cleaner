@@ -6,7 +6,7 @@ namespace cleaner.Domain.Rules;
 
 public class NoPublicGenericListPropertiesRule : IRule
 {
-    public string Id => "NoPublicGenericListPropertiesRule";
+    public string Id => GetType().Name;
     public string Name => "No Public Generic List Properties Rule";
     public string ShortDescription => "Disallow public properties of type List<T>";
     public string LongDescription => "This rule checks if there are any public properties of type List<T> and raises a warning if any are found.";

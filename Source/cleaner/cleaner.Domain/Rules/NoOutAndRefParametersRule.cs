@@ -6,7 +6,7 @@ namespace cleaner.Domain.Rules;
 
 public class NoOutAndRefParametersRule : IRule
 {
-    public string Id => "E007";
+    public string Id => GetType().Name;
     public string Name => "No Out and Ref Parameters Rule";
     public string ShortDescription => "Checks if a method or indexer has out or ref parameters.";
     public string LongDescription => "This rule checks if a method or indexer has any out or ref parameters, and raises a warning if it does.";

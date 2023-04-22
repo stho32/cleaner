@@ -6,7 +6,7 @@ namespace cleaner.Domain.Rules;
 
 public class NoPublicFieldsRule : IRule
 {
-    public string Id => "E006";
+    public string Id => GetType().Name;
     public string Name => "No Public Fields Rule";
     public string ShortDescription => "Checks if any public fields are declared in a file.";
     public string LongDescription => "This rule checks if any public fields are declared in a file. It will return a warning if a public field is found.";

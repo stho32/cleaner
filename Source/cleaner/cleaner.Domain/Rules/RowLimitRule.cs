@@ -2,7 +2,7 @@ namespace cleaner.Domain.Rules;
 
 public class RowLimitRule : IRule
 {
-    public string Id => "RowLimitRule";
+    public string Id => GetType().Name;
     public string Name => "Row Limit Rule";
     public string ShortDescription => "Detects files with more than 500 rows";
     public string LongDescription => "This rule checks if a file has more than 500 rows and raises a warning if it does.";

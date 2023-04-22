@@ -8,7 +8,7 @@ namespace cleaner.Domain.Rules
 
     public class MethodLengthRule : IRule
     {
-        public string Id => "MethodLengthRule";
+        public string Id => GetType().Name;
         public string Name => "Method Length Rule";
         public string ShortDescription => "Detects methods with more than 10 semicolons in their body";
         public string LongDescription => "This rule checks if a method contains more than 10 semicolons in its body and raises a warning if it does.";

@@ -6,7 +6,7 @@ namespace cleaner.Domain.Rules;
 
 public class FileNameMatchingDeclarationRule : IRule
 {
-    public string Id => "FileNameMatchingDeclarationRule";
+    public string Id => GetType().Name;
     public string Name => "File Name Matching Declaration Rule";
     public string ShortDescription => "Verify that the file name matches the declared type";
     public string LongDescription => "This rule checks if the file name matches the name of the declared type inside the file and raises a warning if they don't match.";

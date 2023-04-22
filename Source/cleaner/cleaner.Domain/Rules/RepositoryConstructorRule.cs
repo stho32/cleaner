@@ -8,7 +8,6 @@ namespace cleaner.Domain.Rules;
 public class RepositoryConstructorRule : IRule
 {
     public string Id => GetType().Name;
-
     public string Name => "Repository Constructor Rule";
 
     public string ShortDescription => "Detects 'Repository' classes without a constructor with at least one parameter of type 'IDatabaseAccessor'";

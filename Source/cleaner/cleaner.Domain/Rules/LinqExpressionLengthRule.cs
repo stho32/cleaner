@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class LinqExpressionLengthRule : IRule
 {
-    public string Id => "LinqExpressionLengthRule";
+    public string Id => GetType().Name;
     public string Name => "LINQ Expression Length Rule";
     public string ShortDescription => "Detects LINQ expressions with more than 2 steps";
     public string LongDescription => "This rule checks if a LINQ expression contains more than 2 steps and raises a warning if it does.";

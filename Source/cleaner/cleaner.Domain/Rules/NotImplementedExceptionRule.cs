@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class NotImplementedExceptionRule : IRule
 {
-    public string Id => "E003";
+    public string Id => GetType().Name;
     public string Name => "Not Implemented Exception Rule";
     public string ShortDescription => "Check if a file contains NotImplementedException.";
     public string LongDescription => "This rule checks if a file contains the keyword 'NotImplementedException'. It will return a warning if the keyword is found in the file.";

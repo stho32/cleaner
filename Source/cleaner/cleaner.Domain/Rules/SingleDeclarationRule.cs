@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class SingleDeclarationRule : IRule
 {
-    public string Id => "E002";
+    public string Id => GetType().Name;
     public string Name => "Single Declaration Rule";
     public string ShortDescription => "Check if a file contains only one type declaration.";
     public string LongDescription => "This rule checks if a file contains only one of the specified keywords: enum, class, interface, record, or struct. It will return an error if more than one keyword is found in the file.";

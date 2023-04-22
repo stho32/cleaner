@@ -6,7 +6,7 @@ namespace cleaner.Domain.Rules;
 
 public class PublicPropertiesPrivateSettersRule : IRule
 {
-    public string Id => "PublicPropertiesPrivateSettersRule";
+    public string Id => GetType().Name;
     public string Name => "Public Properties Private Setters Rule";
     public string ShortDescription => "Public properties should not have public setters";
     public string LongDescription => "This rule checks if public properties have public setters and raises a warning if they do.";

@@ -7,7 +7,7 @@ namespace cleaner.Domain.Rules;
 
 public class ForEachDataSourceRule : IRule
 {
-    public string Id => "ForEachDataSourceRule";
+    public string Id => GetType().Name;
     public string Name => "For Each Data Source Rule";
 
     public string ShortDescription =>

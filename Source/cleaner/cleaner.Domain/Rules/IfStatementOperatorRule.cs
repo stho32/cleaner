@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class IfStatementOperatorRule : IRule
 {
-    public string Id => "IfStatementOperatorRule";
+    public string Id => GetType().Name;
     public string Name => "If Statement Operator Rule";
     public string ShortDescription => "Detects if statements containing operators, except for function calls";
 

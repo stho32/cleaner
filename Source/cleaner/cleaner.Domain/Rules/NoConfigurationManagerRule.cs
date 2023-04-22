@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class NoConfigurationManagerRule : IRule
 {
-    public string Id => "NoConfigurationManagerRule";
+    public string Id => GetType().Name;
 
     public string Name => "Configuration Management Detection Rule";
 
