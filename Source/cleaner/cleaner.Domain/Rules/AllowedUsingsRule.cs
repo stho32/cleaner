@@ -122,7 +122,9 @@ public class AllowedUsingsRule : IRule
             "System.Threading.Tasks",
             "System.Runtime.CompilerServices",
             "System.Text.RegularExpressions",
-            "System.Reflection"
+            "System.Reflection",
+            "CommandLine",
+            "CommandLine.Text"
         };
     }
 }
