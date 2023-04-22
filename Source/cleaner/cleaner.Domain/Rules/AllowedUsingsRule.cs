@@ -67,22 +67,25 @@ public class AllowedUsingsRule : IRule
         var namespaceDeclaration = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
         var fileScopedNamespaceDeclaration = root.DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>().FirstOrDefault();
 
+        string rootNamespace = string.Empty;
+
         if (namespaceDeclaration != null)
         {
-            string fullNamespace = namespaceDeclaration.Name.ToString();
-            string[] namespaceParts = fullNamespace.Split('.');
-            return namespaceParts.Length > 0 ? namespaceParts[0] : string.Empty;
+            rootNamespace = GetRootNamespaceFromDeclaration(namespaceDeclaration.Name.ToString());
         }
         else if (fileScopedNamespaceDeclaration != null)
         {
-            string fullNamespace = fileScopedNamespaceDeclaration.Name.ToString();
-            string[] namespaceParts = fullNamespace.Split('.');
-            return namespaceParts.Length > 0 ? namespaceParts[0] : string.Empty;
+            rootNamespace = GetRootNamespaceFromDeclaration(fileScopedNamespaceDeclaration.Name.ToString());
         }
 
-        return string.Empty;
+        return rootNamespace;
     }
 
+    private string GetRootNamespaceFromDeclaration(string fullNamespace)
+    {
+        string[] namespaceParts = fullNamespace.Split('.');
+        return namespaceParts.Length > 0 ? namespaceParts[0] : string.Empty;
+    }
 
     private bool IsSubNamespaceOfSameRootNamespace(string usingNamespace, string rootNamespace)
     {
