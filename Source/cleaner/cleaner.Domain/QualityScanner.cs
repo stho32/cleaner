@@ -37,8 +37,9 @@ public class QualityScanner
         foreach (var rule in rules)
         {
             int ruleIdWidth = rule.Id.Length;
-
-            if (ruleIdWidth > maxRuleIdWidth)
+            var currentRuleWidthIsLonger = ruleIdWidth > maxRuleIdWidth;
+            
+            if (currentRuleWidthIsLonger)
             {
                 maxRuleIdWidth = ruleIdWidth;
             }
