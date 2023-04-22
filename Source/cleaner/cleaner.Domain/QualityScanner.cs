@@ -17,6 +17,7 @@ public class QualityScanner
 
     public void PerformQualityScan(CommandLineOptions commandLineOptions, int maxRuleIdWidth)
     {
+        _maxRuleIdWidth = maxRuleIdWidth;
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
 
         _fileSystemAccessProvider = new FileSystemAccessProvider();
