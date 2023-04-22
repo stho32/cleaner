@@ -90,7 +90,7 @@ public class QualityScanner
 
     private ValidationMessage[]? RunValidationRules(string filePath, string fileContent)
     {
-        var rules = RuleFactory.GetRules(_allowedUsings, fileContent);
+        var rules = new CompositeRule(RuleFactory.GetRules(_allowedUsings, fileContent));
         var messages = rules.Validate(filePath, fileContent);
         return messages;
     }

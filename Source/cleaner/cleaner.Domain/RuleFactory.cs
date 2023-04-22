@@ -6,7 +6,7 @@ namespace cleaner.Domain;
 
 public static class RuleFactory
 {
-    public static CompositeRule GetRules(HashSet<string> allowedUsings, string fileContent)
+    public static IRule[] GetRules(HashSet<string> allowedUsings, string fileContent)
     {
         var ruleInstances = CreateRuleInstances(allowedUsings);
         var ignoredRuleIds = CleanerCommentParser.GetIgnoredRuleIds(fileContent);
@@ -14,7 +14,7 @@ public static class RuleFactory
         // Remove the ignored rules
         ruleInstances.RemoveAll(rule => ignoredRuleIds.Contains(rule.Id));
 
-        return new CompositeRule(ruleInstances);
+        return ruleInstances.ToArray();
     }
 
     private static List<IRule> CreateRuleInstances(HashSet<string> allowedUsings)
