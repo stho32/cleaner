@@ -121,7 +121,8 @@ public class AllowedUsingsRule : IRule
             "System.Threading",
             "System.Threading.Tasks",
             "System.Runtime.CompilerServices",
-            "System.Text.RegularExpressions"
+            "System.Text.RegularExpressions",
+            "System.Reflection"
         };
     }
 }

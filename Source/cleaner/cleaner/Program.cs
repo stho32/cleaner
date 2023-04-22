@@ -1,16 +1,13 @@
-﻿using System.Reflection;
-using cleaner.Domain;
+﻿using cleaner.Domain;
 using cleaner.Domain.FileSystem;
 using cleaner.Domain.Formatter;
 using cleaner.Domain.Helpers;
 using cleaner.Domain.Rules;
-using cleaner.Domain.Rules.NestedIfStatementsRuleValidation;
 
 namespace cleaner
 {
     public static class Program
     {
-        private static IRule? _validationRules; 
         private static IFileSystemAccessProvider? _fileSystemAccessProvider;
         
         static void Main(string[] args)
@@ -19,29 +16,8 @@ namespace cleaner
             if (!parser.IsValid) 
                 return;
 
-            HashSet<string> allowedUsings = LoadAllowedUsingsOrUseDefault(parser.AllowedUsingsFilePath);
+            _allowedUsings = LoadAllowedUsingsOrUseDefault(parser.AllowedUsingsFilePath);
 
-            // Dynamically load all rule types
-            var ruleTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => t.GetInterfaces().Contains(typeof(IRule)) && !t.IsAbstract);
-
-            // Create rule instances
-            var ruleInstances = new List<IRule>();
-            foreach (var ruleType in ruleTypes)
-            {
-                if (ruleType == typeof(AllowedUsingsRule))
-                {
-                    ruleInstances.Add(new AllowedUsingsRule(allowedUsings));
-                }
-                else
-                {
-                    ruleInstances.Add((IRule)Activator.CreateInstance(ruleType));
-                }
-            }
-
-            _validationRules = new CompositeRule(ruleInstances);
-            
             _fileSystemAccessProvider = new FileSystemAccessProvider();
 
             var walker = new DirectoryWalker(ValidateRules, new FileSystemAccessProvider(), "*.cs");
@@ -87,7 +63,8 @@ namespace cleaner
         private static int _totalFilesChecked = 0;
         private static int _totalFilesWithProblems = 0;
         private static int _totalProblems = 0;
-        
+        private static HashSet<string> _allowedUsings = null!;
+
         private static void PrintStatistics(int totalFilesChecked, int totalFilesWithProblems, int totalProblems)
         {
             Console.WriteLine("\nStatistics:");
@@ -129,7 +106,8 @@ namespace cleaner
 
         private static ValidationMessage[]? RunValidationRules(string filePath, string fileContent)
         {
-            var messages = _validationRules!.Validate(filePath, fileContent);
+            var rules = RuleFactory.GetRules(_allowedUsings, fileContent);
+            var messages = rules.Validate(filePath, fileContent);
             return messages;
         }
 
