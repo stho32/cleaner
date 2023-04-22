@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.Rules;
 
+// cleaner: ignore SqlInNonRepositoryRule
 [TestFixture]
 public class SqlInNonRepositoryRuleTests
 {
