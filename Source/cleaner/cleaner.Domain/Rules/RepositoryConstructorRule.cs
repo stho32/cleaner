@@ -26,18 +26,7 @@ public class RepositoryConstructorRule : IRule
         {
             if (HasMatchingClassName(classDeclaration))
             {
-                bool hasRequiredConstructor = false;
-
-                foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>())
-                {
-                    if (HasParameterOfTypeIDatabaseAccessor(constructor))
-                    {
-                        hasRequiredConstructor = true;
-                        break;
-                    }
-                }
-
-                if (!hasRequiredConstructor)
+                if (!HasRequiredConstructor(classDeclaration))
                 {
                     messages.Add(new ValidationMessage(Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should have a constructor with at least one parameter of type 'IDatabaseAccessor'."));
                 }
@@ -45,6 +34,22 @@ public class RepositoryConstructorRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private static bool HasRequiredConstructor(ClassDeclarationSyntax classDeclaration)
+    {
+        bool hasRequiredConstructor = false;
+
+        foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>())
+        {
+            if (HasParameterOfTypeIDatabaseAccessor(constructor))
+            {
+                hasRequiredConstructor = true;
+                break;
+            }
+        }
+
+        return hasRequiredConstructor;
     }
 
     private static bool HasParameterOfTypeIDatabaseAccessor(ConstructorDeclarationSyntax constructor)
