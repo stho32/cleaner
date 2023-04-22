@@ -126,7 +126,8 @@ public class AllowedUsingsRule : IRule
             "System.Text.RegularExpressions",
             "System.Reflection",
             "CommandLine",
-            "CommandLine.Text"
+            "CommandLine.Text",
+            "NUnit.Framework"
         };
     }
 }
