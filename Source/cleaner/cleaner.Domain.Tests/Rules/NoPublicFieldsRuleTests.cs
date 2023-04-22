@@ -67,19 +67,16 @@ public class NoPublicFieldsRuleTests
         // Assert
         Assert.AreEqual(3, result.Length);
 
-        Assert.AreEqual("NoPublicFieldsRule", result[0]?.RuleId);
-        Assert.AreEqual("No Public Fields Rule", result[0]?.RuleName);
-        Assert.AreEqual("The file 'test.cs' contains a public field: 'publicField'. This is not allowed.",
-            result[0]?.ErrorMessage);
-
-        Assert.AreEqual("NoPublicFieldsRule", result[1]?.RuleId);
-        Assert.AreEqual("No Public Fields Rule", result[1]?.RuleName);
-        Assert.AreEqual("The file 'test.cs' contains a public field: 'publicStaticField'. This is not allowed.",
-            result[1]?.ErrorMessage);
-
-        Assert.AreEqual("NoPublicFieldsRule", result[2]?.RuleId);
-        Assert.AreEqual("No Public Fields Rule", result[2]?.RuleName);
-        Assert.AreEqual("The file 'test.cs' contains a public field: 'publicReadonlyField'. This is not allowed.",
-            result[2]?.ErrorMessage);
+        AssertValidationMessage(result[0], "test.cs", "publicField");
+        AssertValidationMessage(result[1], "test.cs", "publicStaticField");
+        AssertValidationMessage(result[2], "test.cs", "publicReadonlyField");
+    }
+    
+    private void AssertValidationMessage(ValidationMessage? message, string filePath, string fieldName)
+    {
+        Assert.AreEqual("NoPublicFieldsRule", message?.RuleId);
+        Assert.AreEqual("No Public Fields Rule", message?.RuleName);
+        Assert.AreEqual($"The file '{filePath}' contains a public field: '{fieldName}'. This is not allowed.",
+            message?.ErrorMessage);
     }
 }
