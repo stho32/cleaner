@@ -15,9 +15,9 @@ public class QualityScanner
     private HashSet<string> _allowedUsings = null!;
     private static int _maxRuleIdWidth;
 
-    public void PerformQualityScan(CommandLineOptions commandLineOptions, int maxRuleIdWidth)
+    public void PerformQualityScan(CommandLineOptions commandLineOptions)
     {
-        _maxRuleIdWidth = maxRuleIdWidth;
+        _maxRuleIdWidth = MaxRuleIdWidth();
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
 
         _fileSystemAccessProvider = new FileSystemAccessProvider();
@@ -26,6 +26,25 @@ public class QualityScanner
         walker.Walk(commandLineOptions.DirectoryPath ?? "", commandLineOptions.StopOnFirstFileWithProblems);
 
         PrintStatistics(_totalFilesChecked, _totalFilesWithProblems, _totalProblems);
+    }
+    
+    private static int MaxRuleIdWidth()
+    {
+        var rules = RuleFactory.GetRules(AllowedUsingsRule.GetDefaultAllowedUsings(), "");
+
+        int maxRuleIdWidth = 0;
+
+        foreach (var rule in rules)
+        {
+            int ruleIdWidth = rule.Id.Length;
+
+            if (ruleIdWidth > maxRuleIdWidth)
+            {
+                maxRuleIdWidth = ruleIdWidth;
+            }
+        }
+
+        return maxRuleIdWidth;
     }
 
     private static HashSet<string> LoadAllowedUsingsOrUseDefault(string? allowedUsingsFilePath)
