@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.Rules;
 
+// cleaner: ignore SqlInNonRepositoryRule
 public class SqlInNonRepositoryRule : IRule
 {
     public string Id => GetType().Name;
