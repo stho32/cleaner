@@ -18,26 +18,16 @@ public class NoOutAndRefParametersRule : IRule
         SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
         CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
 
-        var methodDeclarations = root.DescendantNodes()
-            .OfType<MethodDeclarationSyntax>()
-            .Where(method => !method.Modifiers.Any(SyntaxKind.OverrideKeyword));
+        VerifyMethodDeclarations(filePath, root, messages);
+        VerifyIndexerDeclarations(filePath, root, messages);
 
+        return messages.ToArray();
+    }
+
+    private void VerifyIndexerDeclarations(string filePath, CompilationUnitSyntax root, List<ValidationMessage> messages)
+    {
         var indexerDeclarations = root.DescendantNodes()
             .OfType<IndexerDeclarationSyntax>();
-
-        foreach (var methodDeclaration in methodDeclarations)
-        {
-            foreach (var parameter in methodDeclaration.ParameterList.Parameters)
-            {
-                if (HasParameterRefOrOutModifier(parameter))
-                {
-                    messages.Add(new ValidationMessage(
-                        Id,
-                        Name,
-                        $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' has {parameter.Modifiers} parameter '{parameter.Identifier.Text}'. Please avoid using out or ref parameters."));
-                }
-            }
-        }
 
         foreach (var indexerDeclaration in indexerDeclarations)
         {
@@ -52,8 +42,27 @@ public class NoOutAndRefParametersRule : IRule
                 }
             }
         }
+    }
 
-        return messages.ToArray();
+    private void VerifyMethodDeclarations(string filePath, CompilationUnitSyntax root, List<ValidationMessage> messages)
+    {
+        var methodDeclarations = root.DescendantNodes()
+            .OfType<MethodDeclarationSyntax>()
+            .Where(method => !method.Modifiers.Any(SyntaxKind.OverrideKeyword));
+
+        foreach (var methodDeclaration in methodDeclarations)
+        {
+            foreach (var parameter in methodDeclaration.ParameterList.Parameters)
+            {
+                if (HasParameterRefOrOutModifier(parameter))
+                {
+                    messages.Add(new ValidationMessage(
+                        Id,
+                        Name,
+                        $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' has {parameter.Modifiers} parameter '{parameter.Identifier.Text}'. Please avoid using out or ref parameters."));
+                }
+            }
+        }
     }
 
     private static bool HasParameterRefOrOutModifier(ParameterSyntax parameter)
