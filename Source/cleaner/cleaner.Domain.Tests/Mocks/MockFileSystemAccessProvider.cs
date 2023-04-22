@@ -16,14 +16,11 @@ public class MockFileSystemAccessProvider : IFileSystemAccessProvider
     public IEnumerable<string> GetFiles(string path, string searchPattern)
     {
         if (!Files.TryGetValue(path, out var files))
-        {
             return Array.Empty<string>();
-        }
 
-        if (string.IsNullOrEmpty(searchPattern) || searchPattern == "*")
-        {
+        var findAllSearchPattern = string.IsNullOrEmpty(searchPattern) || searchPattern == "*";
+        if (findAllSearchPattern)
             return files;
-        }
 
         var regexPattern = "^" + Regex.Escape(searchPattern).Replace("\\*", ".*").Replace("\\?", ".") + "$";
         var regex = new Regex(regexPattern, RegexOptions.IgnoreCase);
@@ -43,6 +40,6 @@ public class MockFileSystemAccessProvider : IFileSystemAccessProvider
 
     public string GetFileContent(string filePath)
     {
-        throw new NotImplementedException();
+        return string.Empty;
     }
 }
