@@ -28,7 +28,6 @@ public class SingleDeclarationRule : IRule
         {
             messages.Add(
                 new ValidationMessage(
-                    Severity.Error,
                     Id,
                     Name,
                     $"The file '{filePath}' contains {declarationCount} type declarations. Only one type declaration is allowed per file."));

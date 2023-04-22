@@ -67,19 +67,16 @@ public class NoPublicFieldsRuleTests
         // Assert
         Assert.AreEqual(3, result.Length);
 
-        Assert.AreEqual(Severity.Warning, result[0]?.Severity);
         Assert.AreEqual("NoPublicFieldsRule", result[0]?.RuleId);
         Assert.AreEqual("No Public Fields Rule", result[0]?.RuleName);
         Assert.AreEqual("The file 'test.cs' contains a public field: 'publicField'. This is not allowed.",
             result[0]?.ErrorMessage);
 
-        Assert.AreEqual(Severity.Warning, result[1]?.Severity);
         Assert.AreEqual("NoPublicFieldsRule", result[1]?.RuleId);
         Assert.AreEqual("No Public Fields Rule", result[1]?.RuleName);
         Assert.AreEqual("The file 'test.cs' contains a public field: 'publicStaticField'. This is not allowed.",
             result[1]?.ErrorMessage);
 
-        Assert.AreEqual(Severity.Warning, result[2]?.Severity);
         Assert.AreEqual("NoPublicFieldsRule", result[2]?.RuleId);
         Assert.AreEqual("No Public Fields Rule", result[2]?.RuleName);
         Assert.AreEqual("The file 'test.cs' contains a public field: 'publicReadonlyField'. This is not allowed.",

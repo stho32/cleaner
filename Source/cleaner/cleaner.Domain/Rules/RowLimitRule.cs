@@ -15,7 +15,6 @@ public class RowLimitRule : IRule
         if (hasMoreRowsThanAllowed)
         {
             var message = new ValidationMessage(
-                Severity.Warning,
                 Id,
                 Name,
                 $"The file '{filePath}' contains {rowCount} rows, which is more than the allowed limit of 500 rows."

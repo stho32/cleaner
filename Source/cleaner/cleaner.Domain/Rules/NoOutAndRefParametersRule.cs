@@ -32,7 +32,6 @@ public class NoOutAndRefParametersRule : IRule
                 if (HasParameterRefOrOutModifier(parameter))
                 {
                     messages.Add(new ValidationMessage(
-                        Severity.Warning,
                         Id,
                         Name,
                         $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' has {parameter.Modifiers} parameter '{parameter.Identifier.Text}'. Please avoid using out or ref parameters."));
@@ -47,7 +46,6 @@ public class NoOutAndRefParametersRule : IRule
                 if (HasParameterRefOrOutModifier(parameter))
                 {
                     messages.Add(new ValidationMessage(
-                        Severity.Warning,
                         Id,
                         Name,
                         $"Indexer in file '{filePath}' has {parameter.Modifiers} parameter '{parameter.Identifier.Text}'. Please avoid using out or ref parameters."));

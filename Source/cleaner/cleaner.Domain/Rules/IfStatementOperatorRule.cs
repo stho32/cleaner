@@ -36,7 +36,6 @@ public class IfStatementOperatorRule : IRule
             int lineNumber = span.StartLinePosition.Line + 1;
 
             var message = new ValidationMessage(
-                Severity.Warning,
                 Id,
                 Name,
                 $"An if statement in the file '{filePath}':{lineNumber} contains operators, which is not allowed."

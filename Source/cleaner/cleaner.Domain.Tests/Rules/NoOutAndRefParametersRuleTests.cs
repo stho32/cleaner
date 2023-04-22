@@ -46,7 +46,6 @@ public class NoOutAndRefParametersRuleTests
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(5, messages.Length);
         Assert.AreEqual("No Out and Ref Parameters Rule", messages[0]?.RuleName);
-        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
         Assert.IsTrue(messages.All(m => m!.ErrorMessage.Contains("Please avoid using out or ref parameters.")));
     }
 
@@ -65,7 +64,6 @@ public class NoOutAndRefParametersRuleTests
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(3, messages.Length);
         Assert.AreEqual("No Out and Ref Parameters Rule", messages[0]?.RuleName);
-        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
         Assert.IsTrue(messages.All(m => m!.ErrorMessage.Contains("Please avoid using out or ref parameters.")));
     }
 }

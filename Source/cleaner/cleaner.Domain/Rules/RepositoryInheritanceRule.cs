@@ -32,7 +32,7 @@ public class RepositoryInheritanceRule : IRule
             {
                 if (IsNotInherited(classDeclaration))
                 {
-                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class."));
+                    messages.Add(new ValidationMessage(Id, Name, $"Class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class."));
                 }
             }
         }

@@ -31,7 +31,7 @@ public class NestedIfStatementsRule : IRule
 
             if (tooMuchNesting)
             {
-                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(methodDeclaration)} has if statements nested more than 2 levels deep."));
+                messages.Add(new ValidationMessage(Id, Name, $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(methodDeclaration)} has if statements nested more than 2 levels deep."));
             }
         }
 

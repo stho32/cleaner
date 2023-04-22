@@ -27,7 +27,6 @@ public class NoPublicFieldsRule : IRule
             foreach (var variable in fieldDeclaration.Declaration.Variables)
             {
                 var message = new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"The file '{filePath}' contains a public field: '{variable.Identifier.Text}'. This is not allowed."

@@ -57,7 +57,6 @@ public class SingleDeclarationRuleTests
         // Assert
         Assert.AreEqual(1, messages.Length);
         Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-        Assert.AreEqual(Severity.Error, messages[0]?.Severity);
     }
 
     [Test]
@@ -76,7 +75,6 @@ public class SingleDeclarationRuleTests
         // Assert
         Assert.AreEqual(1, messages.Length);
         Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-        Assert.AreEqual(Severity.Error, messages[0]?.Severity);
     }
 
     [Test]
@@ -95,6 +93,5 @@ public class SingleDeclarationRuleTests
         // Assert
         Assert.AreEqual(1, messages.Length);
         Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-        Assert.AreEqual(Severity.Error, messages[0]?.Severity);
     }
 }

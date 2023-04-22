@@ -33,7 +33,6 @@ namespace cleaner.Domain.Rules
                 {
                     var lineNumber = tree.GetLineSpan(method.Span).StartLinePosition.Line + 1;
                     var message = new ValidationMessage(
-                        Severity.Warning,
                         Id,
                         Name,
                         $"The method '{method.Identifier.Text}':{lineNumber} in the file '{filePath}' contains {semicolonCount} semicolons, which is more than the allowed limit of 10."

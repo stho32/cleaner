@@ -33,7 +33,6 @@ public class CyclomaticComplexityRule : IRule
             {
                 int lineNumber = method.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
                 messages.Add(new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"Method '{method.Identifier.ValueText}' in file '{filePath}' at line {lineNumber} has a cyclomatic complexity of {complexity}, which exceeds the threshold of {_threshold}."));           }

@@ -33,7 +33,6 @@ public class ForEachDataSourceRule : IRule
                 int lineNumber = RuleHelper.GetLineNumber(forEachStatement);
 
                 var message = new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"A foreach statement in the file '{filePath}':{lineNumber} contains a data source expression with more than two dots, which is not allowed."

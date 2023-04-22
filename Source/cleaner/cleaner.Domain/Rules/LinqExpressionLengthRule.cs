@@ -35,7 +35,6 @@ public class LinqExpressionLengthRule : IRule
             if (linqExpressionIsTooLong)
             {
                 var message = new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"A LINQ expression in the file '{filePath}' contains {methodCalls.Count} steps, which is more than the allowed limit of 2."

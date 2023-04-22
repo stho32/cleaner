@@ -70,8 +70,7 @@ public class TestClass
 
         // Assert
         Assert.AreEqual(1, result?.Length);
-        Assert.AreEqual(Severity.Warning, result![0]?.Severity);
-        Assert.AreEqual("MethodLengthRule", result[0]?.RuleId);
+        Assert.AreEqual("MethodLengthRule", result![0]?.RuleId);
         Assert.AreEqual("Method Length Rule", result[0]?.RuleName);
         StringAssert.Contains("more than the allowed limit of 10", result[0]?.ErrorMessage);
     }

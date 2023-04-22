@@ -1,3 +1,4 @@
+using System.Drawing;
 using cleaner.Domain.Helpers;
 using cleaner.Domain.Rules;
 
@@ -12,23 +13,10 @@ public class ValidationMessagePrinter
         
         foreach (var message in messages!)
         {
-            Console.ForegroundColor = GetSeverityColor(message.Severity);
-            Console.WriteLine($"{message.Severity}: {message.RuleName} ({message.RuleId}): {message.ErrorMessage}");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"({message.RuleId}): {message.ErrorMessage}");
         }
 
         Console.ResetColor();
-    }
-
-    private ConsoleColor GetSeverityColor(Severity severity)
-    {
-        switch (severity)
-        {
-            case Severity.Error:
-                return ConsoleColor.Red;
-            case Severity.Warning:
-                return ConsoleColor.Yellow;
-            default:
-                return ConsoleColor.White;
-        }
     }
 }

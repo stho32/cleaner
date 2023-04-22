@@ -29,7 +29,6 @@ public class PublicPropertiesPrivateSettersRule : IRule
                 if (IsPublicSetter(setter))
                 {
                     var message = new ValidationMessage(
-                        Severity.Warning,
                         Id,
                         Name,
                         $"The property '{propertyDeclaration?.Identifier.Text}' in the file '{filePath}' has a public setter. Consider using a private setter."

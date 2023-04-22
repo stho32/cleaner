@@ -31,7 +31,6 @@ public class FileNameMatchingDeclarationRule : IRule
             if (!string.Equals(actualFileName, expectedFileName, StringComparison.OrdinalIgnoreCase))
             {
                 var message = new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"The file '{filePath}' should be named '{expectedFileName}' to match the declared type '{declaredTypeName}'."

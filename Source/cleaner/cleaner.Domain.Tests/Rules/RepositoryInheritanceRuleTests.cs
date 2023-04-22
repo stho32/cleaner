@@ -60,7 +60,6 @@ public class RepositoryInheritanceRuleTests
         var messages = _rule.Validate("TestFile.cs", code);
         Assert.IsNotEmpty(messages);
         Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(Severity.Warning, messages[0]?.Severity);
         Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
         Assert.AreEqual(_rule.Name, messages[0]?.RuleName);
         StringAssert.Contains("Class 'TestRepository' in file 'TestFile.cs' at line 6 should not inherit from another class.",

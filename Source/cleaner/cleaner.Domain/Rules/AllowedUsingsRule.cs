@@ -39,7 +39,6 @@ public class AllowedUsingsRule : IRule
             if (isInvalidUsing)
             {
                 var message = new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"The file '{filePath}' contains a disallowed using: '{usingNamespace}'."

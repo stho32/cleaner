@@ -1,3 +1,3 @@
 namespace cleaner.Domain.Rules;
 
-public record ValidationMessage(Severity Severity, string RuleId, string RuleName, string ErrorMessage);
+public record ValidationMessage(string RuleId, string RuleName, string ErrorMessage);

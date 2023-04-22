@@ -33,7 +33,7 @@ public class NoConfigurationManagerRule : IRule
             
             if (IsRelatedToConfigurationManagementInNet(usingName))
             {
-                messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Configuration Management detected in file '{filePath}' at line {RuleHelper.GetLineNumber(usingDirective)}"));
+                messages.Add(new ValidationMessage(Id, Name, $"Configuration Management detected in file '{filePath}' at line {RuleHelper.GetLineNumber(usingDirective)}"));
             }
         }
 

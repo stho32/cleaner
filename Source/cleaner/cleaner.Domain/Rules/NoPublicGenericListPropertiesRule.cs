@@ -29,7 +29,6 @@ public class NoPublicGenericListPropertiesRule : IRule
             if (isPublicGenericList)
             {
                 var message = new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"The file '{filePath}' contains a public property of type List<T>: '{propertyDeclaration.Identifier.Text}'. This is not allowed."

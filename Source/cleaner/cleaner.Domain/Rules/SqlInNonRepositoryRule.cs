@@ -44,7 +44,7 @@ public class SqlInNonRepositoryRule : IRule
                     var isASubstentialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
                     if (isASubstentialAmountOfSqlPresent)
                     {
-                        messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"SQL detected in non-Repository class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
+                        messages.Add(new ValidationMessage(Id, Name, $"SQL detected in non-Repository class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
                     }
                 }
             }

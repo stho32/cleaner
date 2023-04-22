@@ -30,7 +30,6 @@ public class NotImplementedExceptionRule : IRule
         {
             messages.Add(
                 new ValidationMessage(
-                    Severity.Warning,
                     Id,
                     Name,
                     $"The file '{filePath}' contains {exceptionCount} occurrence(s) of 'NotImplementedException'. Please review and implement the required functionality."));
