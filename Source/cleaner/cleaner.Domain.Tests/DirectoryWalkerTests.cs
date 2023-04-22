@@ -21,7 +21,22 @@ public class DirectoryWalkerTests
     [Test]
     public void Walk_ValidPath_CallsCallbackForEachCsFile()
     {
-        var mockProvider = new MockFileSystemAccessProvider
+        var mockProvider = SetUpMockFileSystemAccessProvider();
+        var foundFiles = new List<string>();
+        var walker = new DirectoryWalker(filePath =>
+        {
+            foundFiles.Add(filePath);
+            return true;
+        }, mockProvider, "*.cs");
+
+        walker.Walk("root");
+
+        AssertFoundFiles(foundFiles);
+    }
+
+    private MockFileSystemAccessProvider SetUpMockFileSystemAccessProvider()
+    {
+        return new MockFileSystemAccessProvider
         {
             Directories =
             {
@@ -40,16 +55,10 @@ public class DirectoryWalkerTests
                 {"root/sub2/.hidden", new List<string> {"root/sub2/.hidden/file6.cs"}}
             }
         };
+    }
 
-        var foundFiles = new List<string>();
-        var walker = new DirectoryWalker(filePath =>
-        {
-            foundFiles.Add(filePath);
-            return true;
-        }, mockProvider, "*.cs");
-
-        walker.Walk("root");
-
+    private void AssertFoundFiles(List<string> foundFiles)
+    {
         Assert.AreEqual(4, foundFiles.Count);
         Assert.Contains("root/file1.cs", foundFiles);
         Assert.Contains("root/sub1/file3.cs", foundFiles);
