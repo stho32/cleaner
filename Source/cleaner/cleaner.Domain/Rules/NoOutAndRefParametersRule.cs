@@ -29,7 +29,7 @@ public class NoOutAndRefParametersRule : IRule
         {
             foreach (var parameter in methodDeclaration.ParameterList.Parameters)
             {
-                if (parameter.Modifiers.Any(SyntaxKind.RefKeyword) || parameter.Modifiers.Any(SyntaxKind.OutKeyword))
+                if (HasParameterRefOrOutModifier(parameter))
                 {
                     messages.Add(new ValidationMessage(
                         Severity.Warning,
@@ -44,7 +44,7 @@ public class NoOutAndRefParametersRule : IRule
         {
             foreach (var parameter in indexerDeclaration.ParameterList.Parameters)
             {
-                if (parameter.Modifiers.Any(SyntaxKind.RefKeyword) || parameter.Modifiers.Any(SyntaxKind.OutKeyword))
+                if (HasParameterRefOrOutModifier(parameter))
                 {
                     messages.Add(new ValidationMessage(
                         Severity.Warning,
@@ -56,5 +56,10 @@ public class NoOutAndRefParametersRule : IRule
         }
 
         return messages.ToArray();
+    }
+
+    private static bool HasParameterRefOrOutModifier(ParameterSyntax parameter)
+    {
+        return parameter.Modifiers.Any(SyntaxKind.RefKeyword) || parameter.Modifiers.Any(SyntaxKind.OutKeyword);
     }
 }
