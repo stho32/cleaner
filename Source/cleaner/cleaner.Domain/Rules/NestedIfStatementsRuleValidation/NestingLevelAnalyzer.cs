@@ -15,6 +15,14 @@ public class NestingLevelAnalyzer
         if (node == null)
             return currentNestingLevel;
 
+        var (newCurrentNestingLevel, maxNestingLevel) = UpdateNestingLevel(node, currentNestingLevel);
+        maxNestingLevel = CheckChildNodes(node, newCurrentNestingLevel, maxNestingLevel);
+
+        return maxNestingLevel;
+    }
+
+    private (int currentNestingLevel, int maxNestingLevel) UpdateNestingLevel(SyntaxNode node, int currentNestingLevel)
+    {
         int maxNestingLevel = currentNestingLevel;
 
         if (IsAnIfStatement(node))
@@ -23,6 +31,11 @@ public class NestingLevelAnalyzer
             maxNestingLevel = currentNestingLevel;
         }
 
+        return (currentNestingLevel, maxNestingLevel);
+    }
+
+    private int CheckChildNodes(SyntaxNode node, int currentNestingLevel, int maxNestingLevel)
+    {
         foreach (var child in node.ChildNodes())
         {
             maxNestingLevel = Math.Max(maxNestingLevel, AnalyzeNode(child, currentNestingLevel));
