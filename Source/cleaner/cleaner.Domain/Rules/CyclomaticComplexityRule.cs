@@ -13,7 +13,7 @@ public class CyclomaticComplexityRule : IRule
     public string LongDescription =>
         "This rule calculates the cyclomatic complexity of each method and warns when it exceeds a given threshold. Cyclomatic complexity is a metric that measures the number of linearly independent paths through a program's source code.";
 
-    private readonly int _threshold = 3;
+    private readonly int _threshold = 5;
 
     public ValidationMessage[]? Validate(string filePath, string fileContent)
     {

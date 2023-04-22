@@ -1,6 +1,5 @@
 ﻿using cleaner.Domain;
 using cleaner.Domain.CommandLineArguments;
-using cleaner.Domain.Rules;
 
 namespace cleaner
 {
@@ -12,21 +11,35 @@ namespace cleaner
             if (commandLineOptions == null)
                 return;
 
-            if (commandLineOptions.ListRules)
-            {
-                var ruleLister = new RuleLister();
-                ruleLister.ListAllRules();
-                return;
-            }
+            if (ListRules(commandLineOptions)) return;
 
+            if (ScanFiles(commandLineOptions)) return;
+
+            Console.WriteLine("No directory path/action specified.");
+        }
+
+        private static bool ScanFiles(CommandLineOptions commandLineOptions)
+        {
             if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
             {
                 var qualityScanner = new QualityScanner();
                 qualityScanner.PerformQualityScan(commandLineOptions);
-                return;
+                return true;
             }
 
-            Console.WriteLine("No directory path/action specified.");
+            return false;
+        }
+
+        private static bool ListRules(CommandLineOptions commandLineOptions)
+        {
+            if (commandLineOptions.ListRules)
+            {
+                var ruleLister = new RuleLister();
+                ruleLister.ListAllRules();
+                return true;
+            }
+
+            return false;
         }
     }
 }
