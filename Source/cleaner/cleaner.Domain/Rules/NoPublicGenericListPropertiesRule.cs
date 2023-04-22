@@ -25,7 +25,8 @@ public class NoPublicGenericListPropertiesRule : IRule
 
         foreach (var propertyDeclaration in propertyDeclarations)
         {
-            if (IsPublic(propertyDeclaration) && IsGenericListType(propertyDeclaration))
+            var isPublicGenericList = IsPublic(propertyDeclaration) && IsGenericListType(propertyDeclaration);
+            if (isPublicGenericList)
             {
                 var message = new ValidationMessage(
                     Severity.Warning,
