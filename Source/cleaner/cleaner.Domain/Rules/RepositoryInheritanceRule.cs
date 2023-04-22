@@ -25,15 +25,23 @@ public class RepositoryInheritanceRule : IRule
 
         foreach (var classDeclaration in classDeclarations)
         {
-            if (classDeclaration.Identifier.Text.EndsWith("Repository", StringComparison.OrdinalIgnoreCase))
+            var className = classDeclaration.Identifier.Text;
+            var isRepositoryClass = className.EndsWith("Repository", StringComparison.OrdinalIgnoreCase);
+            
+            if (isRepositoryClass)
             {
-                if (classDeclaration.BaseList != null && classDeclaration.BaseList.Types.Count > 0)
+                if (IsNotInherited(classDeclaration))
                 {
-                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{classDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class."));
+                    messages.Add(new ValidationMessage(Severity.Warning, Id, Name, $"Class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class."));
                 }
             }
         }
 
         return messages.ToArray();
+    }
+
+    private static bool IsNotInherited(ClassDeclarationSyntax classDeclaration)
+    {
+        return classDeclaration.BaseList != null && classDeclaration.BaseList.Types.Count > 0;
     }
 }
