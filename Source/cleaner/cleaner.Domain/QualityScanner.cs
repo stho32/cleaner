@@ -88,11 +88,17 @@ public class QualityScanner
         _totalFilesChecked += 1;
     }
 
-    private ValidationMessage[]? RunValidationRules(string filePath, string fileContent)
+    private ValidationMessage[] RunValidationRules(string filePath, string fileContent)
     {
-        var rules = new CompositeRule(RuleFactory.GetRules(_allowedUsings, fileContent));
-        var messages = rules.Validate(filePath, fileContent);
-        return messages;
+        var rules = RuleFactory.GetRules(_allowedUsings, fileContent);
+        var messages = new List<ValidationMessage>();
+
+        foreach (var rule in rules)
+        {
+            messages.AddRange(rule.Validate(filePath, fileContent) ?? Array.Empty<ValidationMessage>());
+        }
+
+        return messages.ToArray();
     }
 
     private void UpdateProblemStatistics(ValidationMessage[]? messages)

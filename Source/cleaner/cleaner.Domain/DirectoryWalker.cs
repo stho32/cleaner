@@ -18,12 +18,17 @@ public class DirectoryWalker
 
     public void Walk(string directoryPath, bool stopOnFirstFileWithErrors = false)
     {
-        if (string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.DirectoryExists(directoryPath))
+        if (IsNoValidPathGiven(directoryPath))
         {
             throw new ArgumentException("Invalid directory path provided.");
         }
 
         WalkDirectory(directoryPath, stopOnFirstFileWithErrors);
+    }
+
+    private bool IsNoValidPathGiven(string directoryPath)
+    {
+        return string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.DirectoryExists(directoryPath);
     }
 
     private void WalkDirectory(string directoryPath, bool stopOnFirstFileWithErrors)
@@ -32,12 +37,7 @@ public class DirectoryWalker
 
         foreach (var subdirectory in subdirectories)
         {
-            if (subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/"))
-                continue;
-            if (subdirectory.Contains("\\bin\\") || subdirectory.Contains("\\obj\\"))
-                continue;
-            if (_fileSystemAccessProvider.GetFileName(subdirectory).StartsWith("."))
-                continue;
+            if (ShouldIgnoreThisFolder(subdirectory)) continue;
 
             WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
         }
@@ -46,8 +46,30 @@ public class DirectoryWalker
 
         foreach (var csFile in csFiles)
         {
-            if (_fileCallback(csFile) && stopOnFirstFileWithErrors)
+            var hasFoundErrors = _fileCallback(csFile);
+            var shouldStop = hasFoundErrors && stopOnFirstFileWithErrors;
+            
+            if (shouldStop)
                 Environment.Exit(1);
         }
+    }
+
+    private bool ShouldIgnoreThisFolder(string subdirectory)
+    {
+        var isGeneratedFolderOnLinux = subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/"); 
+        if (isGeneratedFolderOnLinux)
+            return true;
+
+        var isGeneratedFolderOnWindows = subdirectory.Contains("\\bin\\") || subdirectory.Contains("\\obj\\");
+        if (isGeneratedFolderOnWindows)
+            return true;
+
+        var lastFolderName = _fileSystemAccessProvider.GetFileName(subdirectory);
+        var lastFolderNameStartsWithADot = lastFolderName.StartsWith(".");
+        
+        if (lastFolderNameStartsWithADot)
+            return true;
+        
+        return false;
     }
 }

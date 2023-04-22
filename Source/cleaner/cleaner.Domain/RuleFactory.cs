@@ -28,14 +28,12 @@ public static class RuleFactory
         var ruleInstances = new List<IRule>();
         foreach (var ruleType in ruleTypes)
         {
-            if (ruleType == typeof(AllowedUsingsRule))
+            var specialHandlingRequired = ruleType == typeof(AllowedUsingsRule);
+            if (specialHandlingRequired)
             {
                 ruleInstances.Add(new AllowedUsingsRule(allowedUsings));
                 continue;
             }
-
-            if (ruleType == typeof(CompositeRule))
-                continue;
 
             var newInstance = (IRule?) Activator.CreateInstance(ruleType);
             if (newInstance != null)
