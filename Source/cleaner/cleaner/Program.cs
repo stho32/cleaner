@@ -21,11 +21,30 @@ namespace cleaner
             if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
             {
                 var qualityScanner = new QualityScanner();
-                qualityScanner.PerformQualityScan(commandLineOptions);
+                qualityScanner.PerformQualityScan(commandLineOptions, MaxRuleIdWidth());
                 return;
             }
             
             Console.WriteLine("No directory path/action specified.");
+        }
+
+        private static int MaxRuleIdWidth()
+        {
+            var rules = RuleFactory.GetRules(AllowedUsingsRule.GetDefaultAllowedUsings(), "");
+
+            int maxRuleIdWidth = 0;
+
+            foreach (var rule in rules)
+            {
+                int ruleIdWidth = rule.Id.Length;
+
+                if (ruleIdWidth > maxRuleIdWidth)
+                {
+                    maxRuleIdWidth = ruleIdWidth;
+                }
+            }
+
+            return maxRuleIdWidth;
         }
 
         private static void ListAllRules()

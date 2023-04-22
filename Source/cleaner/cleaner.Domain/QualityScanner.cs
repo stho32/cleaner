@@ -13,8 +13,9 @@ public class QualityScanner
     private int _totalFilesWithProblems;
     private int _totalProblems;
     private HashSet<string> _allowedUsings = null!;
+    private static int _maxRuleIdWidth;
 
-    public void PerformQualityScan(CommandLineOptions commandLineOptions)
+    public void PerformQualityScan(CommandLineOptions commandLineOptions, int maxRuleIdWidth)
     {
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
 
@@ -112,7 +113,7 @@ public class QualityScanner
 
     private static void PrintValidationMessages(ValidationMessage[]? messages)
     {
-        var messagePrinter = new ValidationMessagePrinter();
+        var messagePrinter = new ValidationMessagePrinter(_maxRuleIdWidth);
         messagePrinter.Print(messages);
     }
 }

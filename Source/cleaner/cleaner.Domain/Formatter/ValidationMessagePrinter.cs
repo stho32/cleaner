@@ -1,22 +1,31 @@
-using System.Drawing;
 using cleaner.Domain.Helpers;
 using cleaner.Domain.Rules;
 
-namespace cleaner.Domain.Formatter;
-
-public class ValidationMessagePrinter
+namespace cleaner.Domain.Formatter
 {
-    public void Print(ValidationMessage[]? messages)
+    public class ValidationMessagePrinter
     {
-        if (CollectionHelpers.IsNullOrEmpty(messages))
-            return;
-        
-        foreach (var message in messages!)
+        private readonly int _maxRuleIdWidth;
+
+        public ValidationMessagePrinter(int maxRuleIdWidth)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"({message.RuleId}): {message.ErrorMessage}");
+            _maxRuleIdWidth = maxRuleIdWidth;
         }
 
-        Console.ResetColor();
+        public void Print(ValidationMessage[]? messages)
+        {
+            if (CollectionHelpers.IsNullOrEmpty(messages))
+                return;
+
+            string format = $"{{0, -{_maxRuleIdWidth}}}   {{1}}";
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            foreach (var message in messages!)
+            {
+                Console.WriteLine(format, $"({message.RuleId}):", message.ErrorMessage);
+            }
+
+            Console.ResetColor();
+        }
     }
 }
