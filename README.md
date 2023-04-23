@@ -27,10 +27,14 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 11. [X] Keine public fields.
 12. [X] Keine Out / Ref Parameter verwenden.
 13. [X] Das .Net-interne Konfigurationsmanagement sollte nicht verwendet werden.
-14. [ ] Es gibt bestimmte Standard-Bibliotheken, die immer verwendet werden sollten. (Core, Frontend falls UI...)
 15. [X] SQL ist nur in Klassen erlaubt, die auf *Repository enden.
 16. [X] Klassen die auf *Repository enden sollten nicht von anderen Klassen abgeleitet sein.
 17. [X] Klassen, die auf *Repository enden haben mindestens einen IDataAccessor-Konstruktor-Parameter
+35. [X] Methoden, die if statements enthalten, die tiefer als 2 Ebenen verschachtelt sind.
+
+## Noch mehr Ideen für Regeln 
+
+14. [ ] Es gibt bestimmte Standard-Bibliotheken, die immer verwendet werden sollten. (Core, Frontend falls UI...)
 18. [ ] ? Klassen, die auf *Repository enden werden alle über eine gemeinsame Factory erstellt
 19. [ ] Wir verwenden ausschließlich den Logger aus der Core-Bibliothek.
 20. [ ] Jede Anwendung muss in der Program.cs in der Main-Funktion eine bestimmte Sequenz an Befehlen enthalten.
@@ -48,6 +52,5 @@ Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und str
 32. [ ] ? Jedes Git-Repository sollte explizit als entweder "aktiv zu warten" oder "nicht aktiv zu warten" klassifiziert sein (an einem gemeinsamen Ort)
 33. [ ] ? Für aktiv zu wartende Git-Repositories sollte bei den Anforderungen ein MOC-* existieren.
 34. [ ] #region verbieten
-35. [X] Methoden, die if statements enthalten, die tiefer als 2 Ebenen verschachtelt sind.
 
 
