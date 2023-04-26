@@ -23,8 +23,13 @@ public class QualityScanner
 
         _fileSystemAccessProvider = new FileSystemAccessProvider();
 
-        var walker = new DirectoryWalker(ValidateRules, new FileSystemAccessProvider(), "*.cs");
-        walker.Walk(commandLineOptions.DirectoryPath ?? "", commandLineOptions.StopOnFirstFileWithProblems);
+        var walker = new RecursiveDirectoryWalker();
+        walker.Walk(
+            ValidateRules,
+            _fileSystemAccessProvider,
+            "*.cs",
+            commandLineOptions.DirectoryPath ?? "",
+            commandLineOptions.StopOnFirstFileWithProblems);
 
         PrintStatistics(_totalFilesChecked, _totalFilesWithProblems, _totalProblems);
     }

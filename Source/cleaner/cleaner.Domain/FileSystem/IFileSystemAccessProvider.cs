@@ -7,4 +7,6 @@ public interface IFileSystemAccessProvider
     string GetFileName(string path);
     bool DirectoryExists(string path);
     string GetFileContent(string filePath);
+    
+    DateTime GetLastWriteTimeUtc(string filePath);
 }

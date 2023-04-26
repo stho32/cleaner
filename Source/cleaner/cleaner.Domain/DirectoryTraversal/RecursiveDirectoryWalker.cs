@@ -2,22 +2,19 @@ using cleaner.Domain.FileSystem;
 
 namespace cleaner.Domain.DirectoryTraversal;
 
-public class DirectoryWalker : IDirectoryWalker
+public class RecursiveDirectoryWalker : IDirectoryWalker
 {
-    private readonly Func<string, bool> _fileCallback;
-    private readonly IFileSystemAccessProvider _fileSystemAccessProvider;
-    private readonly string _searchPattern;
+    private Func<string, bool>? _fileCallback;
+    private IFileSystemAccessProvider? _fileSystemAccessProvider;
+    private string? _searchPattern;
 
-    public DirectoryWalker(Func<string, bool> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider,
-        string searchPattern)
+    public void Walk(Func<string, bool> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider,
+        string searchPattern, string directoryPath, bool stopOnFirstFileWithErrors = false)
     {
         _fileCallback = fileCallback;
         _fileSystemAccessProvider = fileSystemAccessProvider;
         _searchPattern = searchPattern;
-    }
 
-    public void Walk(string directoryPath, bool stopOnFirstFileWithErrors = false)
-    {
         if (IsNoValidPathGiven(directoryPath))
         {
             throw new ArgumentException("Invalid directory path provided.");
@@ -48,7 +45,7 @@ public class DirectoryWalker : IDirectoryWalker
         {
             var hasFoundErrors = _fileCallback(csFile);
             var shouldStop = hasFoundErrors && stopOnFirstFileWithErrors;
-            
+
             if (shouldStop)
                 Environment.Exit(1);
         }
@@ -56,7 +53,7 @@ public class DirectoryWalker : IDirectoryWalker
 
     private bool ShouldIgnoreThisFolder(string subdirectory)
     {
-        var isGeneratedFolderOnLinux = subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/"); 
+        var isGeneratedFolderOnLinux = subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/");
         if (isGeneratedFolderOnLinux)
             return true;
 
@@ -66,10 +63,10 @@ public class DirectoryWalker : IDirectoryWalker
 
         var lastFolderName = _fileSystemAccessProvider.GetFileName(subdirectory);
         var lastFolderNameStartsWithADot = lastFolderName.StartsWith(".");
-        
+
         if (lastFolderNameStartsWithADot)
             return true;
-        
+
         return false;
     }
 }

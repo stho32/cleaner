@@ -7,6 +7,7 @@ public class MockFileSystemAccessProvider : IFileSystemAccessProvider
 {
     public Dictionary<string, List<string>> Directories { get; } = new();
     public Dictionary<string, List<string>> Files { get; } = new();
+    public Dictionary<string, DateTime> FileLastWriteTimes { get; } = new();
 
     public IEnumerable<string> GetDirectories(string path)
     {
@@ -41,5 +42,10 @@ public class MockFileSystemAccessProvider : IFileSystemAccessProvider
     public string GetFileContent(string filePath)
     {
         return string.Empty;
+    }
+
+    public DateTime GetLastWriteTimeUtc(string filePath)
+    {
+        return FileLastWriteTimes.TryGetValue(filePath, out var lastWriteTime) ? lastWriteTime : DateTime.MinValue;
     }
 }

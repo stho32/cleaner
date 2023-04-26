@@ -5,15 +5,15 @@ using NUnit.Framework;
 namespace cleaner.Domain.Tests.DirectoryTraversal;
 
 [TestFixture]
-public class DirectoryWalkerTests
+public class RecursiveDirectoryWalkerTests
 {
     [Test]
     public void Walk_InvalidPath_ThrowsArgumentException()
     {
         var mockProvider = new MockFileSystemAccessProvider();
-        var walker = new DirectoryWalker(_ => { return false; }, mockProvider, "*.cs");
+        var walker = new RecursiveDirectoryWalker();
 
-        Assert.Throws<ArgumentException>(() => walker.Walk("invalid_path"));
+        Assert.Throws<ArgumentException>(() => walker.Walk(_ => { return false; }, mockProvider, "*.cs", "invalid_path"));
     }
 
     [Test]
@@ -21,13 +21,13 @@ public class DirectoryWalkerTests
     {
         var mockProvider = SetUpMockFileSystemAccessProvider();
         var foundFiles = new List<string>();
-        var walker = new DirectoryWalker(filePath =>
+        var walker = new RecursiveDirectoryWalker();
+
+        walker.Walk(filePath =>
         {
             foundFiles.Add(filePath);
             return true;
-        }, mockProvider, "*.cs");
-
-        walker.Walk("root");
+        }, mockProvider, "*.cs", "root");
 
         AssertFoundFiles(foundFiles);
     }
@@ -65,3 +65,4 @@ public class DirectoryWalkerTests
         Assert.IsFalse(foundFiles.Contains("root/sub2/.hidden/file6.cs"));
     }
 }
+

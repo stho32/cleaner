@@ -26,4 +26,9 @@ public class FileSystemAccessProvider : IFileSystemAccessProvider
     {
         return File.ReadAllText(filePath);
     }
+    
+    public DateTime GetLastWriteTimeUtc(string filePath)
+    {
+        return File.GetLastWriteTimeUtc(filePath);
+    }
 }
