@@ -1,5 +1,6 @@
 ﻿using cleaner.Domain;
 using cleaner.Domain.CommandLineArguments;
+using cleaner.Domain.DirectoryTraversal;
 
 namespace cleaner
 {
@@ -13,17 +14,27 @@ namespace cleaner
 
             if (ListRules(commandLineOptions)) return;
 
-            if (ScanFiles(commandLineOptions)) return;
+            var directoryWalker = GetMatchingDirectoryWalker(commandLineOptions);
+            
+            if (ScanFiles(commandLineOptions, directoryWalker)) return;
 
             Console.WriteLine("No directory path/action specified.");
         }
 
-        private static bool ScanFiles(CommandLineOptions commandLineOptions)
+        private static IDirectoryWalker GetMatchingDirectoryWalker(CommandLineOptions commandLineOptions)
+        {
+            if (commandLineOptions.LatestChangedFiles == null)
+                return new RecursiveDirectoryWalker();
+
+            return new LatestChangedFilesDirectoryWalker(commandLineOptions.LatestChangedFiles.Value);
+        }
+
+        private static bool ScanFiles(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
         {
             if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
             {
                 var qualityScanner = new QualityScanner();
-                qualityScanner.PerformQualityScan(commandLineOptions);
+                qualityScanner.PerformQualityScan(commandLineOptions, directoryWalker);
                 return true;
             }
 

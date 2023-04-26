@@ -16,15 +16,14 @@ public class QualityScanner
     private HashSet<string> _allowedUsings = null!;
     private static int _maxRuleIdWidth;
 
-    public void PerformQualityScan(CommandLineOptions commandLineOptions)
+    public void PerformQualityScan(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
     {
         _maxRuleIdWidth = MaxRuleIdWidth();
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
 
         _fileSystemAccessProvider = new FileSystemAccessProvider();
 
-        var walker = new RecursiveDirectoryWalker();
-        walker.Walk(
+        directoryWalker.Walk(
             ValidateRules,
             _fileSystemAccessProvider,
             "*.cs",
