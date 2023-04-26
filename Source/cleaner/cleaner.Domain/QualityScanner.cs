@@ -1,4 +1,5 @@
 using cleaner.Domain.CommandLineArguments;
+using cleaner.Domain.DirectoryTraversal;
 using cleaner.Domain.FileSystem;
 using cleaner.Domain.Formatter;
 using cleaner.Domain.Helpers;

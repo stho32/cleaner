@@ -1,10 +1,8 @@
-﻿using cleaner.Domain.Tests.Mocks;
-
-namespace cleaner.Domain.Tests;
-
-using System;
-using System.Collections.Generic;
+﻿using cleaner.Domain.DirectoryTraversal;
+using cleaner.Domain.Tests.Mocks;
 using NUnit.Framework;
+
+namespace cleaner.Domain.Tests.DirectoryTraversal;
 
 [TestFixture]
 public class DirectoryWalkerTests

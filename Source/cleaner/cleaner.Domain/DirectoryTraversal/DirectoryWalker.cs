@@ -1,8 +1,8 @@
 using cleaner.Domain.FileSystem;
 
-namespace cleaner.Domain;
+namespace cleaner.Domain.DirectoryTraversal;
 
-public class DirectoryWalker
+public class DirectoryWalker : IDirectoryWalker
 {
     private readonly Func<string, bool> _fileCallback;
     private readonly IFileSystemAccessProvider _fileSystemAccessProvider;
