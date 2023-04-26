@@ -17,6 +17,9 @@ public class CommandLineOptions
     [Option('r', "listRules", Required = false, HelpText = "List all existing rules.")]
     public bool ListRules { get; private set; }
 
+    [Option("latestChangedFiles", Required = false, HelpText = "If present, the process will scan only the latest changed n files.")]
+    public int? LatestChangedFiles { get; private set; }
+
     [Usage(ApplicationAlias = "cleaner")]
     // ReSharper disable once UnusedMember.Global
     public static IEnumerable<Example> Examples =>
@@ -29,6 +32,8 @@ public class CommandLineOptions
             new("Processing a directory with an allowed usings file",
                 new CommandLineOptions { DirectoryPath = @"C:\projects", AllowedUsingsFilePath = @"C:\allowedUsings.txt" }),
             new("Listing all existing rules",
-                new CommandLineOptions { ListRules = true })
+                new CommandLineOptions { ListRules = true }),
+            new("Processing a directory with the latest changed 5 files",
+                new CommandLineOptions { DirectoryPath = @"C:\projects", LatestChangedFiles = 5 })
         };
 }
