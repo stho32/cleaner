@@ -41,6 +41,11 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
 
         var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern);
 
+        ValidateFiles(stopOnFirstFileWithErrors, csFiles);
+    }
+
+    private void ValidateFiles(bool stopOnFirstFileWithErrors, IEnumerable<string> csFiles)
+    {
         foreach (var csFile in csFiles)
         {
             var hasFoundErrors = _fileCallback(csFile);

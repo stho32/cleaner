@@ -37,20 +37,27 @@ public class SqlInNonRepositoryRule : IRule
                     .Where(node => node.IsKind(SyntaxKind.StringLiteralExpression))
                     .ToArray();
 
-                foreach (var stringLiteral in stringLiterals)
-                {
-                    var matches = SqlRegex.Matches(stringLiteral.Token.ValueText);
-
-                    var isASubstentialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
-                    if (isASubstentialAmountOfSqlPresent)
-                    {
-                        messages.Add(new ValidationMessage(Id, Name, $"SQL detected in non-Repository class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
-                    }
-                }
+                ValidateStringLiterals(filePath, stringLiterals, messages, className);
             }
         }
 
         return messages.ToArray();
+    }
+
+    private void ValidateStringLiterals(string filePath, LiteralExpressionSyntax[] stringLiterals, List<ValidationMessage> messages,
+        string className)
+    {
+        foreach (var stringLiteral in stringLiterals)
+        {
+            var matches = SqlRegex.Matches(stringLiteral.Token.ValueText);
+
+            var isASubstentialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
+            if (isASubstentialAmountOfSqlPresent)
+            {
+                messages.Add(new ValidationMessage(Id, Name,
+                    $"SQL detected in non-Repository class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));
+            }
+        }
     }
 
     private static bool IsRepository(string className)
