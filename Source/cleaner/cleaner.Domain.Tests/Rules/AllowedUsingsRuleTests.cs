@@ -46,9 +46,7 @@ public class AllowedUsingsRuleTests
     public void Validate_DisallowedUsings_ShouldReturnWarning()
     {
         string code = @"
-            using System;
-            using System.Collections.Generic;
-            using System.Text;
+            using Disallowed.Text;
 
             namespace TestNamespace
             {

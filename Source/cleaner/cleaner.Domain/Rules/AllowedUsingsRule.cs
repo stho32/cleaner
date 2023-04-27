@@ -33,9 +33,8 @@ public class AllowedUsingsRule : IRule
         {
             string usingNamespace = GetUsingWithoutOptionalGlobalMarker(usingDirective);
 
-            var isInvalidUsing = !_allowedUsings.Contains(usingNamespace) && 
-                    !IsSubNamespaceOfSameRootNamespace(usingNamespace, rootNamespace);
-            
+            var isInvalidUsing = !IsAllowedNamespace(usingNamespace, rootNamespace);
+
             if (isInvalidUsing)
             {
                 var message = new ValidationMessage(
@@ -53,7 +52,7 @@ public class AllowedUsingsRule : IRule
     private string GetUsingWithoutOptionalGlobalMarker(UsingDirectiveSyntax usingDirective)
     {
         var usingNamespace = usingDirective.Name.ToString();
-        
+
         if (usingNamespace.StartsWith("global::"))
         {
             usingNamespace = usingNamespace.Replace("global::", "");
@@ -87,6 +86,21 @@ public class AllowedUsingsRule : IRule
         return namespaceParts.Length > 0 ? namespaceParts[0] : string.Empty;
     }
 
+    private bool IsAllowedNamespace(string usingNamespace, string rootNamespace)
+    {
+        if (IsSystemNamespace(usingNamespace) || _allowedUsings.Contains(usingNamespace))
+        {
+            return true;
+        }
+
+        return IsSubNamespaceOfSameRootNamespace(usingNamespace, rootNamespace);
+    }
+
+    private bool IsSystemNamespace(string usingNamespace)
+    {
+        return usingNamespace.StartsWith("System.");
+    }
+
     private bool IsSubNamespaceOfSameRootNamespace(string usingNamespace, string rootNamespace)
     {
         if (!string.IsNullOrEmpty(rootNamespace))
@@ -101,30 +115,13 @@ public class AllowedUsingsRule : IRule
     {
         return new HashSet<string>
         {
-            "System",
-            "System.Collections.Generic",
-            "System.Linq",
             "Newtonsoft.Json",
             "Newtonsoft.Json.Linq",
-            "System.Data",
-            "System.Data.SqlClient",
-            "System.Text",
-            "System.ComponentModel",
-            "System.Web",
-            "System.Web.Mvc",
-            "System.Web.Routing",
             "Newtonsoft.Json.Serialization",
             "WebGrease.Css.Extensions",
-            "System.IO",
             "Microsoft.CodeAnalysis",
             "Microsoft.CodeAnalysis.CSharp",
             "Microsoft.CodeAnalysis.CSharp.Syntax",
-            "System.Net.Http",
-            "System.Threading",
-            "System.Threading.Tasks",
-            "System.Runtime.CompilerServices",
-            "System.Text.RegularExpressions",
-            "System.Reflection",
             "CommandLine",
             "CommandLine.Text",
             "NUnit.Framework"

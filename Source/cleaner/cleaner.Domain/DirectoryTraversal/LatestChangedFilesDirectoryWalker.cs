@@ -44,7 +44,7 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
 
     private bool IsNoValidPathGiven(string directoryPath)
     {
-        return string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.DirectoryExists(directoryPath);
+        return string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider!.DirectoryExists(directoryPath);
     }
 
     private List<string> CollectAllFiles(string directoryPath)
@@ -53,7 +53,7 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
 
         void CollectFilesRecursively(string path)
         {
-            var subdirectories = _fileSystemAccessProvider.GetDirectories(path);
+            var subdirectories = _fileSystemAccessProvider!.GetDirectories(path);
 
             foreach (var subdirectory in subdirectories)
             {
@@ -62,7 +62,7 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
                 CollectFilesRecursively(subdirectory);
             }
 
-            var matchingFiles = _fileSystemAccessProvider.GetFiles(path, _searchPattern);
+            var matchingFiles = _fileSystemAccessProvider.GetFiles(path, _searchPattern!);
             files.AddRange(matchingFiles);
         }
 
@@ -80,7 +80,7 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
         if (isGeneratedFolderOnWindows)
             return true;
 
-        var lastFolderName = _fileSystemAccessProvider.GetFileName(subdirectory);
+        var lastFolderName = _fileSystemAccessProvider!.GetFileName(subdirectory);
         var lastFolderNameStartsWithADot = lastFolderName.StartsWith(".");
 
         if (lastFolderNameStartsWithADot)

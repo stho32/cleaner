@@ -25,12 +25,12 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
 
     private bool IsNoValidPathGiven(string directoryPath)
     {
-        return string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider.DirectoryExists(directoryPath);
+        return string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider!.DirectoryExists(directoryPath);
     }
 
     private void WalkDirectory(string directoryPath, bool stopOnFirstFileWithErrors)
     {
-        var subdirectories = _fileSystemAccessProvider.GetDirectories(directoryPath);
+        var subdirectories = _fileSystemAccessProvider!.GetDirectories(directoryPath);
 
         foreach (var subdirectory in subdirectories)
         {
@@ -39,7 +39,7 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
             WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
         }
 
-        var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern);
+        var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern!);
 
         ValidateFiles(stopOnFirstFileWithErrors, csFiles);
     }
@@ -48,7 +48,7 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
     {
         foreach (var csFile in csFiles)
         {
-            var hasFoundErrors = _fileCallback(csFile);
+            var hasFoundErrors = _fileCallback!(csFile);
             var shouldStop = hasFoundErrors && stopOnFirstFileWithErrors;
 
             if (shouldStop)
@@ -66,7 +66,7 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
         if (isGeneratedFolderOnWindows)
             return true;
 
-        var lastFolderName = _fileSystemAccessProvider.GetFileName(subdirectory);
+        var lastFolderName = _fileSystemAccessProvider!.GetFileName(subdirectory);
         var lastFolderNameStartsWithADot = lastFolderName.StartsWith(".");
 
         if (lastFolderNameStartsWithADot)
