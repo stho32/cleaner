@@ -88,7 +88,8 @@ public class AllowedUsingsRule : IRule
 
     private bool IsAllowedNamespace(string usingNamespace, string rootNamespace)
     {
-        if (IsSystemNamespace(usingNamespace) || _allowedUsings.Contains(usingNamespace))
+        var isAllowed = IsSystemNamespace(usingNamespace) || _allowedUsings.Contains(usingNamespace);
+        if (isAllowed)
         {
             return true;
         }
