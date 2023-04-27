@@ -116,6 +116,7 @@ public class AllowedUsingsRule : IRule
     {
         return new HashSet<string>
         {
+            "System",
             "Newtonsoft.Json",
             "Newtonsoft.Json.Linq",
             "Newtonsoft.Json.Serialization",
