@@ -31,7 +31,7 @@ public static class RuleFactory
             var specialHandlingRequired = ruleType == typeof(AllowedUsingsRule);
             if (specialHandlingRequired)
             {
-                ruleInstances.Add(new AllowedUsingsRule(allowedUsings));
+                // ruleInstances.Add(new AllowedUsingsRule(allowedUsings));
                 continue;
             }
 
