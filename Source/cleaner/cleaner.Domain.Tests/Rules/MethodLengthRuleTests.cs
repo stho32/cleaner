@@ -10,7 +10,7 @@ public class MethodLengthRuleTests
     [SetUp]
     public void Setup()
     {
-        _methodLengthRule = new MethodLengthRule();
+        _methodLengthRule = new MethodLengthRule(10);
     }
 
     [Test]
