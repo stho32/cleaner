@@ -27,7 +27,7 @@ namespace cleaner.Domain.Rules
             {
                 var semicolonCount = method.DescendantTokens()
                     .Count(token => token.IsKind(SyntaxKind.SemicolonToken));
-                var hasMoreSemicolonsThanAllowed = semicolonCount > 10;
+                var hasMoreSemicolonsThanAllowed = semicolonCount > 20;
                 
                 if (hasMoreSemicolonsThanAllowed)
                 {
