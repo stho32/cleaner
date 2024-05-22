@@ -72,14 +72,12 @@ jobs:
               with:
                   name: cleaner-linux-x64
                   path: ./artifacts
-              if: matrix.os == 'ubuntu-latest'
 
             - name: Download Artifact
               uses: actions/download-artifact@v3
               with:
                   name: cleaner-win-x64
                   path: ./artifacts
-              if: matrix.os == 'windows-latest'
 
             - name: Generate Tag
               id: gen_tag
