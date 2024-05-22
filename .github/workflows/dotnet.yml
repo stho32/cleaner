@@ -47,7 +47,11 @@ jobs:
               working-directory: Source/${{ env.SOLUTION_DIR }}
 
             - name: Zip Published Files
-              run: zip -r ${{ matrix.OUTPUTDIR }}.zip ./${{matrix.OUTPUTDIR}}
+              shell: pwsh
+              run: |
+                $outputDir = "${{ matrix.OUTPUTDIR }}"
+                $zipFile = "$outputDir.zip"
+                Compress-Archive -Path $outputDir -DestinationPath $zipFile
               working-directory: Source/${{ env.SOLUTION_DIR }}
 
             - name: Upload Artifact
