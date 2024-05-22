@@ -9,7 +9,7 @@ env:
 
 jobs:
     build:
-        name: build-${{matrix.os}}
+        name: Build and Publish
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -51,9 +51,30 @@ jobs:
                   files: ./Source/${{ env.SOLUTION_DIR }}/${{matrix.OUTPUTDIR}}/
                   dest: ${{ env.SOLUTION_DIR }}/${{matrix.OUTPUTDIR}}.zip
 
-            - name: Release
+    release:
+        name: Create Release
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Create Release
+              id: create_release
               uses: softprops/action-gh-release@v1
-              if: startsWith(github.ref, 'refs/tags/')
               with:
                   files: |
-                      ${{ env.SOLUTION_DIR }}/${{matrix.OUTPUTDIR}}.zip
+                      ${{ env.SOLUTION_DIR }}/${{needs.build.outputs.OUTPUTDIR}}.zip
+
+    post:
+        name: Cleanup on Failure
+        runs-on: ubuntu-latest
+        if: failure()
+        steps:
+            - name: Delete Draft Release
+              run: |
+                RELEASE_ID=$(gh api -X GET "repos/${{ github.repository }}/releases" | jq 'map(select(.draft == true)) | .[0].id')
+                if [ -n "$RELEASE_ID" ]; then
+                  gh api -X DELETE "repos/${{ github.repository }}/releases/$RELEASE_ID"
+                fi
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
