@@ -51,19 +51,28 @@ jobs:
                   files: ./Source/${{ env.SOLUTION_DIR }}/${{matrix.OUTPUTDIR}}/
                   dest: ${{ env.SOLUTION_DIR }}/${{matrix.OUTPUTDIR}}.zip
 
-    release:
-        name: Create Release
+    tag_and_release:
+        name: Tag and Create Release
         runs-on: ubuntu-latest
         needs: build
         steps:
             - uses: actions/checkout@v2
 
+            - name: Generate Tag
+              id: gen_tag
+              run: |
+                TAG_NAME=$(date +'%Y%m%d%H%M%S')
+                echo "::set-output name=TAG_NAME::$TAG_NAME"
+                git tag $TAG_NAME
+                git push origin $TAG_NAME
+
             - name: Create Release
               id: create_release
               uses: softprops/action-gh-release@v1
               with:
+                  tag_name: ${{ steps.gen_tag.outputs.TAG_NAME }}
                   files: |
-                      ${{ env.SOLUTION_DIR }}/${{needs.build.outputs.OUTPUTDIR}}.zip
+                      Source/${{ env.SOLUTION_DIR }}/${{ matrix.OUTPUTDIR }}.zip
 
     post:
         name: Cleanup on Failure
