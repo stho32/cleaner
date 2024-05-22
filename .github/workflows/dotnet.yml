@@ -2,7 +2,7 @@ on:
     push:
 
 env:
-    DOTNET_VERSION: "6.0.x" # The .NET SDK version to use
+    DOTNET_VERSION: "8.0.x" # The .NET SDK version to use
     SOLUTION_DIR: "cleaner"
     PROJECT: "./cleaner/cleaner.csproj"
     RELEASEPREFIX: "cleaner"
