@@ -1,14 +1,14 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-public class ForEachDataSourceRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    [Test]
-    public void Validate_NoViolation_DataSourceWithTwoDots()
+    public class ForEachDataSourceRuleTests
     {
-        string code = @"
+        [Test]
+        public void Validate_NoViolation_DataSourceWithTwoDots()
+        {
+            string code = @"
                 public class TestClass
                 {
                     public void TestMethod()
@@ -23,16 +23,16 @@ public class ForEachDataSourceRuleTests
                 }
             ";
 
-        var rule = new ForEachDataSourceRule();
-        var messages = rule.Validate("TestFile.cs", code);
+            var rule = new ForEachDataSourceRule();
+            var messages = rule.Validate("TestFile.cs", code);
 
-        Assert.AreEqual(0, messages.Length);
-    }
+            Assert.That(messages.Length, Is.EqualTo(0));
+        }
 
-    [Test]
-    public void Validate_Violation_DataSourceWithThreeDots()
-    {
-        string code = @"
+        [Test]
+        public void Validate_Violation_DataSourceWithThreeDots()
+        {
+            string code = @"
                 public class TestClass
                 {
                     public void TestMethod()
@@ -47,17 +47,17 @@ public class ForEachDataSourceRuleTests
                 }
             ";
 
-        var rule = new ForEachDataSourceRule();
-        var messages = rule.Validate("TestFile.cs", code);
+            var rule = new ForEachDataSourceRule();
+            var messages = rule.Validate("TestFile.cs", code);
 
-        Assert.AreEqual(1, messages.Length);
-        Assert.IsTrue(messages[0].ErrorMessage.Contains("'TestFile.cs':8"));
-    }
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0].ErrorMessage, Contains.Substring("'TestFile.cs':8"));
+        }
 
-    [Test]
-    public void Validate_NoViolation_DataSourceWithOneDot()
-    {
-        string code = @"
+        [Test]
+        public void Validate_NoViolation_DataSourceWithOneDot()
+        {
+            string code = @"
                 public class TestClass
                 {
                     public void TestMethod()
@@ -72,9 +72,10 @@ public class ForEachDataSourceRuleTests
                 }
             ";
 
-        var rule = new ForEachDataSourceRule();
-        var messages = rule.Validate("TestFile.cs", code);
+            var rule = new ForEachDataSourceRule();
+            var messages = rule.Validate("TestFile.cs", code);
 
-        Assert.AreEqual(0, messages.Length);
+            Assert.That(messages.Length, Is.EqualTo(0));
+        }
     }
 }

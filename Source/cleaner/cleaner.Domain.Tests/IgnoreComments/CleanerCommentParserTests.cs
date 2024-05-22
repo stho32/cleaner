@@ -13,7 +13,7 @@ public class CleanerCommentParserTests
 
         HashSet<string> ignoredRuleIds = CleanerCommentParser.GetIgnoredRuleIds(code);
 
-        Assert.IsEmpty(ignoredRuleIds);
+        Assert.That(ignoredRuleIds, Is.Empty);
     }
 
     [Test]
@@ -23,8 +23,8 @@ public class CleanerCommentParserTests
 
         HashSet<string> ignoredRuleIds = CleanerCommentParser.GetIgnoredRuleIds(code);
 
-        Assert.AreEqual(1, ignoredRuleIds.Count);
-        Assert.IsTrue(ignoredRuleIds.Contains("SqlInNonRepositoryRule"));
+        Assert.That(ignoredRuleIds.Count, Is.EqualTo(1));
+        Assert.That(ignoredRuleIds, Contains.Item("SqlInNonRepositoryRule"));
     }
 
     [Test]
@@ -34,9 +34,9 @@ public class CleanerCommentParserTests
 
         HashSet<string> ignoredRuleIds = CleanerCommentParser.GetIgnoredRuleIds(code);
 
-        Assert.AreEqual(2, ignoredRuleIds.Count);
-        Assert.IsTrue(ignoredRuleIds.Contains("SqlInNonRepositoryRule"));
-        Assert.IsTrue(ignoredRuleIds.Contains("MethodLengthRule"));
+        Assert.That(ignoredRuleIds.Count, Is.EqualTo(2));
+        Assert.That(ignoredRuleIds, Contains.Item("SqlInNonRepositoryRule"));
+        Assert.That(ignoredRuleIds, Contains.Item("MethodLengthRule"));
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class CleanerCommentParserTests
 
         HashSet<string> ignoredRuleIds = CleanerCommentParser.GetIgnoredRuleIds(code);
 
-        Assert.AreEqual(1, ignoredRuleIds.Count);
-        Assert.IsTrue(ignoredRuleIds.Contains("SqlInNonRepositoryRule"));
+        Assert.That(ignoredRuleIds.Count, Is.EqualTo(1));
+        Assert.That(ignoredRuleIds, Contains.Item("SqlInNonRepositoryRule"));
     }
 }

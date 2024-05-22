@@ -26,59 +26,59 @@ public class AllowedUsingsRuleTests
     public void Validate_AllowedUsings_ShouldNotReturnWarning()
     {
         string code = @"
-            using System;
-            using System.Collections.Generic;
-            using System.Linq;
+                using System;
+                using System.Collections.Generic;
+                using System.Linq;
 
-            namespace TestNamespace
-            {
-                class TestClass
+                namespace TestNamespace
                 {
-                }
-            }";
+                    class TestClass
+                    {
+                    }
+                }";
 
         var messages = _rule.Validate("TestFile.cs", code);
 
-        Assert.IsEmpty(messages);
+        Assert.That(messages, Is.Empty);
     }
 
     [Test]
     public void Validate_DisallowedUsings_ShouldReturnWarning()
     {
         string code = @"
-            using Disallowed.Text;
+                using Disallowed.Text;
 
-            namespace TestNamespace
-            {
-                class TestClass
+                namespace TestNamespace
                 {
-                }
-            }";
+                    class TestClass
+                    {
+                    }
+                }";
 
         var messages = _rule.Validate("TestFile.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("AllowedUsingsRule", messages[0]?.RuleId);
+        Assert.That(messages, Is.Not.Empty);
+        Assert.That(messages.Length, Is.EqualTo(1));
+        Assert.That(messages[0]?.RuleId, Is.EqualTo("AllowedUsingsRule"));
     }
 
     [Test]
     public void Validate_SubNamespaceOfRootNamespace_ShouldNotReturnWarning()
     {
         string code = @"
-            using System;
-            using System.Collections.Generic;
-            using TestNamespace.SubNamespace;
+                using System;
+                using System.Collections.Generic;
+                using TestNamespace.SubNamespace;
 
-            namespace TestNamespace
-            {
-                class TestClass
+                namespace TestNamespace
                 {
-                }
-            }";
+                    class TestClass
+                    {
+                    }
+                }";
 
         var messages = _rule.Validate("TestFile.cs", code);
 
-        Assert.IsEmpty(messages);
+        Assert.That(messages, Is.Empty);
     }
 }

@@ -1,63 +1,64 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-public class NotImplementedExceptionRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private NotImplementedExceptionRule _rule = null!;
-
-    [SetUp]
-    public void Setup()
+    public class NotImplementedExceptionRuleTests
     {
-        _rule = new NotImplementedExceptionRule();
-    }
+        private NotImplementedExceptionRule _rule = null!;
 
-    [Test]
-    public void NotImplementedExceptionRule_NoNotImplementedExceptions_NoValidationMessages()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = "class Test { void DoSomething() { } }";
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new NotImplementedExceptionRule();
+        }
 
-        // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        [Test]
+        public void NotImplementedExceptionRule_NoNotImplementedExceptions_NoValidationMessages()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = "class Test { void DoSomething() { } }";
 
-        // Assert
-        Assert.IsEmpty(messages);
-    }
+            // Act
+            var messages = _rule.Validate(filePath, fileContent);
 
-    [Test]
-    public void NotImplementedExceptionRule_OneNotImplementedException_ValidationWarning()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = "class Test { void DoSomething() { throw new NotImplementedException(); } }";
+            // Assert
+            Assert.That(messages, Is.Empty);
+        }
 
-        // Act
-        var messages = _rule.Validate(filePath, fileContent);
+        [Test]
+        public void NotImplementedExceptionRule_OneNotImplementedException_ValidationWarning()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = "class Test { void DoSomething() { throw new NotImplementedException(); } }";
 
-        // Assert
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-    }
+            // Act
+            var messages = _rule.Validate(filePath, fileContent);
 
-    [Test]
-    public void NotImplementedExceptionRule_TwoNotImplementedExceptions_ValidationWarning()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = @"
+            // Assert
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+        }
+
+        [Test]
+        public void NotImplementedExceptionRule_TwoNotImplementedExceptions_ValidationWarning()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = @"
                 class Test {
                     void DoSomething() { throw new NotImplementedException(); }
                     void DoAnotherThing() { throw new NotImplementedException(); }
                 }";
 
-        // Act
-        var messages = _rule.Validate(filePath, fileContent);
+            // Act
+            var messages = _rule.Validate(filePath, fileContent);
 
-        // Assert
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+            // Assert
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+        }
     }
 }

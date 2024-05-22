@@ -1,38 +1,38 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-public class MethodLengthRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private IRule _methodLengthRule = null!;
-
-    [SetUp]
-    public void Setup()
+    public class MethodLengthRuleTests
     {
-        _methodLengthRule = new MethodLengthRule(10);
-    }
+        private IRule _methodLengthRule = null!;
 
-    [Test]
-    public void Validate_NoMethods_ShouldReturnNoMessages()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = "public class TestClass { }";
+        [SetUp]
+        public void Setup()
+        {
+            _methodLengthRule = new MethodLengthRule(10);
+        }
 
-        // Act
-        var result = _methodLengthRule.Validate(filePath, fileContent);
+        [Test]
+        public void Validate_NoMethods_ShouldReturnNoMessages()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = "public class TestClass { }";
 
-        // Assert
-        Assert.IsEmpty(result!);
-    }
+            // Act
+            var result = _methodLengthRule.Validate(filePath, fileContent);
 
-    [Test]
-    public void Validate_MethodWithFewerSemicolons_ShouldReturnNoMessages()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = @"
+            // Assert
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void Validate_MethodWithFewerSemicolons_ShouldReturnNoMessages()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = @"
 public class TestClass
 {
     public void TestMethod()
@@ -43,19 +43,19 @@ public class TestClass
     }
 }";
 
-        // Act
-        var result = _methodLengthRule.Validate(filePath, fileContent);
+            // Act
+            var result = _methodLengthRule.Validate(filePath, fileContent);
 
-        // Assert
-        Assert.IsEmpty(result!);
-    }
+            // Assert
+            Assert.That(result, Is.Empty);
+        }
 
-    [Test]
-    public void Validate_MethodWithMoreSemicolons_ShouldReturnWarning()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = @"
+        [Test]
+        public void Validate_MethodWithMoreSemicolons_ShouldReturnWarning()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = @"
 public class TestClass
 {
     public void TestMethod()
@@ -65,13 +65,14 @@ public class TestClass
     }
 }";
 
-        // Act
-        var result = _methodLengthRule.Validate(filePath, fileContent);
+            // Act
+            var result = _methodLengthRule.Validate(filePath, fileContent);
 
-        // Assert
-        Assert.AreEqual(1, result?.Length);
-        Assert.AreEqual("MethodLengthRule", result![0]?.RuleId);
-        Assert.AreEqual("Method Length Rule", result[0]?.RuleName);
-        StringAssert.Contains("more than the allowed limit of 10", result[0]?.ErrorMessage);
+            // Assert
+            Assert.That(result?.Length, Is.EqualTo(1));
+            Assert.That(result![0]?.RuleId, Is.EqualTo("MethodLengthRule"));
+            Assert.That(result[0]?.RuleName, Is.EqualTo("Method Length Rule"));
+            Assert.That(result[0]?.ErrorMessage, Does.Contain("more than the allowed limit of 10"));
+        }
     }
 }

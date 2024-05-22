@@ -33,7 +33,7 @@ public class RuleHelperTests
 
         int lineNumber = RuleHelper.GetLineNumber(mainMethod);
 
-        Assert.AreEqual(8, lineNumber);
+        Assert.That(lineNumber, Is.EqualTo(8));
     }
 
     [Test]
@@ -41,6 +41,6 @@ public class RuleHelperTests
     {
         int lineNumber = RuleHelper.GetLineNumber(null);
 
-        Assert.AreEqual(-1, lineNumber);
+        Assert.That(lineNumber, Is.EqualTo(-1));
     }
 }

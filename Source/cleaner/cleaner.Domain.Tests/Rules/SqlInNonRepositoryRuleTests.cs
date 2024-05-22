@@ -1,24 +1,24 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-// cleaner: ignore SqlInNonRepositoryRule
-[TestFixture]
-public class SqlInNonRepositoryRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private SqlInNonRepositoryRule _rule = null!;
-
-    [SetUp]
-    public void Setup()
+    // cleaner: ignore SqlInNonRepositoryRule
+    [TestFixture]
+    public class SqlInNonRepositoryRuleTests
     {
-        _rule = new SqlInNonRepositoryRule();
-    }
+        private SqlInNonRepositoryRule _rule = null!;
 
-    [Test]
-    public void NoSql_NoWarning()
-    {
-        string code = @"
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new SqlInNonRepositoryRule();
+        }
+
+        [Test]
+        public void NoSql_NoWarning()
+        {
+            string code = @"
                 public class TestClass
                 {
                     public void DoSomething()
@@ -28,14 +28,14 @@ public class SqlInNonRepositoryRuleTests
                 }
             ";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsEmpty(messages);
-    }
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void SqlInRepositoryClass_NoWarning()
-    {
-        string code = @"
+        [Test]
+        public void SqlInRepositoryClass_NoWarning()
+        {
+            string code = @"
                 public class TestRepository
                 {
                     public void GetData()
@@ -45,14 +45,14 @@ public class SqlInNonRepositoryRuleTests
                 }
             ";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsEmpty(messages);
-    }
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void SqlInNonRepositoryClass_Warning()
-    {
-        string code = @"
+        [Test]
+        public void SqlInNonRepositoryClass_Warning()
+        {
+            string code = @"
                 public class TestClass
                 {
                     public void GetData()
@@ -62,11 +62,12 @@ public class SqlInNonRepositoryRuleTests
                 }
             ";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-        Assert.AreEqual(_rule.Name, messages[0]?.RuleName);
-        StringAssert.Contains("SQL detected in non-Repository class 'TestClass'", messages[0]?.ErrorMessage);
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+            Assert.That(messages[0]?.RuleName, Is.EqualTo(_rule.Name));
+            Assert.That(messages[0]?.ErrorMessage, Does.Contain("SQL detected in non-Repository class 'TestClass'"));
+        }
     }
 }

@@ -1,23 +1,23 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-[TestFixture]
-public class NoConfigurationManagerRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private NoConfigurationManagerRule _rule = null!;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class NoConfigurationManagerRuleTests
     {
-        _rule = new NoConfigurationManagerRule();
-    }
+        private NoConfigurationManagerRule _rule = null!;
 
-    [Test]
-    public void Validate_NoConfigurationManager_ShouldNotReturnWarning()
-    {
-        string code = @"
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new NoConfigurationManagerRule();
+        }
+
+        [Test]
+        public void Validate_NoConfigurationManager_ShouldNotReturnWarning()
+        {
+            string code = @"
             using System;
 
             namespace TestNamespace
@@ -31,15 +31,15 @@ public class NoConfigurationManagerRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsEmpty(messages);
-    }
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void Validate_UsesConfigurationManager_ShouldReturnError()
-    {
-        string code = @"
+        [Test]
+        public void Validate_UsesConfigurationManager_ShouldReturnError()
+        {
+            string code = @"
             using System.Configuration;
 
             namespace TestNamespace
@@ -53,17 +53,17 @@ public class NoConfigurationManagerRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("NoConfigurationManagerRule", messages[0]?.RuleId);
-    }
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo("NoConfigurationManagerRule"));
+        }
 
-    [Test]
-    public void Validate_UsesWebConfigurationManager_ShouldReturnError()
-    {
-        string code = @"
+        [Test]
+        public void Validate_UsesWebConfigurationManager_ShouldReturnError()
+        {
+            string code = @"
             using System.Web.Configuration;
 
             namespace TestNamespace
@@ -77,17 +77,17 @@ public class NoConfigurationManagerRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("NoConfigurationManagerRule", messages[0]?.RuleId);
-    }
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo("NoConfigurationManagerRule"));
+        }
 
-    [Test]
-    public void Validate_UsesBothConfigurationManagers_ShouldReturnError()
-    {
-        string code = @"
+        [Test]
+        public void Validate_UsesBothConfigurationManagers_ShouldReturnError()
+        {
+            string code = @"
             using System.Configuration;
             using System.Web.Configuration;
 
@@ -103,10 +103,11 @@ public class NoConfigurationManagerRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(2, messages.Length);
-        Assert.AreEqual("NoConfigurationManagerRule", messages[0]?.RuleId);
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(2));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo("NoConfigurationManagerRule"));
+        }
     }
 }

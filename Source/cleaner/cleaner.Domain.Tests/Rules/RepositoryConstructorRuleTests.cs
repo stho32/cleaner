@@ -1,23 +1,23 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-[TestFixture]
-public class RepositoryConstructorRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private RepositoryConstructorRule _rule = null!;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class RepositoryConstructorRuleTests
     {
-        _rule = new RepositoryConstructorRule();
-    }
+        private RepositoryConstructorRule _rule = null!;
 
-    [Test]
-    public void NonRepositoryClass_NoWarning()
-    {
-        string code = @"
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new RepositoryConstructorRule();
+        }
+
+        [Test]
+        public void NonRepositoryClass_NoWarning()
+        {
+            string code = @"
                 public class TestClass
                 {
                     public TestClass(IDatabaseAccessor db)
@@ -26,14 +26,14 @@ public class RepositoryConstructorRuleTests
                 }
             ";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsEmpty(messages);
-    }
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void RepositoryClassWithRequiredConstructor_NoWarning()
-    {
-        string code = @"
+        [Test]
+        public void RepositoryClassWithRequiredConstructor_NoWarning()
+        {
+            string code = @"
                 public class TestRepository
                 {
                     public TestRepository(IDatabaseAccessor db)
@@ -42,14 +42,14 @@ public class RepositoryConstructorRuleTests
                 }
             ";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsEmpty(messages);
-    }
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void RepositoryClassWithoutRequiredConstructor_Warning()
-    {
-        string code = @"
+        [Test]
+        public void RepositoryClassWithoutRequiredConstructor_Warning()
+        {
+            string code = @"
                 public class TestRepository
                 {
                     public TestRepository()
@@ -58,13 +58,12 @@ public class RepositoryConstructorRuleTests
                 }
             ";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-        Assert.AreEqual(_rule.Name, messages[0]?.RuleName);
-        StringAssert.Contains(
-            "Class 'TestRepository' in file 'TestFile.cs' at line 2 should have a constructor with at least one parameter of type 'IDatabaseAccessor'.",
-            messages[0]?.ErrorMessage);
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+            Assert.That(messages[0]?.RuleName, Is.EqualTo(_rule.Name));
+            Assert.That(messages[0]?.ErrorMessage, Does.Contain("Class 'TestRepository' in file 'TestFile.cs' at line 2 should have a constructor with at least one parameter of type 'IDatabaseAccessor'."));
+        }
     }
 }

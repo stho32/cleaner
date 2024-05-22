@@ -1,23 +1,23 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-[TestFixture]
-public class IfStatementDotsRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private IfStatementDotsRule _rule = null!;
-
-    [SetUp]
-    public void SetUp()
+    [TestFixture]
+    public class IfStatementDotsRuleTests
     {
-        _rule = new IfStatementDotsRule();
-    }
+        private IfStatementDotsRule _rule = null!;
 
-    [Test]
-    public void IfStatementDotsRule_ValidIfStatements_NoWarnings()
-    {
-        var code = @"
+        [SetUp]
+        public void SetUp()
+        {
+            _rule = new IfStatementDotsRule();
+        }
+
+        [Test]
+        public void IfStatementDotsRule_ValidIfStatements_NoWarnings()
+        {
+            var code = @"
 namespace TestNamespace
 {
     public class TestClass
@@ -35,14 +35,14 @@ namespace TestNamespace
     }
 }";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.IsEmpty(messages);
-    }
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void IfStatementDotsRule_InvalidIfStatements_Warnings()
-    {
-        var code = @"
+        [Test]
+        public void IfStatementDotsRule_InvalidIfStatements_Warnings()
+        {
+            var code = @"
 namespace TestNamespace
 {
     public class TestClass
@@ -61,10 +61,11 @@ namespace TestNamespace
     }
 }";
 
-        var messages = _rule.Validate("TestFile.cs", code);
-        Assert.AreEqual(2, messages.Length);
+            var messages = _rule.Validate("TestFile.cs", code);
+            Assert.That(messages.Length, Is.EqualTo(2));
 
-        Assert.True(messages[0].ErrorMessage.Contains(":12 "));
-        Assert.True(messages[1].ErrorMessage.Contains(":15 "));
+            Assert.That(messages[0].ErrorMessage, Does.Contain(":12 "));
+            Assert.That(messages[1].ErrorMessage, Does.Contain(":15 "));
+        }
     }
 }

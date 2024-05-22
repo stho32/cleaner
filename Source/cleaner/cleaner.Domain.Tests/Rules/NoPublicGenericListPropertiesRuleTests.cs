@@ -1,22 +1,23 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-[TestFixture]
-public class NoPublicGenericListPropertiesRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private NoPublicGenericListPropertiesRule _rule = null!;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class NoPublicGenericListPropertiesRuleTests
     {
-        _rule = new NoPublicGenericListPropertiesRule();
-    }
+        private NoPublicGenericListPropertiesRule _rule = null!;
 
-    [Test]
-    public void Validate_NoPublicListProperties_ShouldNotReturnWarning()
-    {
-        string code = @"
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new NoPublicGenericListPropertiesRule();
+        }
+
+        [Test]
+        public void Validate_NoPublicListProperties_ShouldNotReturnWarning()
+        {
+            string code = @"
             namespace TestNamespace
             {
                 class TestClass
@@ -33,15 +34,15 @@ public class NoPublicGenericListPropertiesRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsEmpty(messages);
-    }
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void Validate_PublicListProperty_ShouldReturnWarning()
-    {
-        string code = @"
+        [Test]
+        public void Validate_PublicListProperty_ShouldReturnWarning()
+        {
+            string code = @"
             namespace TestNamespace
             {
                 class TestClass
@@ -50,17 +51,17 @@ public class NoPublicGenericListPropertiesRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("NoPublicGenericListPropertiesRule", messages[0]?.RuleId);
-    }
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo("NoPublicGenericListPropertiesRule"));
+        }
 
-    [Test]
-    public void Validate_GenericListProperty_ShouldReturnWarning()
-    {
-        string code = @"
+        [Test]
+        public void Validate_GenericListProperty_ShouldReturnWarning()
+        {
+            string code = @"
             using System.Collections.Generic;
             namespace TestNamespace
             {
@@ -70,10 +71,11 @@ public class NoPublicGenericListPropertiesRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+            var messages = _rule.Validate("TestClass.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("NoPublicGenericListPropertiesRule", messages[0]?.RuleId);
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo("NoPublicGenericListPropertiesRule"));
+        }
     }
 }

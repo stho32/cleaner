@@ -1,97 +1,98 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-public class SingleDeclarationRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private SingleDeclarationRule? _rule;
-
-    [SetUp]
-    public void Setup()
+    public class SingleDeclarationRuleTests
     {
-        _rule = new SingleDeclarationRule();
-    }
+        private SingleDeclarationRule? _rule;
 
-    [Test]
-    public void SingleDeclarationRule_FileWithOneClass_NoValidationMessages()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = "class Test {}";
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new SingleDeclarationRule();
+        }
 
-        // Act
-        var messages = _rule!.Validate(filePath, fileContent);
+        [Test]
+        public void SingleDeclarationRule_FileWithOneClass_NoValidationMessages()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = "class Test {}";
 
-        // Assert
-        Assert.IsEmpty(messages);
-    }
+            // Act
+            var messages = _rule!.Validate(filePath, fileContent);
 
-    [Test]
-    public void SingleDeclarationRule_FileWithOneInterface_NoValidationMessages()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = "interface ITest {}";
+            // Assert
+            Assert.That(messages, Is.Empty);
+        }
 
-        // Act
-        var messages = _rule!.Validate(filePath, fileContent);
+        [Test]
+        public void SingleDeclarationRule_FileWithOneInterface_NoValidationMessages()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = "interface ITest {}";
 
-        // Assert
-        Assert.IsEmpty(messages);
-    }
+            // Act
+            var messages = _rule!.Validate(filePath, fileContent);
 
-    [Test]
-    public void SingleDeclarationRule_FileWithClassAndInterface_ValidationError()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = @"
+            // Assert
+            Assert.That(messages, Is.Empty);
+        }
+
+        [Test]
+        public void SingleDeclarationRule_FileWithClassAndInterface_ValidationError()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = @"
                 class Test {}
                 interface ITest {}
             ";
 
-        // Act
-        var messages = _rule!.Validate(filePath, fileContent);
+            // Act
+            var messages = _rule!.Validate(filePath, fileContent);
 
-        // Assert
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-    }
+            // Assert
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+        }
 
-    [Test]
-    public void SingleDeclarationRule_FileWithClassAndEnum_ValidationError()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = @"
+        [Test]
+        public void SingleDeclarationRule_FileWithClassAndEnum_ValidationError()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = @"
                 class Test {}
                 enum MyEnum { A, B, C }
             ";
 
-        // Act
-        var messages = _rule!.Validate(filePath, fileContent);
+            // Act
+            var messages = _rule!.Validate(filePath, fileContent);
 
-        // Assert
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
-    }
+            // Assert
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+        }
 
-    [Test]
-    public void SingleDeclarationRule_FileWithTwoClasses_ValidationError()
-    {
-        // Arrange
-        string filePath = "test.cs";
-        string fileContent = @"
+        [Test]
+        public void SingleDeclarationRule_FileWithTwoClasses_ValidationError()
+        {
+            // Arrange
+            string filePath = "test.cs";
+            string fileContent = @"
                 class Test1 {}
                 class Test2 {}
             ";
 
-        // Act
-        var messages = _rule!.Validate(filePath, fileContent);
+            // Act
+            var messages = _rule!.Validate(filePath, fileContent);
 
-        // Assert
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual(_rule.Id, messages[0]?.RuleId);
+            // Assert
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo(_rule.Id));
+        }
     }
 }

@@ -1,23 +1,23 @@
 using cleaner.Domain.Rules;
 using NUnit.Framework;
 
-namespace cleaner.Domain.Tests.Rules;
-
-[TestFixture]
-public class LinqExpressionLengthRuleTests
+namespace cleaner.Domain.Tests.Rules
 {
-    private LinqExpressionLengthRule? _rule;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class LinqExpressionLengthRuleTests
     {
-        _rule = new LinqExpressionLengthRule();
-    }
+        private LinqExpressionLengthRule? _rule;
 
-    [Test]
-    public void Validate_LinqExpressionWithTwoSteps_ShouldNotReturnWarning()
-    {
-        string code = @"
+        [SetUp]
+        public void Setup()
+        {
+            _rule = new LinqExpressionLengthRule();
+        }
+
+        [Test]
+        public void Validate_LinqExpressionWithTwoSteps_ShouldNotReturnWarning()
+        {
+            string code = @"
             using System;
             using System.Linq;
             using System.Collections.Generic;
@@ -32,15 +32,15 @@ public class LinqExpressionLengthRuleTests
                 }
             }";
 
-        var messages = _rule!.Validate("TestFile.cs", code);
+            var messages = _rule!.Validate("TestFile.cs", code);
 
-        Assert.IsEmpty(messages);
-    }
+            Assert.That(messages, Is.Empty);
+        }
 
-    [Test]
-    public void Validate_LinqExpressionWithThreeSteps_ShouldReturnWarning()
-    {
-        string code = @"
+        [Test]
+        public void Validate_LinqExpressionWithThreeSteps_ShouldReturnWarning()
+        {
+            string code = @"
             using System;
             using System.Linq;
             using System.Collections.Generic;
@@ -56,10 +56,11 @@ public class LinqExpressionLengthRuleTests
                 }
             }";
 
-        var messages = _rule!.Validate("TestFile.cs", code);
+            var messages = _rule!.Validate("TestFile.cs", code);
 
-        Assert.IsNotEmpty(messages);
-        Assert.AreEqual(1, messages.Length);
-        Assert.AreEqual("LinqExpressionLengthRule", messages[0]?.RuleId);
+            Assert.That(messages, Is.Not.Empty);
+            Assert.That(messages.Length, Is.EqualTo(1));
+            Assert.That(messages[0]?.RuleId, Is.EqualTo("LinqExpressionLengthRule"));
+        }
     }
 }
