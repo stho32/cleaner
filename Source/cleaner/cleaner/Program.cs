@@ -1,6 +1,7 @@
 ﻿using cleaner.Domain;
 using cleaner.Domain.CommandLineArguments;
 using cleaner.Domain.DirectoryTraversal;
+using cleaner.Domain.FileBasedRules;
 
 namespace cleaner
 {
@@ -33,7 +34,7 @@ namespace cleaner
         {
             if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
             {
-                var qualityScanner = new QualityScanner();
+                var qualityScanner = new FileBasedQualityScanner();
                 qualityScanner.PerformQualityScan(commandLineOptions, directoryWalker);
                 return true;
             }
