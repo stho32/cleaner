@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FolderBasedRules\" />
+  </ItemGroup>
+
 </Project>

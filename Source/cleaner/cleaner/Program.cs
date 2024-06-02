@@ -2,6 +2,7 @@
 using cleaner.Domain.CommandLineArguments;
 using cleaner.Domain.DirectoryTraversal;
 using cleaner.Domain.FileBasedRules;
+using cleaner.Domain.Formatter;
 
 namespace cleaner
 {
@@ -34,8 +35,18 @@ namespace cleaner
         {
             if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
             {
-                var qualityScanner = new FileBasedQualityScanner();
-                qualityScanner.PerformQualityScan(commandLineOptions, directoryWalker);
+                var qualityScanner = new CompositeQualityScanner(
+                    new FileBasedQualityScanner()
+                );
+
+                var messages = qualityScanner.PerformQualityScan(commandLineOptions, directoryWalker);
+
+                var messagePrinter = new ValidationMessagePrinter(10);
+                messagePrinter.Print(messages);
+
+                //var statistics = new Statistics(messages);
+                //statistics.PrintStatistics();
+
                 return true;
             }
 

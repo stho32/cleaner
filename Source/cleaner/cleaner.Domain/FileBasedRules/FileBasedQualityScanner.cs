@@ -2,26 +2,21 @@ using cleaner.Domain.CommandLineArguments;
 using cleaner.Domain.DirectoryTraversal;
 using cleaner.Domain.FileBasedRules.Rules;
 using cleaner.Domain.FileSystem;
-using cleaner.Domain.Formatter;
 using cleaner.Domain.Helpers;
 
 namespace cleaner.Domain.FileBasedRules;
 
-public class FileBasedQualityScanner
+public class FileBasedQualityScanner : IQualityScanner
 {
     private IFileSystemAccessProvider? _fileSystemAccessProvider;
-    private int _totalFilesChecked;
-    private int _totalFilesWithProblems;
-    private int _totalProblems;
     private HashSet<string> _allowedUsings = null!;
-    private static int _maxRuleIdWidth;
+    private List<ValidationMessage> _validationMessages = new();
 
-    public void PerformQualityScan(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
+    public ValidationMessage[] PerformQualityScan(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
     {
-        _maxRuleIdWidth = MaxRuleIdWidth();
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
 
-        _fileSystemAccessProvider = new FileSystemAccessProvider();
+        _fileSystemAccessProvider = new FileSystemAccessProvider(); 
 
         directoryWalker.Walk(
             ValidateRules,
@@ -30,29 +25,9 @@ public class FileBasedQualityScanner
             commandLineOptions.DirectoryPath ?? "",
             commandLineOptions.StopOnFirstFileWithProblems);
 
-        PrintStatistics(_totalFilesChecked, _totalFilesWithProblems, _totalProblems);
+        return _validationMessages.ToArray();
     }
-
-    private static int MaxRuleIdWidth()
-    {
-        var rules = RuleFactory.GetRules(AllowedUsingsRule.GetDefaultAllowedUsings(), "");
-
-        int maxRuleIdWidth = 0;
-
-        foreach (var rule in rules)
-        {
-            int ruleIdWidth = rule.Id.Length;
-            var currentRuleWidthIsLonger = ruleIdWidth > maxRuleIdWidth;
-
-            if (currentRuleWidthIsLonger)
-            {
-                maxRuleIdWidth = ruleIdWidth;
-            }
-        }
-
-        return maxRuleIdWidth;
-    }
-
+    
     private static HashSet<string> LoadAllowedUsingsOrUseDefault(string? allowedUsingsFilePath)
     {
         if (!string.IsNullOrEmpty(allowedUsingsFilePath))
@@ -76,14 +51,6 @@ public class FileBasedQualityScanner
         return fileName.Contains(".Designer.");
     }
 
-    private static void PrintStatistics(int totalFilesChecked, int totalFilesWithProblems, int totalProblems)
-    {
-        Console.WriteLine("\nStatistics:");
-        Console.WriteLine($"  Total files checked:       {totalFilesChecked}");
-        Console.WriteLine($"  Total files with problems: {totalFilesWithProblems}");
-        Console.WriteLine($"  Total problems found:      {totalProblems}");
-    }
-
     private bool ValidateRules(string filePath)
     {
         if (IsDesignerFile(filePath))
@@ -93,14 +60,11 @@ public class FileBasedQualityScanner
         if (string.IsNullOrWhiteSpace(fileContent))
             return false;
 
-        IncrementTotalFilesChecked();
-
         ValidationMessage[]? messages = RunValidationRules(filePath, fileContent);
+        _validationMessages.AddRange(messages);
+
         if (CollectionHelpers.IsNullOrEmpty(messages))
             return false;
-
-        UpdateProblemStatistics(messages);
-        PrintValidationMessages(messages);
 
         return true;
     }
@@ -108,11 +72,6 @@ public class FileBasedQualityScanner
     private string? GetFileContent(string filePath)
     {
         return _fileSystemAccessProvider?.GetFileContent(filePath);
-    }
-
-    private void IncrementTotalFilesChecked()
-    {
-        _totalFilesChecked += 1;
     }
 
     private ValidationMessage[] RunValidationRules(string filePath, string fileContent)
@@ -127,19 +86,5 @@ public class FileBasedQualityScanner
 
         return messages.ToArray();
     }
-
-    private void UpdateProblemStatistics(ValidationMessage[]? messages)
-    {
-        if (messages == null)
-            return;
-
-        _totalFilesWithProblems += 1;
-        _totalProblems += messages.Length;
-    }
-
-    private static void PrintValidationMessages(ValidationMessage[]? messages)
-    {
-        var messagePrinter = new ValidationMessagePrinter(_maxRuleIdWidth);
-        messagePrinter.Print(messages);
-    }
 }
+
