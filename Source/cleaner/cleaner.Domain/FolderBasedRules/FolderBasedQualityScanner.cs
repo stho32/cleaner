@@ -60,14 +60,8 @@ public class FolderBasedQualityScanner : IQualityScanner
 
         string? directoryPath = Path.GetDirectoryName(filePath);
 
-        if (_fileCountByDirectory.ContainsKey(directoryPath!))
-        {
-            _fileCountByDirectory[directoryPath!]++;
-        }
-        else
-        {
-            _fileCountByDirectory[directoryPath!] = 1;
-        }
+        _fileCountByDirectory.TryGetValue(directoryPath!, out var count);
+        _fileCountByDirectory[directoryPath!] = count + 1;
 
         return GreaterThanMaximumFileCount(_fileCountByDirectory[directoryPath!]);
     }

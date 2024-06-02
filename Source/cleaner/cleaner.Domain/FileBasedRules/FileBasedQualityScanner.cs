@@ -58,7 +58,7 @@ public class FileBasedQualityScanner : IQualityScanner
             return false;
 
         string? fileContent = GetFileContent(filePath);
-        if (fileFilter.IsValidContent(fileContent))
+        if (!fileFilter.IsValidContent(fileContent))
             return false;
 
         _statisticsCollector.ScanningFile();
