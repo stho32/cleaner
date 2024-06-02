@@ -38,7 +38,7 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
             var shouldStop = hasFoundErrors && stopOnFirstFileWithErrors;
 
             if (shouldStop)
-                Environment.Exit(1);
+                return;
         }
     }
 

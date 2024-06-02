@@ -2,7 +2,7 @@
   "profiles": {
     "cleaner": {
       "commandName": "Project",
-      "commandLineArgs": "-d C:\\Projekte\\cleaner"
+      "commandLineArgs": "-d C:\\Projekte\\cleaner -s"
     }
   }
 }

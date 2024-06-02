@@ -8,8 +8,12 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
     private IFileSystemAccessProvider? _fileSystemAccessProvider;
     private string? _searchPattern;
 
-    public void Walk(Func<string, bool> fileCallback, IFileSystemAccessProvider fileSystemAccessProvider,
-        string searchPattern, string directoryPath, bool stopOnFirstFileWithErrors = false)
+    public void Walk(
+        Func<string, bool> fileCallback, 
+        IFileSystemAccessProvider fileSystemAccessProvider,
+        string searchPattern, 
+        string directoryPath, 
+        bool stopOnFirstFileWithErrors = false)
     {
         _fileCallback = fileCallback;
         _fileSystemAccessProvider = fileSystemAccessProvider;
@@ -28,7 +32,7 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
         return string.IsNullOrEmpty(directoryPath) || !_fileSystemAccessProvider!.DirectoryExists(directoryPath);
     }
 
-    private void WalkDirectory(string directoryPath, bool stopOnFirstFileWithErrors)
+    private bool WalkDirectory(string directoryPath, bool stopOnFirstFileWithErrors)
     {
         var subdirectories = _fileSystemAccessProvider!.GetDirectories(directoryPath);
 
@@ -36,15 +40,18 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
         {
             if (ShouldIgnoreThisFolder(subdirectory)) continue;
 
-            WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
+            var shoudStopScan = WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
+
+            if (shoudStopScan)
+                return true;
         }
 
         var csFiles = _fileSystemAccessProvider.GetFiles(directoryPath, _searchPattern!);
 
-        ValidateFiles(stopOnFirstFileWithErrors, csFiles);
+        return ShouldStopScan(stopOnFirstFileWithErrors, csFiles);
     }
 
-    private void ValidateFiles(bool stopOnFirstFileWithErrors, IEnumerable<string> csFiles)
+    private bool ShouldStopScan(bool stopOnFirstFileWithErrors, IEnumerable<string> csFiles)
     {
         foreach (var csFile in csFiles)
         {
@@ -52,8 +59,10 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
             var shouldStop = hasFoundErrors && stopOnFirstFileWithErrors;
 
             if (shouldStop)
-                Environment.Exit(1);
+                return true;
         }
+
+        return false;
     }
 
     private bool ShouldIgnoreThisFolder(string subdirectory)
