@@ -31,7 +31,12 @@ public class FileNameMatchingDeclarationRule : IRule
             var allowedExtensions = new[] { ".cs", ".aspx.cs", ".aspx.designer.cs", ".xaml.cs" };
 
             bool isValidFileName = allowedExtensions.Any(ext => 
-                string.Equals(actualFileName, $"{declaredTypeName}{ext}", StringComparison.OrdinalIgnoreCase));
+                string.Equals(
+                    actualFileName.Replace("-", ""),
+                    $"{declaredTypeName}{ext}".Replace("-", ""),
+                    StringComparison.OrdinalIgnoreCase
+                )
+            );
 
             if (!isValidFileName)
             {
@@ -39,7 +44,7 @@ public class FileNameMatchingDeclarationRule : IRule
                 var message = new ValidationMessage(
                     Id,
                     Name,
-                    $"The file '{filePath}' should be named one of the following: {expectedFileNames} to match the declared type '{declaredTypeName}'."
+                    $"The file '{filePath}' should be named one of the following: {expectedFileNames} to match the declared type '{declaredTypeName}'. Hyphens in the file name are ignored in this comparison."
                 );
                 messages.Add(message);
             }
