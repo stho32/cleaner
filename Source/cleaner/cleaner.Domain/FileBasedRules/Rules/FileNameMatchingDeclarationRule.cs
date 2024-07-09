@@ -36,7 +36,7 @@ public class FileNameMatchingDeclarationRule : IRule
                     $"{declaredTypeName}{ext}".Replace("-", ""),
                     StringComparison.OrdinalIgnoreCase
                 )
-            );
+            ) || actualFileName.Replace("-", "").EndsWith(declaredTypeName.Replace("-", ""), StringComparison.OrdinalIgnoreCase);
 
             if (!isValidFileName)
             {
@@ -44,7 +44,7 @@ public class FileNameMatchingDeclarationRule : IRule
                 var message = new ValidationMessage(
                     Id,
                     Name,
-                    $"The file '{filePath}' should be named one of the following: {expectedFileNames} to match the declared type '{declaredTypeName}'. Hyphens in the file name are ignored in this comparison."
+                    $"The file '{filePath}' should either end with '{declaredTypeName}' or be named one of the following: {expectedFileNames} to match the declared type '{declaredTypeName}'. Hyphens in the file name are ignored in this comparison."
                 );
                 messages.Add(message);
             }
