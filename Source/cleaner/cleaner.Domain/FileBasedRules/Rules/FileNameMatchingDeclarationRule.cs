@@ -25,15 +25,21 @@ public class FileNameMatchingDeclarationRule : IRule
         if (declaredTypeSyntax != null)
         {
             string declaredTypeName = declaredTypeSyntax.Identifier.Text;
-            string expectedFileName = $"{declaredTypeName}.cs";
             string actualFileName = Path.GetFileName(filePath);
 
-            if (!string.Equals(actualFileName, expectedFileName, StringComparison.OrdinalIgnoreCase))
+            // Define allowed file extensions
+            var allowedExtensions = new[] { ".cs", ".aspx.cs", ".aspx.designer.cs", ".xaml.cs" };
+
+            bool isValidFileName = allowedExtensions.Any(ext => 
+                string.Equals(actualFileName, $"{declaredTypeName}{ext}", StringComparison.OrdinalIgnoreCase));
+
+            if (!isValidFileName)
             {
+                var expectedFileNames = string.Join(", ", allowedExtensions.Select(ext => $"'{declaredTypeName}{ext}'"));
                 var message = new ValidationMessage(
                     Id,
                     Name,
-                    $"The file '{filePath}' should be named '{expectedFileName}' to match the declared type '{declaredTypeName}'."
+                    $"The file '{filePath}' should be named one of the following: {expectedFileNames} to match the declared type '{declaredTypeName}'."
                 );
                 messages.Add(message);
             }
