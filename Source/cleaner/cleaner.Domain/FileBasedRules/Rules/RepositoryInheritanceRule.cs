@@ -30,9 +30,9 @@ public class RepositoryInheritanceRule : IRule
 
             if (isRepositoryClass)
             {
-                if (IsNotInherited(classDeclaration))
+                if (InheritsFromClass(classDeclaration))
                 {
-                    messages.Add(new ValidationMessage(Id, Name, $"Class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class."));
+                    messages.Add(new ValidationMessage(Id, Name, $"Class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(classDeclaration)} should not inherit from another class. Inheriting from interfaces is allowed."));
                 }
             }
         }
@@ -40,8 +40,21 @@ public class RepositoryInheritanceRule : IRule
         return messages.ToArray();
     }
 
-    private static bool IsNotInherited(ClassDeclarationSyntax classDeclaration)
+    private static bool InheritsFromClass(ClassDeclarationSyntax classDeclaration)
     {
-        return classDeclaration.BaseList != null && classDeclaration.BaseList.Types.Count > 0;
+        if (classDeclaration.BaseList == null)
+            return false;
+
+        return classDeclaration.BaseList.Types.Any(baseType =>
+        {
+            var symbol = baseType.Type switch
+            {
+                IdentifierNameSyntax ins => ins.Identifier.Text,
+                QualifiedNameSyntax qns => qns.Right.Identifier.Text,
+                _ => null
+            };
+
+            return symbol != null && !symbol.StartsWith("I");
+        });
     }
 }
