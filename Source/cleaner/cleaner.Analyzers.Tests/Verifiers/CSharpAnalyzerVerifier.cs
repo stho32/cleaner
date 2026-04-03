@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -32,6 +33,7 @@ public class DefaultVerifier : IVerifier
             throw new InvalidOperationException(message ?? "Expected false, but got true.");
     }
 
+    [DoesNotReturn]
     public void Fail(string? message = null)
     {
         throw new InvalidOperationException(message ?? "Verification failed.");
