@@ -2,17 +2,67 @@
 
 [![CodeScene Code Health](https://codescene.io/projects/38361/status-badges/code-health)](https://codescene.io/projects/38361)
 
-Cleaner ist der Versuch der technischen Unterstützung folgenden gerade in Arbeit befindlichen A3's.
+CLI-Tool zur statischen Analyse von C#-Codebasen. Erkennt technologische und strukturelle Drift anhand konfigurierbarer Qualitaetsregeln (IOSP, Law of Demeter, Repository-Pattern, Methodenlaenge, etc.).
 
-obsidian://open?vault=Training2&file=A3s%2FA3%20Probleml%C3%B6sungstemplate
+## Voraussetzungen
 
-Es handelt sich um ein Experiment für ein Werkzeug, dass technologische und strukturelle Drift und Innovation sichtbar machen und dem entgegen wirken kann.
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-- Es soll eine Übersicht über unerwünschte Abweichungen darstellen.
-- Ggf. noch unbekannte Muster erkennen und nachfragen.
-- Ein nächstes einfaches Refactoring aufstellen, so dass man Lösungen schrittweise in den neuen Lösungsstandard überführen kann.
+## Installation
 
-## Geprüfte Regeln
+**Option A: Aus GitHub Release herunterladen**
+
+Self-contained Executables (kein .NET SDK noetig) fuer Windows und Linux stehen als [GitHub Releases](../../releases) bereit.
+
+**Option B: Selbst bauen**
+
+```bash
+cd Source/cleaner
+dotnet build
+```
+
+Lokales Deployment nach `C:\Tools\cleaner.exe` (Windows):
+
+```powershell
+.\build-and-deploy-locally.ps1
+```
+
+## Verwendung
+
+```bash
+# Verzeichnis scannen
+cleaner -d <pfad>
+
+# Bei erstem Fund stoppen
+cleaner -d <pfad> -s
+
+# Nur die 10 zuletzt geaenderten Dateien scannen
+cleaner -d <pfad> --latestChangedFiles 10
+
+# Eigene Allowed-Usings-Liste verwenden
+cleaner -d <pfad> --allowedUsings usings.txt
+
+# Alle Regeln auflisten
+cleaner -r
+```
+
+### Regeln ignorieren
+
+Einzelne Regeln koennen per Kommentar in der Datei deaktiviert werden:
+
+```csharp
+// cleaner: ignore MethodLengthRule
+```
+
+## Tests ausfuehren
+
+```bash
+cd Source/cleaner
+dotnet test
+dotnet test --collect:"XPlat Code Coverage"   # mit Coverage
+```
+
+## Geprufte Regeln
 
 1. [X] Nur erlaubte Usings. (nuget-Pakete müssen explizit erlaubt werden)
 2. [X] IOSP: If-Statements dürfen keine Expressions enthalten
