@@ -26,7 +26,7 @@ public class NoConfigurationManagerRule : IRule
 
         foreach (var usingDirective in usings)
         {
-            var usingName = usingDirective.Name.ToString();
+            var usingName = usingDirective.Name?.ToString() ?? "";
 
             if (IsRelatedToConfigurationManagementInNet(usingName))
             {

@@ -51,7 +51,7 @@ public class AllowedUsingsRule : IRule
 
     private string GetUsingWithoutOptionalGlobalMarker(UsingDirectiveSyntax usingDirective)
     {
-        var usingNamespace = usingDirective.Name.ToString();
+        var usingNamespace = usingDirective.Name?.ToString() ?? "";
 
         if (usingNamespace.StartsWith("global::"))
         {
