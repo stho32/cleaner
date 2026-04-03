@@ -51,8 +51,8 @@ public class SqlInNonRepositoryRule : IRule
         {
             var matches = SqlRegex.Matches(stringLiteral.Token.ValueText);
 
-            var isASubstentialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
-            if (isASubstentialAmountOfSqlPresent)
+            var isSubstantialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
+            if (isSubstantialAmountOfSqlPresent)
             {
                 messages.Add(new ValidationMessage(Id, Name,
                     $"SQL detected in non-Repository class '{className}' in file '{filePath}' at line {RuleHelper.GetLineNumber(stringLiteral)}"));

@@ -40,9 +40,9 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
         {
             if (ShouldIgnoreThisFolder(subdirectory)) continue;
 
-            var shoudStopScan = WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
+            var shouldStopScan = WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
 
-            if (shoudStopScan)
+            if (shouldStopScan)
                 return true;
         }
 

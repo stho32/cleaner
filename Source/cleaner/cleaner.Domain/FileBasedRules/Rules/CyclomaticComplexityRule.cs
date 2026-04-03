@@ -15,7 +15,7 @@ public class CyclomaticComplexityRule : IRule
 
     private readonly int _threshold = 4;
 
-    public ValidationMessage[]? Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent)
     {
         SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
         var root = tree.GetCompilationUnitRoot();
@@ -27,9 +27,9 @@ public class CyclomaticComplexityRule : IRule
         foreach (var method in methods)
         {
             int complexity = CalculateCyclomaticComplexity(method);
-            var complexityExceedsThresold = complexity > _threshold;
+            var complexityExceedsThreshold = complexity > _threshold;
 
-            if (complexityExceedsThresold)
+            if (complexityExceedsThreshold)
             {
                 int lineNumber = method.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
                 messages.Add(new ValidationMessage(
