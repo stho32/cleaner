@@ -51,8 +51,8 @@ public class DirectoryFilterTests
     }
 
     [Test]
-    public void ShouldIgnore_VsFolder_True()
+    public void ShouldIgnore_DotVsFolder_True()
     {
-        Assert.That(DirectoryFilter.ShouldIgnore(@"C:\src\.vs", _fs), Is.True);
+        Assert.That(DirectoryFilter.ShouldIgnore("/src/.vs", _fs), Is.True);
     }
 }
