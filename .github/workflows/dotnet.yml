@@ -24,9 +24,9 @@ jobs:
                       OUTPUTDIR: cleaner-win-x64
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
             - name: Setup .NET Core
-              uses: actions/setup-dotnet@v1
+              uses: actions/setup-dotnet@v4
               with:
                   dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -55,7 +55,7 @@ jobs:
               working-directory: Source/${{ env.SOLUTION_DIR }}
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: ${{ matrix.OUTPUTDIR }}
                   path: Source/${{ env.SOLUTION_DIR }}/${{ matrix.OUTPUTDIR }}.zip
@@ -65,16 +65,16 @@ jobs:
         runs-on: ubuntu-latest
         needs: build
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
 
             - name: Download Artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: cleaner-linux-x64
                   path: ./artifacts
 
             - name: Download Artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: cleaner-win-x64
                   path: ./artifacts
@@ -83,13 +83,13 @@ jobs:
               id: gen_tag
               run: |
                 TAG_NAME=$(date +'%Y%m%d%H%M%S')
-                echo "::set-output name=TAG_NAME::$TAG_NAME"
+                echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
                 git tag $TAG_NAME
                 git push origin $TAG_NAME
 
             - name: Create Release
               id: create_release
-              uses: softprops/action-gh-release@v1
+              uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ steps.gen_tag.outputs.TAG_NAME }}
                   files: ./artifacts/*.zip
