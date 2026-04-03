@@ -18,7 +18,12 @@ public class SqlInNonRepositoryRule : IRule
     public string LongDescription => "This rule checks for SQL strings within classes, and if found, ensures the class name ends with 'Repository'. If not, a warning is raised.";
 
     private static readonly Regex SqlRegex = new Regex(@"\b(?:SELECT|TOP|INSERT|UPDATE|DELETE|FROM|WHERE|EXEC|ORDER BY)\b", RegexOptions.IgnoreCase);
-    private const int SqlKeywordThreshold = 3;
+    private readonly int _sqlKeywordThreshold;
+
+    public SqlInNonRepositoryRule(int sqlKeywordThreshold = 3)
+    {
+        _sqlKeywordThreshold = sqlKeywordThreshold;
+    }
 
     public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
@@ -49,7 +54,7 @@ public class SqlInNonRepositoryRule : IRule
         {
             var matches = SqlRegex.Matches(stringLiteral.Token.ValueText);
 
-            var isSubstantialAmountOfSqlPresent = matches.Count >= SqlKeywordThreshold;
+            var isSubstantialAmountOfSqlPresent = matches.Count >= _sqlKeywordThreshold;
             if (isSubstantialAmountOfSqlPresent)
             {
                 messages.Add(new ValidationMessage(Id, Name,

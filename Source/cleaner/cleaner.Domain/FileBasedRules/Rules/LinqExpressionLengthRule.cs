@@ -5,6 +5,13 @@ namespace cleaner.Domain.FileBasedRules.Rules;
 
 public class LinqExpressionLengthRule : IRule
 {
+    private readonly int _maxSteps;
+
+    public LinqExpressionLengthRule(int maxSteps = 2)
+    {
+        _maxSteps = maxSteps;
+    }
+
     public string Id => GetType().Name;
     public string Name => "LINQ Expression Length Rule";
     public string ShortDescription => "Detects LINQ expressions with more than 2 steps";
@@ -24,14 +31,14 @@ public class LinqExpressionLengthRule : IRule
                 .Where(IsALinqPredicate)
                 .ToList();
 
-            var linqExpressionIsTooLong = methodCalls.Count > 2;
+            var linqExpressionIsTooLong = methodCalls.Count > _maxSteps;
 
             if (linqExpressionIsTooLong)
             {
                 var message = new ValidationMessage(
                     Id,
                     Name,
-                    $"A LINQ expression in the file '{filePath}' contains {methodCalls.Count} steps, which is more than the allowed limit of 2."
+                    $"A LINQ expression in the file '{filePath}' contains {methodCalls.Count} steps, which is more than the allowed limit of {_maxSteps}."
                 );
                 messages.Add(message);
             }

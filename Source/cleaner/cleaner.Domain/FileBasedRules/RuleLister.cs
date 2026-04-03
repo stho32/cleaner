@@ -1,3 +1,4 @@
+using cleaner.Domain.Configuration;
 using cleaner.Domain.FileBasedRules.Rules;
 
 namespace cleaner.Domain.FileBasedRules;
@@ -7,7 +8,7 @@ public class RuleLister
     public void ListAllRules()
     {
         var rules =
-            RuleFactory.GetRules(AllowedUsingsRule.GetDefaultAllowedUsings(), "");
+            RuleFactory.GetRules(AllowedUsingsRule.GetDefaultAllowedUsings(), "", new CleanerConfig());
 
         Console.WriteLine("List of existing rules:");
 

@@ -1,45 +1,45 @@
-using System.Reflection;
+using cleaner.Domain.Configuration;
 using cleaner.Domain.FileBasedRules.IgnoreComments;
 using cleaner.Domain.FileBasedRules.Rules;
+using cleaner.Domain.FileBasedRules.Rules.NestedIfStatementsRuleValidation;
 
 namespace cleaner.Domain.FileBasedRules;
 
 public static class RuleFactory
 {
-    public static IRule[] GetRules(HashSet<string> allowedUsings, string fileContent)
+    public static IRule[] GetRules(HashSet<string> allowedUsings, string fileContent, CleanerConfig config)
     {
-        var ruleInstances = CreateRuleInstances(allowedUsings);
+        var ruleInstances = CreateRuleInstances(allowedUsings, config);
         var ignoredRuleIds = CleanerCommentParser.GetIgnoredRuleIds(fileContent);
 
-        // Remove the ignored rules
         ruleInstances.RemoveAll(rule => ignoredRuleIds.Contains(rule.Id));
 
         return ruleInstances.ToArray();
     }
 
-    private static List<IRule> CreateRuleInstances(HashSet<string> allowedUsings)
+    private static List<IRule> CreateRuleInstances(HashSet<string> allowedUsings, CleanerConfig config)
     {
-        // Dynamically load all rule types
-        var ruleTypes = Assembly.GetExecutingAssembly()
-            .GetTypes()
-            .Where(t => t.GetInterfaces().Contains(typeof(IRule)) && !t.IsAbstract);
-
-        // Create rule instances
-        var ruleInstances = new List<IRule>();
-        foreach (var ruleType in ruleTypes)
+        return new List<IRule>
         {
-            var specialHandlingRequired = ruleType == typeof(AllowedUsingsRule);
-            if (specialHandlingRequired)
-            {
-                // ruleInstances.Add(new AllowedUsingsRule(allowedUsings));
-                continue;
-            }
-
-            var newInstance = (IRule?)Activator.CreateInstance(ruleType);
-            if (newInstance != null)
-                ruleInstances.Add(newInstance);
-        }
-
-        return ruleInstances;
+            // new AllowedUsingsRule(allowedUsings),
+            new CyclomaticComplexityRule(config.CyclomaticComplexityThreshold),
+            new FileNameMatchingDeclarationRule(),
+            new ForEachDataSourceRule(config.MaxForEachDots),
+            new IfStatementDotsRule(config.MaxIfStatementDots),
+            new IfStatementOperatorRule(),
+            new LinqExpressionLengthRule(config.MaxLinqSteps),
+            new MethodLengthRule(config.MethodLengthMaxSemicolons),
+            new NestedIfStatementsRule(config.MaxNestedIfDepth),
+            new NoConfigurationManagerRule(),
+            new NoOutAndRefParametersRule(),
+            new NoPublicFieldsRule(),
+            new NoPublicGenericListPropertiesRule(),
+            new NotImplementedExceptionRule(),
+            new PublicPropertiesPrivateSettersRule(),
+            new RepositoryInheritanceRule(),
+            new RowLimitRule(config.MaxRowsPerFile),
+            new SingleDeclarationRule(),
+            new SqlInNonRepositoryRule(config.SqlKeywordThreshold)
+        };
     }
 }

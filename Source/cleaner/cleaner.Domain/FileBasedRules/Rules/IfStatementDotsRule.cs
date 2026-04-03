@@ -5,6 +5,13 @@ namespace cleaner.Domain.FileBasedRules.Rules;
 
 public class IfStatementDotsRule : IRule
 {
+    private readonly int _maxDots;
+
+    public IfStatementDotsRule(int maxDots = 2)
+    {
+        _maxDots = maxDots;
+    }
+
     public string Id => GetType().Name;
     public string Name => "If Statement Dots Rule";
     public string ShortDescription => "Detects if statements with expressions containing more than two dots";
@@ -38,6 +45,6 @@ public class IfStatementDotsRule : IRule
     private bool IfStatementContainsTooManyDots(IfStatementSyntax ifStatement)
     {
         var nodes = ifStatement.Condition.DescendantNodesAndSelf();
-        return nodes.Any(n => n.ToString().Count(c => c == '.') > 2);
+        return nodes.Any(n => n.ToString().Count(c => c == '.') > _maxDots);
     }
 }

@@ -6,6 +6,13 @@ namespace cleaner.Domain.FileBasedRules.Rules.NestedIfStatementsRuleValidation;
 
 public class NestedIfStatementsRule : IRule
 {
+    private readonly int _maxDepth;
+
+    public NestedIfStatementsRule(int maxDepth = 2)
+    {
+        _maxDepth = maxDepth;
+    }
+
     public string Id => GetType().Name;
 
     public string Name => "Nested If Statements Rule";
@@ -24,11 +31,11 @@ public class NestedIfStatementsRule : IRule
         {
             var analyzer = new NestingLevelAnalyzer();
             int maxNestingLevel = analyzer.GetMaxNestingLevel(methodDeclaration.Body);
-            bool tooMuchNesting = maxNestingLevel > 2;
+            bool tooMuchNesting = maxNestingLevel > _maxDepth;
 
             if (tooMuchNesting)
             {
-                messages.Add(new ValidationMessage(Id, Name, $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(methodDeclaration)} has if statements nested more than 2 levels deep."));
+                messages.Add(new ValidationMessage(Id, Name, $"Method '{methodDeclaration.Identifier.Text}' in file '{filePath}' at line {RuleHelper.GetLineNumber(methodDeclaration)} has if statements nested more than {_maxDepth} levels deep."));
             }
         }
 

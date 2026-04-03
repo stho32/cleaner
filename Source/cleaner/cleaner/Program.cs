@@ -1,5 +1,6 @@
 ﻿using cleaner.Domain;
 using cleaner.Domain.CommandLineArguments;
+using cleaner.Domain.Configuration;
 using cleaner.Domain.DirectoryTraversal;
 using cleaner.Domain.FileBasedRules;
 using cleaner.Domain.FileBasedRules.Rules;
@@ -38,9 +39,10 @@ namespace cleaner
             if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
             {
                 var statisticsCollector = new StatisticsCollector();
+                var config = CleanerConfigLoader.Load(commandLineOptions.DirectoryPath);
 
                 var qualityScanner = new CompositeQualityScanner(
-                    new FolderBasedQualityScanner(6, statisticsCollector),
+                    new FolderBasedQualityScanner(config.MaxFilesPerDirectory, statisticsCollector),
                     new FileBasedQualityScanner(statisticsCollector)
                 );
 

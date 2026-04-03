@@ -1,4 +1,5 @@
 using cleaner.Domain.CommandLineArguments;
+using cleaner.Domain.Configuration;
 using cleaner.Domain.DirectoryTraversal;
 using cleaner.Domain.FileBasedRules.Rules;
 using cleaner.Domain.FileSystem;
@@ -12,6 +13,7 @@ public class FileBasedQualityScanner : IQualityScanner
     private readonly IStatisticsCollector _statisticsCollector;
     private IFileSystemAccessProvider? _fileSystemAccessProvider;
     private HashSet<string> _allowedUsings = null!;
+    private CleanerConfig _config = new();
     private List<ValidationMessage> _validationMessages = new();
 
     public FileBasedQualityScanner(IStatisticsCollector statisticsCollector)
@@ -22,8 +24,9 @@ public class FileBasedQualityScanner : IQualityScanner
     public ValidationMessage[] PerformQualityScan(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
     {
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
+        _config = CleanerConfigLoader.Load(commandLineOptions.DirectoryPath ?? ".");
 
-        _fileSystemAccessProvider = new FileSystemAccessProvider(); 
+        _fileSystemAccessProvider = new FileSystemAccessProvider();
 
         directoryWalker.Walk(
             ValidateRules,
@@ -82,7 +85,7 @@ public class FileBasedQualityScanner : IQualityScanner
 
     private ValidationMessage[] RunValidationRules(string filePath, string fileContent)
     {
-        var rules = RuleFactory.GetRules(_allowedUsings, fileContent);
+        var rules = RuleFactory.GetRules(_allowedUsings, fileContent, _config);
         var tree = CSharpSyntaxTree.ParseText(fileContent);
         var root = tree.GetCompilationUnitRoot();
         var messages = new List<ValidationMessage>();

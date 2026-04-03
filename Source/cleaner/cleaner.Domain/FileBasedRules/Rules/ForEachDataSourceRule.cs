@@ -6,6 +6,13 @@ namespace cleaner.Domain.FileBasedRules.Rules;
 
 public class ForEachDataSourceRule : IRule
 {
+    private readonly int _maxDots;
+
+    public ForEachDataSourceRule(int maxDots = 2)
+    {
+        _maxDots = maxDots;
+    }
+
     public string Id => GetType().Name;
     public string Name => "For Each Data Source Rule";
 
@@ -44,6 +51,6 @@ public class ForEachDataSourceRule : IRule
     {
         var dataSourceExpression = forEachStatement.Expression.ToString();
         var dotCount = dataSourceExpression.Count(c => c == '.');
-        return dotCount > 2;
+        return dotCount > _maxDots;
     }
 }
