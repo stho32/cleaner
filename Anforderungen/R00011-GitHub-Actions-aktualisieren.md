@@ -2,7 +2,7 @@
 id: R00011
 titel: "GitHub Actions Workflow aktualisieren"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Hoch
 aufwand: Klein
 erstellt: 2026-04-03

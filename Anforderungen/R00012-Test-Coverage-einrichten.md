@@ -2,7 +2,7 @@
 id: R00012
 titel: "Test-Coverage einrichten"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Hoch
 aufwand: Klein
 erstellt: 2026-04-03

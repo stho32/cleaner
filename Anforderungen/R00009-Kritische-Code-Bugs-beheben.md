@@ -2,7 +2,7 @@
 id: R00009
 titel: "Kritische Code-Bugs beheben"
 typ: Bug
-status: Offen
+status: Erledigt
 prioritaet: Hoch
 aufwand: Klein
 erstellt: 2026-04-03

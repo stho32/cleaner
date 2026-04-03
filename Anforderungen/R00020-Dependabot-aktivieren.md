@@ -2,7 +2,7 @@
 id: R00020
 titel: "Dependabot aktivieren"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Niedrig
 aufwand: Klein
 erstellt: 2026-04-03

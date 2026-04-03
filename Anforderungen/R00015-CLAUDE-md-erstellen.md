@@ -2,7 +2,7 @@
 id: R00015
 titel: "CLAUDE.md erstellen"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Mittel
 aufwand: Klein
 erstellt: 2026-04-03

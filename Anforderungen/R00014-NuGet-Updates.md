@@ -2,7 +2,7 @@
 id: R00014
 titel: "NuGet-Abhaengigkeiten aktualisieren"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Mittel
 aufwand: Klein
 erstellt: 2026-04-03

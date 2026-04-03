@@ -2,7 +2,7 @@
 id: R00021
 titel: "Tippfehler und Inkonsistenzen bereinigen"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Niedrig
 aufwand: Klein
 erstellt: 2026-04-03

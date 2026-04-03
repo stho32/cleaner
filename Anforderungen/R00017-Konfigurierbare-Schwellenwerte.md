@@ -2,7 +2,7 @@
 id: R00017
 titel: "Regel-Schwellenwerte konfigurierbar machen"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Mittel
 aufwand: Mittel
 erstellt: 2026-04-03

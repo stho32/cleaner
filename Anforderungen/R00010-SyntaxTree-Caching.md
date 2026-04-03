@@ -2,7 +2,7 @@
 id: R00010
 titel: "Roslyn SyntaxTree Caching"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Hoch
 aufwand: Mittel
 erstellt: 2026-04-03

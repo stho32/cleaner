@@ -2,7 +2,7 @@
 id: R00019
 titel: "README mit Setup-Anleitung ergaenzen"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Niedrig
 aufwand: Klein
 erstellt: 2026-04-03

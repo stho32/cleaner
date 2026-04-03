@@ -2,7 +2,7 @@
 id: R00018
 titel: "Roslyn-Analyzer NuGet-Paket"
 typ: Verbesserung
-status: Offen
+status: Erledigt
 prioritaet: Mittel
 aufwand: Gross
 erstellt: 2026-04-03
