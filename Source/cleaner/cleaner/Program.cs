@@ -1,4 +1,4 @@
-﻿using cleaner.Domain;
+using cleaner.Domain;
 using cleaner.Domain.CommandLineArguments;
 using cleaner.Domain.Configuration;
 using cleaner.Domain.DirectoryTraversal;
@@ -7,70 +7,72 @@ using cleaner.Domain.FileBasedRules.Rules;
 using cleaner.Domain.FolderBasedRules;
 using cleaner.Domain.Formatter;
 
-namespace cleaner
+namespace cleaner;
+
+public static class Program
 {
-    public static class Program
+    static int Main(string[] args)
     {
-        static void Main(string[] args)
+        var parseResult = CommandLineArgumentParser.ParseCommandLineArguments(args);
+
+        switch (parseResult.Type)
         {
-            var commandLineOptions = CommandLineArgumentParser.ParseCommandLineArguments(args);
-            if (commandLineOptions == null)
-                return;
+            case ParseResultType.ShowedHelp:
+            case ParseResultType.ShowedVersion:
+                Console.WriteLine(parseResult.Output);
+                return 0;
 
-            if (ListRules(commandLineOptions)) return;
+            case ParseResultType.Error:
+                Console.Error.WriteLine(parseResult.Output);
+                return 1;
 
-            var directoryWalker = GetMatchingDirectoryWalker(commandLineOptions);
-            
-            if (ScanFiles(commandLineOptions, directoryWalker)) return;
-
-            Console.WriteLine("No directory path/action specified.");
+            case ParseResultType.Success:
+                return Run(parseResult.Options!);
         }
 
-        private static IDirectoryWalker GetMatchingDirectoryWalker(CommandLineOptions commandLineOptions)
-        {
-            if (commandLineOptions.LatestChangedFiles == null)
-                return new RecursiveDirectoryWalker();
-
-            return new LatestChangedFilesDirectoryWalker(commandLineOptions.LatestChangedFiles.Value);
-        }
-
-        private static bool ScanFiles(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
-        {
-            if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
-            {
-                var statisticsCollector = new StatisticsCollector();
-                var config = CleanerConfigLoader.Load(commandLineOptions.DirectoryPath);
-
-                var qualityScanner = new CompositeQualityScanner(
-                    new FolderBasedQualityScanner(config.MaxFilesPerDirectory, statisticsCollector),
-                    new FileBasedQualityScanner(statisticsCollector)
-                );
-
-                var messages = qualityScanner.PerformQualityScan(commandLineOptions, directoryWalker);
-
-                var messagePrinter = new ValidationMessagePrinter();
-                messagePrinter.Print(messages);
-
-                var statistics = new Statistics(messages, statisticsCollector.GetStatistics());
-                statistics.PrintStatistics();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private static bool ListRules(CommandLineOptions commandLineOptions)
-        {
-            if (commandLineOptions.ListRules)
-            {
-                var ruleLister = new RuleLister();
-                ruleLister.ListAllRules();
-                return true;
-            }
-
-            return false;
-        }
+        return 1;
     }
 
+    private static int Run(CommandLineOptions commandLineOptions)
+    {
+        if (commandLineOptions.ListRules)
+        {
+            var ruleLister = new RuleLister();
+            ruleLister.ListAllRules();
+            return 0;
+        }
+
+        if (!string.IsNullOrWhiteSpace(commandLineOptions.DirectoryPath))
+        {
+            var statisticsCollector = new StatisticsCollector();
+            var config = CleanerConfigLoader.Load(commandLineOptions.DirectoryPath);
+
+            var qualityScanner = new CompositeQualityScanner(
+                new FolderBasedQualityScanner(config.MaxFilesPerDirectory, statisticsCollector),
+                new FileBasedQualityScanner(statisticsCollector)
+            );
+
+            var directoryWalker = GetMatchingDirectoryWalker(commandLineOptions);
+            var messages = qualityScanner.PerformQualityScan(commandLineOptions, directoryWalker);
+
+            var messagePrinter = new ValidationMessagePrinter();
+            messagePrinter.Print(messages);
+
+            var statistics = new Statistics(messages, statisticsCollector.GetStatistics());
+            statistics.PrintStatistics();
+
+            return 0;
+        }
+
+        Console.WriteLine("No directory path/action specified.");
+        return 1;
+    }
+
+    private static IDirectoryWalker GetMatchingDirectoryWalker(CommandLineOptions commandLineOptions)
+    {
+        if (commandLineOptions.LatestChangedFiles == null)
+            return new RecursiveDirectoryWalker();
+
+        return new LatestChangedFilesDirectoryWalker(commandLineOptions.LatestChangedFiles.Value);
+    }
 }

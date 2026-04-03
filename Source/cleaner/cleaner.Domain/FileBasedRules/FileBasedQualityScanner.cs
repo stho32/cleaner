@@ -11,22 +11,26 @@ namespace cleaner.Domain.FileBasedRules;
 public class FileBasedQualityScanner : IQualityScanner
 {
     private readonly IStatisticsCollector _statisticsCollector;
-    private IFileSystemAccessProvider? _fileSystemAccessProvider;
+    private readonly IFileSystemAccessProvider _fileSystemAccessProvider;
     private HashSet<string> _allowedUsings = null!;
     private CleanerConfig _config = new();
     private List<ValidationMessage> _validationMessages = new();
 
     public FileBasedQualityScanner(IStatisticsCollector statisticsCollector)
+        : this(statisticsCollector, new FileSystemAccessProvider())
+    {
+    }
+
+    public FileBasedQualityScanner(IStatisticsCollector statisticsCollector, IFileSystemAccessProvider fileSystemAccessProvider)
     {
         _statisticsCollector = statisticsCollector;
+        _fileSystemAccessProvider = fileSystemAccessProvider;
     }
 
     public ValidationMessage[] PerformQualityScan(CommandLineOptions commandLineOptions, IDirectoryWalker directoryWalker)
     {
         _allowedUsings = LoadAllowedUsingsOrUseDefault(commandLineOptions.AllowedUsingsFilePath);
         _config = CleanerConfigLoader.Load(commandLineOptions.DirectoryPath ?? ".");
-
-        _fileSystemAccessProvider = new FileSystemAccessProvider();
 
         directoryWalker.Walk(
             ValidateRules,
@@ -37,7 +41,7 @@ public class FileBasedQualityScanner : IQualityScanner
 
         return _validationMessages.ToArray();
     }
-    
+
     private static HashSet<string> LoadAllowedUsingsOrUseDefault(string? allowedUsingsFilePath)
     {
         if (!string.IsNullOrEmpty(allowedUsingsFilePath))
@@ -61,13 +65,13 @@ public class FileBasedQualityScanner : IQualityScanner
         if (!fileFilter.IsValidFilename(filePath))
             return false;
 
-        string? fileContent = GetFileContent(filePath);
+        string? fileContent = _fileSystemAccessProvider.GetFileContent(filePath);
         if (!fileFilter.IsValidContent(fileContent))
             return false;
 
         _statisticsCollector.ScanningFile();
 
-        ValidationMessage[]? messages = RunValidationRules(filePath, fileContent!);
+        ValidationMessage[] messages = RunValidationRules(filePath, fileContent!);
         _validationMessages.AddRange(messages);
 
         if (CollectionHelpers.IsNullOrEmpty(messages))
@@ -76,11 +80,6 @@ public class FileBasedQualityScanner : IQualityScanner
         _statisticsCollector.FoundFileWithProblems();
 
         return true;
-    }
-
-    private string? GetFileContent(string filePath)
-    {
-        return _fileSystemAccessProvider?.GetFileContent(filePath);
     }
 
     private ValidationMessage[] RunValidationRules(string filePath, string fileContent)
@@ -98,5 +97,3 @@ public class FileBasedQualityScanner : IQualityScanner
         return messages.ToArray();
     }
 }
-
-
