@@ -45,7 +45,7 @@ namespace cleaner.Domain.FileBasedRules.Rules
                     var message = new ValidationMessage(
                         Id,
                         Name,
-                        $"The method '{method.Identifier.Text}':{lineNumber} in the file '{filePath}' contains {semicolonCount} semicolons, which is more than the allowed limit of 10."
+                        $"The method '{method.Identifier.Text}':{lineNumber} in the file '{filePath}' contains {semicolonCount} semicolons, which is more than the allowed limit of {MaxLength}."
                     );
                     messages.Add(message);
                 }

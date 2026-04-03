@@ -40,8 +40,6 @@ public class NoPublicFieldsRule : IRule
 
     private bool IsPublic(FieldDeclarationSyntax fieldDeclaration)
     {
-        return fieldDeclaration.Modifiers.Any(modifier =>
-            modifier.IsKind(SyntaxKind.PublicKeyword) &&
-            !modifier.IsKind(SyntaxKind.StaticKeyword));
+        return fieldDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.PublicKeyword));
     }
 }

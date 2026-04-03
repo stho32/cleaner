@@ -56,9 +56,9 @@ public class IfStatementOperatorRule : IRule
 
     private bool IsSimpleNullComparison(BinaryExpressionSyntax binaryExpression)
     {
-        return binaryExpression.Left is LiteralExpressionSyntax leftLiteral &&
-                leftLiteral.IsKind(SyntaxKind.NullLiteralExpression) ||
-               binaryExpression.Right is LiteralExpressionSyntax rightLiteral &&
-                rightLiteral.IsKind(SyntaxKind.NullLiteralExpression);
+        return (binaryExpression.Left is LiteralExpressionSyntax leftLiteral &&
+                leftLiteral.IsKind(SyntaxKind.NullLiteralExpression)) ||
+               (binaryExpression.Right is LiteralExpressionSyntax rightLiteral &&
+                rightLiteral.IsKind(SyntaxKind.NullLiteralExpression));
     }
 }

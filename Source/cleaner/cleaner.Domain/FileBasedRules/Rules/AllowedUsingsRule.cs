@@ -99,7 +99,7 @@ public class AllowedUsingsRule : IRule
 
     private bool IsSystemNamespace(string usingNamespace)
     {
-        return usingNamespace.StartsWith("System.");
+        return usingNamespace == "System" || usingNamespace.StartsWith("System.");
     }
 
     private bool IsSubNamespaceOfSameRootNamespace(string usingNamespace, string rootNamespace)

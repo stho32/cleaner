@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd Source/spamfilter
-dotnet run --project spamfilter.console/
-cd ..
-cd ..
-
+cd Source/cleaner
+dotnet run --project cleaner/
+cd ../..
