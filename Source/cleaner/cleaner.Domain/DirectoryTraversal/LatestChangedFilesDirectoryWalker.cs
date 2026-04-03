@@ -57,7 +57,7 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
 
             foreach (var subdirectory in subdirectories)
             {
-                if (ShouldIgnoreThisFolder(subdirectory)) continue;
+                if (DirectoryFilter.ShouldIgnore(subdirectory, _fileSystemAccessProvider!)) continue;
 
                 CollectFilesRecursively(subdirectory);
             }
@@ -70,22 +70,4 @@ public class LatestChangedFilesDirectoryWalker : IDirectoryWalker
         return files;
     }
 
-    private bool ShouldIgnoreThisFolder(string subdirectory)
-    {
-        var isGeneratedFolderOnLinux = subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/");
-        if (isGeneratedFolderOnLinux)
-            return true;
-
-        var isGeneratedFolderOnWindows = subdirectory.Contains("\\bin\\") || subdirectory.Contains("\\obj\\");
-        if (isGeneratedFolderOnWindows)
-            return true;
-
-        var lastFolderName = _fileSystemAccessProvider!.GetFileName(subdirectory);
-        var lastFolderNameStartsWithADot = lastFolderName.StartsWith(".");
-
-        if (lastFolderNameStartsWithADot)
-            return true;
-
-        return false;
-    }
 }

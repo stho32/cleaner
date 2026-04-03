@@ -38,7 +38,7 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
 
         foreach (var subdirectory in subdirectories)
         {
-            if (ShouldIgnoreThisFolder(subdirectory)) continue;
+            if (DirectoryFilter.ShouldIgnore(subdirectory, _fileSystemAccessProvider!)) continue;
 
             var shouldStopScan = WalkDirectory(subdirectory, stopOnFirstFileWithErrors);
 
@@ -65,22 +65,4 @@ public class RecursiveDirectoryWalker : IDirectoryWalker
         return false;
     }
 
-    private bool ShouldIgnoreThisFolder(string subdirectory)
-    {
-        var isGeneratedFolderOnLinux = subdirectory.Contains("/bin/") || subdirectory.Contains("/obj/");
-        if (isGeneratedFolderOnLinux)
-            return true;
-
-        var isGeneratedFolderOnWindows = subdirectory.Contains("\\bin\\") || subdirectory.Contains("\\obj\\");
-        if (isGeneratedFolderOnWindows)
-            return true;
-
-        var lastFolderName = _fileSystemAccessProvider!.GetFileName(subdirectory);
-        var lastFolderNameStartsWithADot = lastFolderName.StartsWith(".");
-
-        if (lastFolderNameStartsWithADot)
-            return true;
-
-        return false;
-    }
 }
