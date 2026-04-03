@@ -39,7 +39,7 @@ jobs:
               working-directory: Source/${{ env.SOLUTION_DIR }}
 
             - name: Test + Cover
-              run: dotnet test
+              run: dotnet test --collect:"XPlat Code Coverage"
               working-directory: Source/${{ env.SOLUTION_DIR }}
 
             - name: Publish
