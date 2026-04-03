@@ -11,12 +11,9 @@ public class NoOutAndRefParametersRule : IRule
     public string ShortDescription => "Checks if a method or indexer has out or ref parameters.";
     public string LongDescription => "This rule checks if a method or indexer has any out or ref parameters, and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
 
         VerifyMethodDeclarations(filePath, root, messages);
         VerifyIndexerDeclarations(filePath, root, messages);

@@ -1,6 +1,5 @@
 using cleaner.Domain.FileBasedRules.Helpers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules.NestedIfStatementsRuleValidation;
@@ -15,12 +14,10 @@ public class NestedIfStatementsRule : IRule
 
     public string LongDescription => "This rule checks if a method contains if statements nested more than 2 levels deep. If it does, a warning is raised.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
 
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
         var methodDeclarations = root.DescendantNodes().OfType<MethodDeclarationSyntax>();
 
         foreach (var methodDeclaration in methodDeclarations)

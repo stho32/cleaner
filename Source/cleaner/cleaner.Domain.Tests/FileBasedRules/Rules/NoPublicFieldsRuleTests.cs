@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -34,7 +37,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             }";
 
             // Act
-            var result = _rule.Validate("test.cs", fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _rule.Validate("test.cs", fileContent, tree, root);
 
             // Assert
             Assert.That(result, Is.Empty);
@@ -62,7 +67,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             }";
 
             // Act
-            var result = _rule.Validate("test.cs", fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _rule.Validate("test.cs", fileContent, tree, root);
 
             // Assert
             Assert.That(result.Length, Is.EqualTo(3));

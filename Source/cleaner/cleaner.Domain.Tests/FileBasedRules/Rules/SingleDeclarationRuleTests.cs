@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -21,7 +24,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             string fileContent = "class Test {}";
 
             // Act
-            var messages = _rule!.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule!.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(messages, Is.Empty);
@@ -35,7 +40,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             string fileContent = "interface ITest {}";
 
             // Act
-            var messages = _rule!.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule!.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(messages, Is.Empty);
@@ -52,7 +59,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             ";
 
             // Act
-            var messages = _rule!.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule!.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(messages.Length, Is.EqualTo(1));
@@ -70,7 +79,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             ";
 
             // Act
-            var messages = _rule!.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule!.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(messages.Length, Is.EqualTo(1));
@@ -88,7 +99,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             ";
 
             // Act
-            var messages = _rule!.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule!.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(messages.Length, Is.EqualTo(1));

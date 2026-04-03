@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -11,12 +10,9 @@ public class IfStatementDotsRule : IRule
     public string ShortDescription => "Detects if statements with expressions containing more than two dots";
     public string LongDescription => "This rule checks if an if statement contains expressions with more than two dots and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         var ifStatements = root.DescendantNodes()
             .OfType<IfStatementSyntax>()

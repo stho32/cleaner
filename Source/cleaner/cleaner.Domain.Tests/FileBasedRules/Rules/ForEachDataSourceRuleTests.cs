@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -24,7 +27,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             ";
 
             var rule = new ForEachDataSourceRule();
-            var messages = rule.Validate("TestFile.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = rule.Validate("TestFile.cs", code, tree, root);
 
             Assert.That(messages.Length, Is.EqualTo(0));
         }
@@ -48,7 +53,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             ";
 
             var rule = new ForEachDataSourceRule();
-            var messages = rule.Validate("TestFile.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = rule.Validate("TestFile.cs", code, tree, root);
 
             Assert.That(messages.Length, Is.EqualTo(1));
             Assert.That(messages[0].ErrorMessage, Contains.Substring("'TestFile.cs':8"));
@@ -73,7 +80,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             ";
 
             var rule = new ForEachDataSourceRule();
-            var messages = rule.Validate("TestFile.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = rule.Validate("TestFile.cs", code, tree, root);
 
             Assert.That(messages.Length, Is.EqualTo(0));
         }

@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -31,7 +34,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 }
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Empty);
         }
@@ -53,7 +58,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 }
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Not.Empty);
             Assert.That(messages.Length, Is.EqualTo(1));
@@ -77,7 +84,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 }
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Not.Empty);
             Assert.That(messages.Length, Is.EqualTo(1));
@@ -103,7 +112,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 }
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Not.Empty);
             Assert.That(messages.Length, Is.EqualTo(2));

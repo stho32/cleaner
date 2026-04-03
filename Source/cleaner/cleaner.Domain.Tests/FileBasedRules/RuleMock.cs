@@ -1,4 +1,6 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.Tests.FileBasedRules;
 
@@ -20,7 +22,7 @@ public class RuleMock : IRule
     public string ShortDescription => "A mock rule for testing.";
     public string LongDescription => "This is a mock rule implementation for testing purposes. It can be configured to return a given message or not.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         return (_returnMessage ? new[] { _message } : Array.Empty<ValidationMessage>())!;
     }

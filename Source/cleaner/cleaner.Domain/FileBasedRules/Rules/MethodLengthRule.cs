@@ -23,12 +23,9 @@ namespace cleaner.Domain.FileBasedRules.Rules
             MaxLength = maxLength;
         }
 
-        public ValidationMessage[] Validate(string filePath, string fileContent)
+        public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
         {
             var messages = new List<ValidationMessage>();
-
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-            var root = tree.GetCompilationUnitRoot();
 
             var methods = root.DescendantNodes()
                 .OfType<MethodDeclarationSyntax>();

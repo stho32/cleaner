@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -21,7 +24,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             string fileContent = "public class TestClass { }";
 
             // Act
-            var result = _methodLengthRule.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _methodLengthRule.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(result, Is.Empty);
@@ -44,7 +49,9 @@ public class TestClass
 }";
 
             // Act
-            var result = _methodLengthRule.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _methodLengthRule.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(result, Is.Empty);
@@ -66,7 +73,9 @@ public class TestClass
 }";
 
             // Act
-            var result = _methodLengthRule.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _methodLengthRule.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(result?.Length, Is.EqualTo(1));

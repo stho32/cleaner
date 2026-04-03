@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -21,7 +24,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
             string fileContent = "public class TestClass { }";
 
             // Act
-            var result = _ifStatementOperatorRule.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _ifStatementOperatorRule.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(result, Is.Empty);
@@ -50,7 +55,9 @@ public class TestClass
 }";
 
             // Act
-            var result = _ifStatementOperatorRule.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _ifStatementOperatorRule.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(result, Is.Empty);
@@ -74,7 +81,9 @@ public class TestClass
 }";
 
             // Act
-            var result = _ifStatementOperatorRule.Validate(filePath, fileContent);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var result = _ifStatementOperatorRule.Validate(filePath, fileContent, tree, root);
 
             // Assert
             Assert.That(result?.Length, Is.EqualTo(1));
@@ -105,7 +114,9 @@ namespace TestNamespace
 }";
 
             // Act
-            var messages = ifStatementOperatorRule.Validate("TestClass.cs", testCode);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(testCode);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = ifStatementOperatorRule.Validate("TestClass.cs", testCode, tree, root);
 
             // Assert
             Assert.That(messages, Is.Empty, "The IfStatementOperatorRule should allow simple null comparisons.");

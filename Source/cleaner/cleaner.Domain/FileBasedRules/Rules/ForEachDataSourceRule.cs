@@ -1,6 +1,5 @@
 using cleaner.Domain.FileBasedRules.Helpers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -16,12 +15,9 @@ public class ForEachDataSourceRule : IRule
     public string LongDescription =>
         "This rule checks if a foreach statement's data source expression contains more than two dots and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         var forEachStatements = root.DescendantNodes()
             .OfType<ForEachStatementSyntax>();

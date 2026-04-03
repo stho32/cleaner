@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -11,12 +10,9 @@ public class SingleDeclarationRule : IRule
     public string ShortDescription => "Check if a file contains only one type declaration.";
     public string LongDescription => "This rule checks if a file contains only one of the specified keywords: enum, class, interface, record, or struct. It will return an error if more than one keyword is found in the file.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         int declarationCount = root.Members.OfType<BaseTypeDeclarationSyntax>().Count();
 

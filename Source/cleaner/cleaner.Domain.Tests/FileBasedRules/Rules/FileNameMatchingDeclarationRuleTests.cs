@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules;
@@ -25,7 +28,9 @@ public class FileNameMatchingDeclarationRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("TestClass.cs", code);
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+        CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+        var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
         Assert.That(messages, Is.Empty);
     }
@@ -41,7 +46,9 @@ public class FileNameMatchingDeclarationRuleTests
                 }
             }";
 
-        var messages = _rule.Validate("IncorrectFileName.cs", code);
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+        CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+        var messages = _rule.Validate("IncorrectFileName.cs", code, tree, root);
 
         Assert.That(messages, Is.Not.Empty);
         Assert.That(messages.Length, Is.EqualTo(1));
@@ -54,7 +61,9 @@ public class FileNameMatchingDeclarationRuleTests
         string code = @"
             // This file intentionally contains no type declarations.";
 
-        var messages = _rule.Validate("EmptyFile.cs", code);
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+        CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+        var messages = _rule.Validate("EmptyFile.cs", code, tree, root);
 
         Assert.That(messages, Is.Empty);
     }

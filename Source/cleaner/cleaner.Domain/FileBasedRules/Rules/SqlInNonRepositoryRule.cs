@@ -20,12 +20,10 @@ public class SqlInNonRepositoryRule : IRule
     private static readonly Regex SqlRegex = new Regex(@"\b(?:SELECT|TOP|INSERT|UPDATE|DELETE|FROM|WHERE|EXEC|ORDER BY)\b", RegexOptions.IgnoreCase);
     private const int SqlKeywordThreshold = 3;
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
 
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
         var classDeclarations = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
         foreach (var classDeclaration in classDeclarations)

@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -11,12 +10,9 @@ public class LinqExpressionLengthRule : IRule
     public string ShortDescription => "Detects LINQ expressions with more than 2 steps";
     public string LongDescription => "This rule checks if a LINQ expression contains more than 2 steps and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         var invocationExpressions = root.DescendantNodes()
             .OfType<InvocationExpressionSyntax>();

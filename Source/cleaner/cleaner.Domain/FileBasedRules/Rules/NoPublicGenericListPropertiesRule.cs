@@ -11,12 +11,9 @@ public class NoPublicGenericListPropertiesRule : IRule
     public string ShortDescription => "Disallow public properties of type List<T>";
     public string LongDescription => "This rule checks if there are any public properties of type List<T> and raises a warning if any are found.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         var propertyDeclarations = root.DescendantNodes()
             .OfType<PropertyDeclarationSyntax>()

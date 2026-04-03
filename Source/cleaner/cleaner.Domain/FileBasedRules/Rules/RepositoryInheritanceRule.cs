@@ -1,6 +1,5 @@
 using cleaner.Domain.FileBasedRules.Helpers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -15,12 +14,10 @@ public class RepositoryInheritanceRule : IRule
 
     public string LongDescription => "This rule checks if a class ending with 'Repository' is derived from another class. If it is, a warning is raised.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
 
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
         var classDeclarations = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
         foreach (var classDeclaration in classDeclarations)

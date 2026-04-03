@@ -1,6 +1,9 @@
 using NUnit.Framework;
 using System.Linq;
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
 {
@@ -26,7 +29,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 public void Method3(int i, string s = null) {}
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Empty);
         }
@@ -42,7 +47,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 public void Method3(ref int i, out string s = null) {}
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Not.Empty);
             Assert.That(messages.Length, Is.EqualTo(5));
@@ -60,7 +67,9 @@ namespace cleaner.Domain.Tests.FileBasedRules.Rules
                 public int this[out int i, string s, ref object o] { get { return 0; } set {} }
             }";
 
-            var messages = _rule.Validate("TestClass.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestClass.cs", code, tree, root);
 
             Assert.That(messages, Is.Not.Empty);
             Assert.That(messages.Length, Is.EqualTo(3));

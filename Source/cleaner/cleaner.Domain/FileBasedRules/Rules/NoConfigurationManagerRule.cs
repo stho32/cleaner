@@ -1,6 +1,5 @@
 using cleaner.Domain.FileBasedRules.Helpers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -15,12 +14,9 @@ public class NoConfigurationManagerRule : IRule
 
     public string LongDescription => "This rule checks for usage of the .NET Configuration Management, including both normal and web versions, and raises a warning if detected.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         var usings = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
 

@@ -1,4 +1,7 @@
 using cleaner.Domain.FileBasedRules.Rules;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace cleaner.Domain.Tests.FileBasedRules.Rules
@@ -35,7 +38,9 @@ namespace TestNamespace
     }
 }";
 
-            var messages = _rule.Validate("TestFile.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestFile.cs", code, tree, root);
             Assert.That(messages, Is.Empty);
         }
 
@@ -61,7 +66,9 @@ namespace TestNamespace
     }
 }";
 
-            var messages = _rule.Validate("TestFile.cs", code);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+            CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
+            var messages = _rule.Validate("TestFile.cs", code, tree, root);
             Assert.That(messages.Length, Is.EqualTo(2));
 
             Assert.That(messages[0].ErrorMessage, Does.Contain(":12 "));

@@ -3,6 +3,7 @@ using cleaner.Domain.DirectoryTraversal;
 using cleaner.Domain.FileBasedRules.Rules;
 using cleaner.Domain.FileSystem;
 using cleaner.Domain.Helpers;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace cleaner.Domain.FileBasedRules;
 
@@ -82,11 +83,13 @@ public class FileBasedQualityScanner : IQualityScanner
     private ValidationMessage[] RunValidationRules(string filePath, string fileContent)
     {
         var rules = RuleFactory.GetRules(_allowedUsings, fileContent);
+        var tree = CSharpSyntaxTree.ParseText(fileContent);
+        var root = tree.GetCompilationUnitRoot();
         var messages = new List<ValidationMessage>();
 
         foreach (var rule in rules)
         {
-            messages.AddRange(rule.Validate(filePath, fileContent) ?? Array.Empty<ValidationMessage>());
+            messages.AddRange(rule.Validate(filePath, fileContent, tree, root));
         }
 
         return messages.ToArray();

@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace cleaner.Domain.FileBasedRules.Rules;
@@ -18,13 +17,10 @@ public class AllowedUsingsRule : IRule
     public string ShortDescription => "Verify that only allowed usings are used";
     public string LongDescription => "This rule checks if only allowed usings are used in a file and raises a warning if any disallowed usings are found.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
 
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-
-        var root = tree.GetCompilationUnitRoot();
         string rootNamespace = ExtractRootNamespace(root);
 
         var usingDirectives = root.DescendantNodes().OfType<UsingDirectiveSyntax>();

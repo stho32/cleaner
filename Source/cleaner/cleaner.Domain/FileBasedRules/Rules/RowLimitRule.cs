@@ -1,3 +1,6 @@
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 namespace cleaner.Domain.FileBasedRules.Rules;
 
 public class RowLimitRule : IRule
@@ -7,7 +10,7 @@ public class RowLimitRule : IRule
     public string ShortDescription => "Detects files with more than 500 rows";
     public string LongDescription => "This rule checks if a file has more than 500 rows and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         int rowCount = CountRows(fileContent);
         var hasMoreRowsThanAllowed = rowCount > 500;

@@ -13,12 +13,9 @@ public class IfStatementOperatorRule : IRule
     public string LongDescription =>
         "This rule checks if an if statement contains operators, except for function calls, and raises a warning if it does.";
 
-    public ValidationMessage[] Validate(string filePath, string fileContent)
+    public ValidationMessage[] Validate(string filePath, string fileContent, SyntaxTree tree, CompilationUnitSyntax root)
     {
         var messages = new List<ValidationMessage>();
-
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(fileContent);
-        var root = tree.GetCompilationUnitRoot();
 
         var ifStatements = root.DescendantNodes()
             .OfType<IfStatementSyntax>()
