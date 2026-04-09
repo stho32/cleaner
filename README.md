@@ -6,7 +6,7 @@ CLI-Tool zur statischen Analyse von C#-Codebasen. Erkennt technologische und str
 
 ## Voraussetzungen
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Installation
 
